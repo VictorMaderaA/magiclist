@@ -17,7 +17,6 @@ class CreateListsTable extends Migration
             $table->id();
             $table->string('name');
             $table->foreignId('user_id')->references('id')->on('users');
-            $table->timestamp('completed_at')->nullable()->default(null);
             $table->timestamps();
             $table->softDeletes();
         });

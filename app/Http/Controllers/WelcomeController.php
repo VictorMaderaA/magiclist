@@ -4,8 +4,6 @@
 namespace App\Http\Controllers;
 
 
-use Illuminate\Support\Facades\File;
-
 class WelcomeController extends Controller
 {
 

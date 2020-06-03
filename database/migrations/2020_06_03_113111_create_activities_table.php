@@ -17,6 +17,7 @@ class CreateActivitiesTable extends Migration
             $table->id();
             $table->string('name');
             $table->text('description');
+            $table->timestamp('completed_at')->nullable()->default(null);
             $table->foreignId('list_id')->references('id')->on('lists');
             $table->timestamps();
             $table->softDeletes();

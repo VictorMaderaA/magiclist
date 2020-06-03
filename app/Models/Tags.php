@@ -75,10 +75,7 @@ class Tags extends BaseModel
      *
      * @var array
      */
-    protected $fillable = [
-        'name',
-        'user_id',
-    ];
+    protected $fillable = [];
 
     //-----------------------------------------------------------------------------------------------------------------
 

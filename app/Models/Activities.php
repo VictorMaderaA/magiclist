@@ -77,11 +77,7 @@ class Activities extends BaseModel
      *
      * @var array
      */
-    protected $fillable = [
-        'name',
-        'description',
-        'list_id',
-    ];
+    protected $fillable = [];
 
     //-----------------------------------------------------------------------------------------------------------------
 

@@ -11,7 +11,6 @@ class Media extends BaseModel
 {
     use SoftDeletes;
 
-
     /**
      * The table associated with the model.
      *
