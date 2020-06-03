@@ -81,5 +81,10 @@ class Activities extends BaseModel
 
     //-----------------------------------------------------------------------------------------------------------------
 
+    public function media()
+    {
+        $this->belongsToMany(Media::class, 'ActivityMedia');
+    }
+
 
 }
