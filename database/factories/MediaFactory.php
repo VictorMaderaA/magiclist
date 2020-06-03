@@ -5,8 +5,8 @@
 use Faker\Generator as Faker;
 use Illuminate\Database\Eloquent\Factory;
 
-$factory->define(MODEL::class, function (Faker $faker) {
+$factory->define(\App\Models\Media::class, function (Faker $faker) {
     return [
-        'name' => $faker->name,
+        
     ];
 });
