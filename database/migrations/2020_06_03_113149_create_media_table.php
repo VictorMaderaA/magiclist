@@ -18,6 +18,7 @@ class CreateMediaTable extends Migration
             $table->string('namePath');
             $table->foreignId('user_id')->references('id')->on('users');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

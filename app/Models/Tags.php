@@ -7,17 +7,15 @@ namespace App\Models;
 use App\Models\Base\BaseModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Lists extends BaseModel
+class Tags extends BaseModel
 {
-    use SoftDeletes;
-
 
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'lists';
+    protected $table = 'tags';
 
     /**
      * The primary key for the model.
@@ -83,6 +81,5 @@ class Lists extends BaseModel
     ];
 
     //-----------------------------------------------------------------------------------------------------------------
-
 
 }
