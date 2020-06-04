@@ -18,6 +18,10 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
+
+    <link rel="stylesheet" href="{{asset('vendor/icofont/icofont.min.css')}}">
+
 </head>
 <body>
     <div id="app">

@@ -14,11 +14,5 @@ $factory->define(\App\Models\Lists::class, function (Faker $faker) {
             }
             return \factory(\App\User::class)->create()->id;
         },
-        'completed_at' => function () use ($faker) {
-            if($faker->numberBetween(0,10) < 8){
-                return null;
-            }
-            return $faker->dateTime();
-        }
     ];
 });
