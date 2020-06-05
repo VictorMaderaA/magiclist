@@ -142,10 +142,29 @@
             },
 
             onClickCheck(item){
+                this.reqChangeActivityState(item.id, !item.completed_at)
                 let found = this.itemsList.find(e => e.id === item.id);
                 found.completed_at = !found.completed_at;
                 this.loadItemsList();
             },
+
+
+
+            reqChangeActivityState: async function (activityId, bool) {
+                const URL = '/api/activity/' + activityId + '/change-completed-state';
+                return await axios.post(URL, {
+                    state: bool
+                })
+                    .then(function (resp) {
+                        console.log(resp);
+                        return resp;
+                    })
+                    .catch(function (err) {
+                        console.error(err);
+                        return err;
+                    });
+            },
+
 
             reduceDescription(desc, maxLenght)
             {
