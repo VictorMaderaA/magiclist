@@ -141,17 +141,25 @@
                 this.loadItemsList();
             },
 
-            onClickCheck(item){
-                this.reqChangeActivityState(item.id, !item.completed_at)
-                let found = this.itemsList.find(e => e.id === item.id);
-                found.completed_at = !found.completed_at;
-                this.loadItemsList();
+            async onClickCheck(item){
+                let response = await this.reqChangeActivityState(item.id, !item.completed_at);
+                if(response.status === 200){
+                    let found = this.itemsList.find(e => e.id === item.id);
+                    found.completed_at = !found.completed_at;
+                    this.loadItemsList();
+                }
             },
 
 
 
             reqChangeActivityState: async function (activityId, bool) {
+                console.log(activityId, bool)
                 const URL = '/api/activity/' + activityId + '/change-completed-state';
+                if(bool){
+                    bool = 1;
+                }else{
+                    bool = 0;
+                }
                 return await axios.post(URL, {
                     state: bool
                 })
@@ -160,7 +168,7 @@
                         return resp;
                     })
                     .catch(function (err) {
-                        console.error(err);
+                        console.error(err.response);
                         return err;
                     });
             },

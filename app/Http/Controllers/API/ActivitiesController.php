@@ -13,11 +13,6 @@ use Illuminate\Support\Facades\Validator;
 class ActivitiesController extends BaseController
 {
 
-    public function __construct()
-    {
-        self::middleware('auth');
-    }
-
     public function changeCompletedState(Request $request, $activityId)
     {
         //Validamos
@@ -29,9 +24,9 @@ class ActivitiesController extends BaseController
         }
 
         //Buscamos que exista la actividad
-        $activity = Activities::query()->findOrFail($activityId)->first();
+        $activity = Activities::query()->findOrFail($activityId);
         //Comprobamos que el usuario tenga acceso a la lista de la actividad
-        if(!auth()->user()->lists()->find($activity->list_id)){
+        if(!auth('api')->user()->lists()->find($activity->list_id)){
             return response('',403);
         }
         //Modificamos la actividad con el valor correspondiente
@@ -43,7 +38,7 @@ class ActivitiesController extends BaseController
         }
 
         //Devolvemos mod correcta
-        return response('', 200);
+        return response($activity->syncOriginal()->toArray(), 200);
 
     }
 

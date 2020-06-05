@@ -5,6 +5,11 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 
 class LoginController extends Controller
 {
@@ -36,5 +41,61 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+    /**
+     * Send the response after the user was authenticated.
+     *
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    protected function sendLoginResponse(Request $request)
+    {
+        $request->session()->regenerate();
+
+        $this->clearLoginAttempts($request);
+
+        Auth::guard('api')->login($this->guard()->user());
+        $cookie = $this->getCookieDetails($token = auth('api')->refresh());
+
+        if ($response = $this->authenticated($request, $this->guard()->user())) {
+            return $response;
+        }
+
+        return redirect()
+            ->intended($this->redirectPath())
+            ->withCookies([
+                \cookie($cookie['name'], $cookie['value'], $cookie['minutes'], $cookie['path'],
+                    $cookie['domain'], $cookie['secure'], $cookie['httponly'], true)
+            ]);
+    }
+
+    /**
+     * @param $token
+     * @return array
+     */
+    private function getCookieDetails($token)
+    {
+        return [
+            'name' => '_token',
+            'value' => $token,
+            'minutes' => auth()->factory()->getTTL() * 60,
+            'path' => null,
+            'domain' => null,
+            // 'secure' => true, // for production
+            'secure' => (app()->environment('app.env') === 'production') ? true : null,
+            'httponly' => true,
+            'samesite' => true,
+        ];
+    }
+
+    /**
+     * Get the guard to be used during authentication.
+     *
+     * @return \Illuminate\Contracts\Auth\StatefulGuard
+     */
+    protected function guard()
+    {
+        return Auth::guard('web');
     }
 }

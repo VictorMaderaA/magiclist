@@ -6,7 +6,7 @@
             <div class="col-md-9">
 
 
-                @foreach(auth()->user()->lists()->get() as $list)
+                @foreach(auth('web')->user()->lists()->get() as $list)
 
                 <div class="card m-md-3">
                     <div class="card-header">{{$list->name}}</div>

@@ -12,14 +12,15 @@ class ListController extends BaseController
 
     public function __construct()
     {
-        self::middleware('auth');
+        self::middleware('api');
     }
 
     public function index($listId)
     {
         $list = Lists::query()
-            ->where('user_id', auth()->id())
-            ->findOrFail($listId)->with('activities')->first();
+            ->where('user_id', auth('web')->id())
+            ->with('activities')
+            ->findOrFail($listId);
         return view('web.list.index')
             ->with('list', json_encode($list->toArray(), 1));
     }

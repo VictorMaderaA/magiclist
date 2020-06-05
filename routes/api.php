@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,5 +13,24 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::group([
+    'middleware' => 'auth:api',
+    'namespace' => 'API'
+], function ($router) {
 
-Route::post('/activity/{activityId}/change-completed-state', 'API\ActivitiesController@changeCompletedState');
+
+    Route::group([
+        'prefix' => 'auth',
+    ], function ($router) {
+        Route::post('login', 'AuthController@login')->name('api_login');
+        Route::post('logout', 'AuthController@logout')->name('api_logout');
+        Route::post('refresh', 'AuthController@refresh')->name('api_refresh');
+        Route::post('me', 'AuthController@me')->name('api_me');
+    });
+
+    Route::post('/activity/{activityId}/change-completed-state', 'ActivitiesController@changeCompletedState');
+
+
+});
+
+
