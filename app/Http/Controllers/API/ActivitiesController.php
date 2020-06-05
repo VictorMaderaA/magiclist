@@ -38,8 +38,7 @@ class ActivitiesController extends BaseController
         }
 
         //Devolvemos mod correcta
-        return response($activity->syncOriginal()->toArray(), 200);
-
+        return response('', 200);
     }
 
 }

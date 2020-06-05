@@ -29,6 +29,7 @@ Route::group([
     });
 
     Route::post('/activity/{activityId}/change-completed-state', 'ActivitiesController@changeCompletedState');
+    Route::post('/list/{listId}/change-activities-order', 'ListController@modifyActivitiesOrder');
 
 
 });

@@ -11,7 +11,7 @@ class ActivityTestSeeder extends Seeder
      */
     public function run()
     {
-        $lists = factory(\App\Models\Lists::class)->times(10)->create([
+        $lists = factory(\App\Models\Lists::class)->times(1)->create([
             'user_id' => 1
         ]);
 

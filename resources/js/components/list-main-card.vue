@@ -23,6 +23,7 @@
                         <draggable
                             v-model="itemsList"
                             v-bind="dragOptions"
+                            :move="onMoveCallback"
                             @start="drag = true"
                             @end="drag = false">
                             <transition-group type="transition" :name="!drag ? 'flip-list' : null">
@@ -100,14 +101,19 @@
                 itemsList: null,
                 showCompleted: true,
                 drag: false,
+                orderModified: false
             }
         },
-        mounted() {
-            console.log('Mounted')
+        beforeMount() {
             this.listName = this.listimport.name;
             this.itemsList = this.listimport.activities;
             this.loadItemsList();
         },
+        mounted() {
+            console.log('Mounted')
+            // this.canUpdate = true;
+        },
+
         methods: {
 
             loadItemsList(){
@@ -127,6 +133,10 @@
 
             onModifiedShowCompleted(){
                 this.loadItemsList();
+            },
+
+            onMoveCallback(evt, originalEvent){
+                this.orderModified = true;
             },
 
             async onClickCheck(item){
@@ -152,11 +162,26 @@
                     state: bool
                 })
                     .then(function (resp) {
-                        console.log(resp);
+                        // console.log(resp);
                         return resp;
                     })
                     .catch(function (err) {
-                        console.error(err.response);
+                        // console.error(err.response);
+                        return err;
+                    });
+            },
+
+            reqModifyActivitiesOrder: async function (listId, newOrder) {
+                const URL = '/api/list/' + listId + '/change-activities-order';
+                return await axios.post(URL, {
+                    data: newOrder
+                })
+                    .then(function (resp) {
+                        // console.log(resp);
+                        return resp;
+                    })
+                    .catch(function (err) {
+                        // console.error(err.response);
                         return err;
                     });
             },
@@ -179,6 +204,28 @@
                     disabled: false,
                     ghostClass: "ghost"
                 };
+            }
+        },
+        watch: {
+            itemsList: function (val) {
+                if(this.orderModified){
+                    let newOrder = []
+                    let listId = null;
+                    let valid = true;
+                    this.itemsList.forEach((x) => {
+                        newOrder.push(x.id);
+                        if(listId && listId !== x.list_id)
+                        {
+                            valid = false;
+                        }else{
+                            listId = x.list_id;
+                        }
+                    });
+                    if(valid){
+                        this.reqModifyActivitiesOrder(listId, newOrder);
+                        this.orderModified = false;
+                    }
+                }
             }
         }
 

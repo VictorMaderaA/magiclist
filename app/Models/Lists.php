@@ -87,7 +87,8 @@ class Lists extends BaseModel
 
     public function activities()
     {
-        return $this->hasMany(Activities::class, 'list_id');
+        return $this->hasMany(Activities::class, 'list_id')
+            ->orderBy('listPriority');
     }
 
     public function activitiesCompleted()
