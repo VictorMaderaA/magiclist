@@ -6,13 +6,17 @@
             <div class="col-md-9">
 
 
-                @foreach(auth('web')->user()->lists()->get() as $list)
+                @foreach(auth()->user()->lists()->get() as $list)
 
                 <div class="card m-md-3">
                     <div class="card-header">{{$list->name}}</div>
                     <div class="card-body">
                         <p>
-                            Contiene: {{$list->activities()->count()}}
+                            Contiene: {{$list->activities_count}}
+                            <br>
+                            Pendientes: {{$list->activities_pending_count}}
+                            <br>
+                            Completadas: {{$list->activities_completed_count}}
                             <br>
                             <a href="{{ route('list_index', $list->id) }}" class="btn btn-default">Edit</a>
                         </p>

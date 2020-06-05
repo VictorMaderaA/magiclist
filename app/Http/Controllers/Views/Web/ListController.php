@@ -18,7 +18,7 @@ class ListController extends BaseController
     public function index($listId)
     {
         $list = Lists::query()
-            ->where('user_id', auth('web')->id())
+            ->where('user_id', auth()->id())
             ->with('activities')
             ->findOrFail($listId);
         return view('web.list.index')

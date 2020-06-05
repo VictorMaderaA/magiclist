@@ -55,8 +55,8 @@ class LoginController extends Controller
 
         $this->clearLoginAttempts($request);
 
-        Auth::guard('api')->login($this->guard()->user());
-        $cookie = $this->getCookieDetails($token = auth('api')->refresh());
+        Auth::guard()->login($this->guard()->user());
+        $cookie = $this->getCookieDetails($token = auth()->refresh());
 
         if ($response = $this->authenticated($request, $this->guard()->user())) {
             return $response;
@@ -68,6 +68,31 @@ class LoginController extends Controller
                 \cookie($cookie['name'], $cookie['value'], $cookie['minutes'], $cookie['path'],
                     $cookie['domain'], $cookie['secure'], $cookie['httponly'], true)
             ]);
+    }
+
+    /**
+     * Log the user out of the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function logout(Request $request)
+    {
+        $this->guard()->logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        auth()->logout();
+
+        if ($response = $this->loggedOut($request)) {
+            return $response;
+        }
+
+        return $request->wantsJson()
+            ? new Response('', 204)
+            : redirect('/');
     }
 
     /**

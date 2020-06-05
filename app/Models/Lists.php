@@ -59,7 +59,11 @@ class Lists extends BaseModel
      *
      * @var array
      */
-    protected $withCount = [];
+    protected $withCount = [
+        'activities',
+        'activitiesPending',
+        'activitiesCompleted'
+    ];
 
     //-----------------------------------------------------------------------------------------------------------------
 
@@ -84,6 +88,18 @@ class Lists extends BaseModel
     public function activities()
     {
         return $this->hasMany(Activities::class, 'list_id');
+    }
+
+    public function activitiesCompleted()
+    {
+        return $this->hasMany(Activities::class, 'list_id')
+            ->where('completed_at', '<>', null);
+    }
+
+    public function activitiesPending()
+    {
+        return $this->hasMany(Activities::class, 'list_id')
+            ->where('completed_at',null);
     }
 
 

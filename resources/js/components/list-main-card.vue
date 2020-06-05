@@ -58,10 +58,6 @@
                                                             data-placement="left" title="" data-original-title="Tooltip on left">
                                                         <i class="icofont-edit"></i>
                                                     </button>
-                                                    <button type="button" class="btn btn-sm btn-outline-info"
-                                                            data-placement="top" title="" data-original-title="Tooltip on top">
-                                                        <i class="icofont-checked"></i>
-                                                    </button>
                                                     <button type="button" class="btn btn-sm btn-outline-danger"
                                                             data-placement="top" title="" data-original-title="Tooltip on top">
                                                         <i class="icofont-trash"></i>
@@ -77,14 +73,6 @@
                         </draggable>
 
                     </ul>
-
-                    <div class="card-body">
-                        <a href="#" class="card-link">Card link</a>
-                        <a href="#" class="card-link">Another link</a>
-                    </div>
-                    <div class="card-footer text-muted">
-                        2 days ago
-                    </div>
                 </div>
             </div>
         </div>
