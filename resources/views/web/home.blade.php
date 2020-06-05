@@ -3,8 +3,19 @@
 @section('content')
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-9">
 
+            <div class="col-md-5">
+                <div class="card m-md-5">
+                    <div class="card-header">Crate New List</div>
+                    <div class="card-body">
+                        <div class="app">
+                            <list-create></list-create>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-9">
 
                 @foreach(auth()->user()->lists()->get() as $list)
 
@@ -12,13 +23,16 @@
                     <div class="card-header">{{$list->name}}</div>
                     <div class="card-body">
                         <p>
-                            Contiene: {{$list->activities_count}}
+                            Contains {{$list->activities_count}} items.
                             <br>
-                            Pendientes: {{$list->activities_pending_count}}
+                            Pending: {{$list->activities_pending_count}}
                             <br>
-                            Completadas: {{$list->activities_completed_count}}
+                            Completed: {{$list->activities_completed_count}}
                             <br>
-                            <a href="{{ route('list_index', $list->id) }}" class="btn btn-default">Edit</a>
+
+                            <a href="{{ route('list_index', $list->id) }}" class="btn btn-default">
+                                <button type="button" class="btn btn-info">Info</button>
+                            </a>
                         </p>
                     </div>
                 </div>

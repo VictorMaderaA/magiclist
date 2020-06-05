@@ -151,7 +151,6 @@
 
 
             reqChangeActivityState: async function (activityId, bool) {
-                console.log(activityId, bool)
                 const URL = '/api/activity/' + activityId + '/change-completed-state';
                 if(bool){
                     bool = 1;
