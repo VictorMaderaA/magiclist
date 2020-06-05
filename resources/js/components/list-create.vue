@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div>
         <p class="text-danger" v-if="message.danger">{{ message.danger }}</p>
         <p class="text-success" v-if="message.success">{{ message.success }}</p>
         <div class="form-group">

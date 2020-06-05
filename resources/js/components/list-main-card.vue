@@ -23,6 +23,7 @@
                         <draggable
                             v-model="itemsList"
                             v-bind="dragOptions"
+                            :handle="'.handle'"
                             :move="onMoveCallback"
                             @start="drag = true"
                             @end="drag = false">
@@ -31,7 +32,7 @@
                                 <div v-for="(item) in itemsList" :key="item.id">
                                     <div class="container" v-if="item.canShow">
                                         <div class="row">
-                                            <div class="col-sm-1">
+                                            <div class="col-sm-1 handle">
                                                 <i class="icofont-hand-drag"></i>
                                             </div>
 
@@ -111,7 +112,6 @@
         },
         mounted() {
             console.log('Mounted')
-            // this.canUpdate = true;
         },
 
         methods: {
