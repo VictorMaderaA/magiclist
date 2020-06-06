@@ -13,6 +13,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <title>{{ config('app.name', 'MagicList') }}</title>
     <link rel="icon" href="{{asset('img/app/icon/Icon_w_50.png')}}">
 
+    <script src="{{ asset('js/app_1.js') }}" defer></script>
+
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="{{asset('vendor/Fontawesome5-13-0/css/all.min.css')}}">
     <!-- Theme style -->
@@ -25,21 +27,28 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <body class="hold-transition sidebar-mini skin-black">
 
     <div class="wrapper">
+        <div id="app">
+            <app-master inline-template>
+                <div>
+                    <!-- Navbar -->
+                @include('web_1.layouts.navbar')
 
-        <!-- Navbar -->
-        @include('web_1.layouts.navbar')
+                <!-- Main Sidebar Container -->
+                @include('web_1.layouts.main-sidebar')
 
-        <!-- Main Sidebar Container -->
-        @include('web_1.layouts.main-sidebar')
+                <!-- Content Wrapper. Contains page content -->
+                @include('web_1.layouts.content-wrapper')
 
-        <!-- Content Wrapper. Contains page content -->
-        @include('web_1.layouts.content-wrapper')
+                <!-- Control Sidebar -->
+                @include('web_1.layouts.control-sidebar')
 
-        <!-- Control Sidebar -->
-        @include('web_1.layouts.control-sidebar')
+                <!-- Main Footer -->
+                    @include('web_1.layouts.main-footer')
+                </div>
 
-        <!-- Main Footer -->
-        @include('web_1.layouts.main-footer')
+            </app-master>
+        </div>
+
     </div>
     <!-- ./wrapper -->
 

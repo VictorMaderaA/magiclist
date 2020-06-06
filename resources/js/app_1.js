@@ -19,11 +19,11 @@ window.Vue = require('vue');
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
-Vue.component('list-main-card', require('./components/list-main-card.vue').default);
-Vue.component('list-create', require('./components/list-create.vue').default);
-Vue.component('lists-index', require('./components/lists-index.vue').default);
-Vue.component('activity-create', require('./components/activity-create.vue').default);
+Vue.component('app-master', require('./web_1/app-master.vue').default);
+Vue.component('main-component', require('./web_1/main-component.vue').default);
+Vue.component('sidebar-ul', require('./web_1/components/sidebar-ul.vue').default);
+// Vue.component('app', require('./components/ExampleComponent.vue').default);
+
 
 
 /**

@@ -2,12 +2,15 @@
     <!-- Brand Logo -->
     <a href="" class="brand-link navbar-light">
 
-        <img alt="MagicList Logo" class="brand-image"
-             sizes="(max-width: 1024px) 100vw, 1024px"
-             srcset="{{asset('img/app/icon/Icon_w_50.png')}} 50w,
+        <picture>
+            <img alt="MagicList Logo" class="brand-image"
+                 sizes="(max-width: 1024px) 100vw, 1024px"
+                 srcset="{{asset('img/app/icon/Icon_w_50.png')}} 50w,
                     {{asset('img/app/icon/Icon_w_522.png')}} 522w,
                     {{asset('img/app/icon/Icon_w_1024.png')}} 1024w"
-             src="{{asset('img/app/icon/Icon_w_1024.png')}}">
+                 src="{{asset('img/app/icon/Icon_w_50.png')}}">
+        </picture>
+
         <span class="brand-text font-weight-normal" style="color: black;">
                 {{ config('app.name', 'MagicList') }}
         </span>
