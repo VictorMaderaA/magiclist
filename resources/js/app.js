@@ -23,6 +23,8 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 Vue.component('list-main-card', require('./components/list-main-card.vue').default);
 Vue.component('list-create', require('./components/list-create.vue').default);
 Vue.component('lists-index', require('./components/lists-index.vue').default);
+Vue.component('activity-create', require('./components/activity-create.vue').default);
+
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

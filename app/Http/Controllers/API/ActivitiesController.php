@@ -41,4 +41,26 @@ class ActivitiesController extends BaseController
         return response('', 200);
     }
 
+    public function create(Request $request){
+        //Validamos
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string',
+            'description' => 'string',
+            'listId' => 'required|integer'
+        ]);
+        if($validator->fails()) {
+            return response($validator->errors(), 404);
+        }
+
+        $activity = new Activities();
+        $activity->name = $request->input('name');
+        $activity->description = $request->input('description')?? '';
+        $activity->list_id = $request->input('listId');
+        $activity->saveOrFail();
+        $activity->syncOriginal();
+
+        //Devolvemos mod correcta
+        return response($activity->toArray(), 200);
+    }
+
 }

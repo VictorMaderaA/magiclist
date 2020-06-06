@@ -12,7 +12,7 @@ class ListController extends BaseController
 
     public function __construct()
     {
-        self::middleware('api');
+        self::middleware('auth:api');
     }
 
     public function index($listId)

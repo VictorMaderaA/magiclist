@@ -24,6 +24,6 @@ class HomeController extends Controller
     public function index()
     {
         return view('web.home')
-            ->with('lists', json_encode(auth()->user()->lists()->get()->toArray()));
+            ->with('lists', json_encode(auth()->user()->lists()->orderBy('priority')->get()->toArray()));
     }
 }

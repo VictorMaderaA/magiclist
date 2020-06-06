@@ -24,6 +24,8 @@
         "vue-template-compiler": "^2.6.10"
     },
     "dependencies": {
+        "tiptap": "^1.27.1",
+        "tiptap-extensions": "^1.29.1",
         "vuedraggable": "^2.23.2"
     }
 }

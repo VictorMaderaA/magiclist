@@ -1,9 +1,30 @@
 <template>
     <div class="container">
+
+        <div>
+        </div>
+
+
+        <div id="overlay" v-if="showCreate">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card m-md-6" style="top: 35%">
+                        <div class="card-header">Crate New List<button @click="hideCreateOverlay">Close</button></div>
+                        <div class="card-body">
+                            <activity-create :listId="listId" @created-activity="onActivityCreated"></activity-create>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
         <div class="row justify-content-center">
             <div class="col-md-9">
                 <div class="card mb-3">
-                    <h3 class="card-header">{{listName}}</h3>
+                    <h3 class="card-header">{{listName}} <button @click="showCreateOverlay">Create</button></h3>
 <!--                    <div class="card-body">-->
 <!--                        <h5 class="card-title">Special title treatment</h5>-->
 <!--                        <h6 class="card-subtitle text-muted">Support card subtitle</h6>-->
@@ -50,7 +71,7 @@
                                             </div>
                                             <div class="col-sm">
                                                 <small>
-                                                    {{reduceDescription(item.description, 50)}}
+                                                    {{reduceDescription(item.description)}}
                                                 </small>
                                             </div>
                                             <div class="col-sm">
@@ -99,14 +120,17 @@
         data() {
             return {
                 listName: null,
+                listId: null,
                 itemsList: null,
-                showCompleted: true,
+                showCompleted: false,
                 drag: false,
-                orderModified: false
+                orderModified: false,
+                showCreate: false,
             }
         },
         beforeMount() {
             this.listName = this.listimport.name;
+            this.listId = this.listimport.id;
             this.itemsList = this.listimport.activities;
             this.loadItemsList();
         },
@@ -138,7 +162,10 @@
             onMoveCallback(evt, originalEvent){
                 this.orderModified = true;
             },
-
+            onActivityCreated(activity){
+                this.itemsList.push(activity);
+                this.loadItemsList();
+            },
             async onClickCheck(item){
                 let response = await this.reqChangeActivityState(item.id, !item.completed_at);
                 if(response.status === 200){
@@ -188,11 +215,23 @@
 
             reduceDescription(desc, maxLenght)
             {
-                if(desc.length > maxLenght){
-                    return desc.substr(0,maxLenght) + '...';
+                var div = document.createElement("div");
+                div.innerHTML = desc;
+                var text = div.textContent || div.innerText || "";
+
+
+                if(text.length > maxLenght){
+                    return text.substr(0,maxLenght) + '...';
                 }else{
-                    return desc;
+                    return text;
                 }
+            },
+
+            showCreateOverlay() {
+                this.showCreate = true;
+            },
+            hideCreateOverlay() {
+                this.showCreate = false;
             },
         },
         computed: {
@@ -232,6 +271,20 @@
 </script>
 
 <style scoped>
+
+    #overlay {
+        position: fixed; /* Sit on top of the page content */
+        display: block; /* Hidden by default */
+        width: 100%; /* Full width (cover the whole page) */
+        height: 100%; /* Full height (cover the whole page) */
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0,0,0,0.5); /* Black background with opacity */
+        z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+    }
+
     .flip-list-move {
         transition: transform 0.5s;
     }

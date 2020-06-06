@@ -148,6 +148,21 @@
                 this.hideCreateOverlay();
             },
 
+            reqModifyActivitiesOrder: async function (newOrder) {
+                const URL = '/api/list/change-order';
+                return await axios.post(URL, {
+                    data: newOrder
+                })
+                    .then(function (resp) {
+                        // console.log(resp);
+                        return resp;
+                    })
+                    .catch(function (err) {
+                        // console.error(err.response);
+                        return err;
+                    });
+            },
+
             showCreateOverlay() {
                 this.showCreate = true;
             },
@@ -165,6 +180,18 @@
                 };
             }
         },
+        watch: {
+            itemsList: function (val) {
+                if(this.orderModified){
+                    let newOrder = []
+                    this.itemsList.forEach((x) => {
+                        newOrder.push(x.id);
+                    });
+                    this.reqModifyActivitiesOrder(newOrder);
+                    this.orderModified = false;
+                }
+            }
+        }
     }
 </script>
 

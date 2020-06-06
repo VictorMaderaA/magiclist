@@ -11,6 +11,16 @@ class Lists extends BaseModel
 {
     use SoftDeletes;
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        Lists::creating(function ($list) {
+            $count = auth()->user()->lists()->count();
+            $list->priority = $count+1;
+        });
+    }
+
 
     /**
      * The table associated with the model.
