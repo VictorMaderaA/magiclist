@@ -14,6 +14,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('dev/views/', 'Views\Develop\ViewsController@index');
+Route::get('dev/views/{id}', 'Views\Develop\ViewsController@show')->name('dev_views_show');
+
+
 Route::get('/', 'WelcomeController');
 
 Auth::routes();
