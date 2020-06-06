@@ -3,12 +3,9 @@
     <a href="" class="brand-link">
 {{--        <img src="{{asset('img/AdminLTELogo.png')}}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"--}}
 {{--             style="opacity: .8">--}}
-        <img alt="MagicList Logo" class="brand-image"
-            sizes="(max-width: 1024px) 100vw, 1024px"
-            srcset="{{asset('img/app/icon/Icon_w_50.png')}} 50w,
+        <img alt="MagicList Logo" class="brand-image" sizes="(max-width: 1024px) 100vw, 1024px" srcset="{{asset('img/app/icon/Icon_w_50.png')}} 50w,
                     {{asset('img/app/icon/Icon_w_522.png')}} 522w,
-                    {{asset('img/app/icon/Icon_w_1024.png')}} 1024w"
-            src="{{asset('img/app/icon/Icon_w_1024.png')}}">
+                    {{asset('img/app/icon/Icon_w_1024.png')}} 1024w" src="{{asset('img/app/icon/Icon_w_1024.png')}}">
         <span class="brand-text font-weight-light">{{ config('app.name', 'MagicList') }}</span>
     </a>
 

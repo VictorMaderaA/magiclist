@@ -5,5 +5,10 @@
         Anything you want
     </div>
     <!-- Default to the left -->
-    <strong>Copyright &copy; 2020 <a href="https://github.com/VictorMaderaA">Víctor René Madera Arenas</a>.</strong> All rights reserved.
+    <strong>
+        Copyright &copy; 2020
+        <a href="https://github.com/VictorMaderaA">
+            Víctor René Madera Arenas
+        </a>.
+    </strong> Allrights reserved.
 </footer>
