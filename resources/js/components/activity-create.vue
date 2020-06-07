@@ -10,60 +10,60 @@
         <div>
             <div v-if="!form.showRawDesc">
                 <editor-menu-bar :editor="form.editor" v-slot="{ commands, isActive, focused }">
-                    <div class="menubar is-hidden">
-
-                        <button class="menubar__button" :class="{ 'is-active': isActive.bold() }" @click="commands.bold">
+                    <div class="menubar">
+                        <button class="menubar__button" :class="{ 'active': isActive.bold() }"
+                                v-on:click.capture.prevent="commands.bold">
                             <i class="icofont-bold"></i>
                         </button>
 
-                        <button class="menubar__button" :class="{ 'is-active': isActive.italic() }"
-                                @click="commands.italic">
+                        <button class="menubar__button" :class="{ 'active': isActive.italic() }"
+                                v-on:click.capture.prevent="commands.italic">
                             <i class="icofont-italic"></i>
                         </button>
 
-                        <button class="menubar__button" :class="{ 'is-active': isActive.strike() }"
-                                @click="commands.strike">
+                        <button class="menubar__button" :class="{ 'active': isActive.strike() }"
+                                v-on:click.capture.prevent="commands.strike">
                             <i class="icofont-strike-through"></i>
                         </button>
 
-                        <button class="menubar__button" :class="{ 'is-active': isActive.underline() }"
-                                @click="commands.underline">
+                        <button class="menubar__button" :class="{ 'active': isActive.underline() }"
+                                v-on:click.capture.prevent="commands.underline">
                             <i class="icofont-underline"></i>
                         </button>
 
-                        <button class="menubar__button" :class="{ 'is-active': isActive.paragraph() }"
-                                @click="commands.paragraph">
+                        <button class="menubar__button" :class="{ 'active': isActive.paragraph() }"
+                                v-on:click.capture.prevent="commands.paragraph">
                             <i class="icofont-paragraph"></i>
                         </button>
 
-                        <button class="menubar__button" :class="{ 'is-active': isActive.heading({ level: 1 }) }"
-                                @click="commands.heading({ level: 1 })">
+                        <button class="menubar__button" :class="{ 'active': isActive.heading({ level: 1 }) }"
+                                v-on:click.capture.prevent="commands.heading({ level: 1 })">
                             H1
                         </button>
 
-                        <button class="menubar__button" :class="{ 'is-active': isActive.heading({ level: 2 }) }"
-                                @click="commands.heading({ level: 2 })">
+                        <button class="menubar__button" :class="{ 'active': isActive.heading({ level: 2 }) }"
+                                v-on:click.capture.prevent="commands.heading({ level: 2 })">
                             H2
                         </button>
 
-                        <button class="menubar__button" :class="{ 'is-active': isActive.heading({ level: 3 }) }"
-                                @click="commands.heading({ level: 3 })">
+                        <button class="menubar__button" :class="{ 'active': isActive.heading({ level: 3 }) }"
+                                v-on:click.capture.prevent="commands.heading({ level: 3 })">
                             H3
                         </button>
 
-                        <button class="menubar__button" :class="{ 'is-active': isActive.bullet_list() }"
-                                @click="commands.bullet_list">
+                        <button class="menubar__button" :class="{ 'active': isActive.bullet_list() }"
+                                v-on:click.capture.prevent="commands.bullet_list">
                             <i class="icofont-listine-dots"></i>
                         </button>
 
-                        <button class="menubar__button" :class="{ 'is-active': isActive.ordered_list() }"
-                                @click="commands.ordered_list">
+                        <button class="menubar__button" :class="{ 'active': isActive.ordered_list() }"
+                                v-on:click.capture.prevent="commands.ordered_list">
                             <i class="icofont-listing-number"></i>
                         </button>
 
 
                         <button class="menubar__button"
-                                @click="onClickRawDesc">
+                                v-on:click.capture.prevent="onClickRawDesc">
                             HTML
                         </button>
                     </div>
@@ -74,7 +74,7 @@
                 <label for="rawDesc">
                     Example textarea
                     <button class="menubar__button"
-                            @click="onClickRawDesc">
+                            v-on:click.capture.prevent="onClickRawDesc">
                         Preview
                     </button>
                 </label>
@@ -95,8 +95,6 @@
         EditorMenuBar
     } from 'tiptap'
     import {
-        Blockquote,
-        CodeBlock,
         HardBreak,
         Heading,
         OrderedList,
@@ -105,12 +103,10 @@
         TodoItem,
         TodoList,
         Bold,
-        Code,
         Italic,
         Link,
         Strike,
         Underline,
-        History,
     } from 'tiptap-extensions'
 
     export default {
@@ -135,8 +131,6 @@
                     rawDesc: '',
                     editor: new Editor({
                         extensions: [
-                            new Blockquote(),
-                            new CodeBlock(),
                             new HardBreak(),
                             new Heading({
                                 levels: [1, 2, 3]
@@ -147,12 +141,10 @@
                             new TodoItem(),
                             new TodoList(),
                             new Bold(),
-                            new Code(),
                             new Italic(),
                             new Link(),
                             new Strike(),
                             new Underline(),
-                            new History(),
                         ],
                         content: '',
                     }),

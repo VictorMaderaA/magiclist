@@ -1,7 +1,7 @@
 <template>
 
     <div class="row justify-content-center">
-        <div class="col-md-6">
+        <div class="col-md-10">
             <div class="card card-outline card-info">
                 <div class="card-header">
                     <h3 class="card-title align-middle">
@@ -21,9 +21,9 @@
                             <div class="col-sm-8">
                                 <!-- text input -->
                                 <div class="form-group">
-                                    <label for="name">List Name</label>
+                                    <label for="name">Name</label>
                                     <input type="text" class="form-control" id="name"
-                                           placeholder="Cooking List..." v-model="itemData.name">
+                                           placeholder="Order Pizza..." v-model="itemData.name">
                                 </div>
                             </div>
                         </div>
@@ -32,15 +32,93 @@
                             <div class="col-sm-10">
                                 <!-- textarea -->
                                 <div class="form-group">
-                                    <label for="description">Description</label>
-                                    <textarea class="form-control" rows="3" id="description"
-                                              placeholder="Enter description..." v-model="itemData.description"></textarea>
+                                    <label>Description</label>
+
+                                    <div v-if="!form.showRawDesc">
+                                        <editor-menu-bar :editor="form.editor" v-slot="{ commands, isActive, focused }">
+                                            <div class="menubar is-hidden">
+
+                                                <button class="menubar__button" :class="{ 'is-active': isActive.bold() }" @click="commands.bold">
+                                                    <i class="fas fa-bold"></i>
+                                                </button>
+
+                                                <button class="menubar__button" :class="{ 'is-active': isActive.italic() }"
+                                                        @click="commands.italic">
+                                                    <i class="fas fa-italic"></i>
+                                                </button>
+
+                                                <button class="menubar__button" :class="{ 'is-active': isActive.strike() }"
+                                                        @click="commands.strike">
+                                                    <i class="fas fa-strikethrough"></i>
+                                                </button>
+
+                                                <button class="menubar__button" :class="{ 'is-active': isActive.underline() }"
+                                                        @click="commands.underline">
+                                                    <i class="fas fa-underline"></i>
+                                                </button>
+
+                                                <button class="menubar__button" :class="{ 'is-active': isActive.paragraph() }"
+                                                        @click="commands.paragraph">
+                                                    <i class="fas fa-paragraph"></i>
+                                                </button>
+
+                                                <button class="menubar__button" :class="{ 'is-active': isActive.heading({ level: 1 }) }"
+                                                        @click="commands.heading({ level: 1 })">
+                                                    H1
+                                                </button>
+
+                                                <button class="menubar__button" :class="{ 'is-active': isActive.heading({ level: 2 }) }"
+                                                        @click="commands.heading({ level: 2 })">
+                                                    H2
+                                                </button>
+
+                                                <button class="menubar__button" :class="{ 'is-active': isActive.heading({ level: 3 }) }"
+                                                        @click="commands.heading({ level: 3 })">
+                                                    H3
+                                                </button>
+
+                                                <button class="menubar__button" :class="{ 'is-active': isActive.bullet_list() }"
+                                                        @click="commands.bullet_list">
+                                                    <i class="fas fa-list-ul"></i>
+                                                </button>
+
+                                                <button class="menubar__button" :class="{ 'is-active': isActive.ordered_list() }"
+                                                        @click="commands.ordered_list">
+                                                    <i class="fas fa-list-ol"></i>
+                                                </button>
+
+
+                                                <button class="menubar__button"
+                                                        @click="onClickRawDesc">
+                                                    HTML
+                                                </button>
+                                            </div>
+                                        </editor-menu-bar>
+                                        <editor-content :editor="form.editor" style="background: white; color: black; outline: none"/>
+                                    </div>
+
+                                    <div class="form-group" v-if="form.showRawDesc">
+                                        <label for="rawDesc">
+                                            Example textarea
+                                            <button class="menubar__button"
+                                                    @click="onClickRawDesc">
+                                                Preview
+                                            </button>
+                                        </label>
+                                        <textarea class="form-control" id="rawDesc" rows="5"
+                                                  style="margin-top: 0px; margin-bottom: 0px; height: 266px;"
+                                                  v-model="form.rawDesc"></textarea>
+                                    </div>
+
+
+
+
                                 </div>
                             </div>
                         </div>
 
                         <div class="input-group row justify-content-center">
-                            <div class="col-5">
+                            <div class="col-10">
                                 <div class="custom-file">
                                     <input type="file" class="custom-file-input" id="inputGroupFile01"
                                            accept="image/*|.mp4">
@@ -69,13 +147,78 @@
 </template>
 
 <script>
+    import {
+        Editor,
+        EditorContent,
+        EditorMenuBar
+    } from 'tiptap'
+    import {
+        Blockquote,
+        CodeBlock,
+        HardBreak,
+        Heading,
+        OrderedList,
+        BulletList,
+        ListItem,
+        TodoItem,
+        TodoList,
+        Bold,
+        Code,
+        Italic,
+        Link,
+        Strike,
+        Underline,
+        History,
+        Placeholder
+    } from 'tiptap-extensions'
+
     export default {
         name: "edit-item",
+        components: {
+            EditorContent,
+            EditorMenuBar,
+        },
         props: [
             'item'
         ],
         data(){
             return{
+                form: {
+                    name: null,
+                    showRawDesc: false,
+                    rawDesc: '',
+                    editor: new Editor({
+                        extensions: [
+                            new Blockquote(),
+                            new CodeBlock(),
+                            new HardBreak(),
+                            new Heading({
+                                levels: [1, 2, 3]
+                            }),
+                            new BulletList(),
+                            new OrderedList(),
+                            new ListItem(),
+                            new TodoItem(),
+                            new TodoList(),
+                            new Bold(),
+                            new Code(),
+                            new Italic(),
+                            new Link(),
+                            new Strike(),
+                            new Underline(),
+                            new History(),
+                            new Placeholder({
+                                emptyEditorClass: 'is-editor-empty',
+                                emptyNodeClass: 'is-empty',
+                                emptyNodeText: 'Here You can Write your Descriptions' +
+                                    '1. Do it your way',
+                                showOnlyWhenEditable: true,
+                                showOnlyCurrent: true,
+                            }),
+                        ],
+                        content: null,
+                })},
+
                 itemData: null,
             }
         },
@@ -85,6 +228,9 @@
             }else{
                 console.error('Missing Item');
             }
+        },
+        beforeDestroy() {
+            this.form.editor.destroy()
         },
         methods:{
             async load(item){
@@ -121,6 +267,17 @@
                     });
             },
 
+            onClickRawDesc(){
+                if(this.form.showRawDesc){
+                    //Mostrando Raw
+                    this.form.editor.setContent(this.form.rawDesc);
+                }else{
+                    //Mostrando Editor
+                    this.form.rawDesc = this.form.editor.getHTML()
+                }
+                this.form.showRawDesc = !this.form.showRawDesc;
+            },
+
 
             onClickCancel(){
                 this.$emit('cancel');
@@ -129,6 +286,26 @@
     }
 </script>
 
-<style scoped>
+<style>
 
+    .ProseMirror {
+        display: block;
+        width: 100%;
+        height: 120%;
+        padding: 0.375rem 0.75rem;
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #495057;
+        background-color: #ffffff;
+        background-clip: padding-box;
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+        box-shadow: inset 0 0 0 rgba(0, 0, 0, 0);
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+
+    .ProseMirror:focus {
+        outline: none !important;
+    }
 </style>
