@@ -155,8 +155,8 @@
                                         <span class="text">{{item.name}}</span>
                                         <!-- General tools such as edit or delete-->
                                         <div class="tools">
-                                            <i class="fas fa-eye text-gray" v-on:click="onClickItem"></i>
-                                            <i class="fas fa-edit text-blue" v-on:click="onClickEditItem"></i>
+                                            <i class="fas fa-eye text-gray" v-on:click="onClickItem(item)"></i>
+                                            <i class="fas fa-edit text-blue" v-on:click="onClickEditItem(item)"></i>
                                             <i class="fas fa-trash text-red" v-on:click="onClickModalDeleteItem(item)"
                                                data-toggle="modal" data-target="#modal-deleteItem"></i>
                                         </div>
@@ -242,7 +242,7 @@
             },
             onClickEditList(){
                 console.log('onClickEditList');
-                this.$emit('edit-list');
+                this.$emit('edit-list', this.list);
             },
 
             onClickModalDeleteItem(item){
@@ -251,16 +251,18 @@
             onClickDeleteItem(){
                 console.log('onClickDeleteItem');
             },
-            onClickEditItem(){
+            onClickEditItem(item){
                 console.log('onClickEditItem');
-                this.$emit('edit-item');
+                this.$emit('edit-item', item);
             },
             onClickNewItem(){
                 console.log('onClickNewItem');
                 this.$emit('create-item', this.list);
             },
-            onClickItem(){
+            onClickItem(item){
                 console.log('onClickItem');
+                this.$emit('selected-item', item);
+
             },
 
 
