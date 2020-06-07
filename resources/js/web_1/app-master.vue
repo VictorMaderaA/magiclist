@@ -19,6 +19,11 @@
             //     console.log('Create Item Master', list);
             // },
 
+            onListCreated(list){
+                this.$refs.sidebarUl.loadLists();
+                //TODO Add existing list from param
+            }
+
         }
     }
 </script>

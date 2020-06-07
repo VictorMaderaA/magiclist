@@ -1,34 +1,60 @@
 <template>
-    <show-list ref="showList"
-               @edit-list="showEditList"
-               @edit-item="showEditItem"
-               @create-item="showCreateItem"
-               @selected-item="showItem"
-               :listId="curr.listId"
-               v-if="showing.list"
-    ></show-list>
+    <div>
+
+        <create-item ref="createItem"
+                     @edit-item="showEditItem"
+                     @created-item="showItem"
+                     @cancel="showList"
+                     v-if="showing.createItem"
+        ></create-item>
+
+        <create-list ref="createList"
+                     @created-list="onListCreated"
+                     @cancel="showList"
+                     v-if="showing.createList"
+        ></create-list>
+
+        <edit-item ref="editItem"
+                   :item="this.curr.listId"
+                   @saved-item="showItem"
+                   @cancel="showList"
+                   v-if="showing.editItem"
+        ></edit-item>
+
+        <show-item ref="showItem"
+                   @edit-item="showEditItem"
+                   @return="showList"
+                   v-if="showing.item"
+        ></show-item>
+
+        <show-list ref="showList"
+                   @edit-item="showEditItem"
+                   @create-item="showCreateItem"
+                   @selected-item="showItem"
+                   :listId="curr.listId"
+                   v-if="showing.list"
+        ></show-list>
+
+    </div>
+
 
 </template>
 
 <script>
-    import ShowList from "./components/show-list";
     export default {
         name: "main-component",
-        components: {
-            'showList': ShowList
-        },
         data(){
             return {
                 showing: {
                     list: false,
                     item: false,
                     createList: false,
-                    editList: false,
                     editItem: false,
                     createItem: false
                 },
                 curr:{
-                    listId: null
+                    listId: null,
+                    itemId: null,
                 }
             }
         },
@@ -40,11 +66,14 @@
             },
 
             showList(list){
-                this.hideShowing();
-                this.curr.listId = list.id;
+                if(list){
+                    this.curr.listId = list.id;
+                }
+
                 if(this.showing.list){
                     this.$refs.showList.updateComponent(this.curr.listId);
                 }
+                this.hideShowing();
                 this.showing.list = true;
             },
             showItem(item){
@@ -58,20 +87,22 @@
                 console.log('Create New List - Main Component');
                 this.showing.createList = true;
             },
-            showEditList(list){
-                this.hideShowing();
-                console.log('Edit List - Main Component');
-                this.showing.editList = true;
-            },
             showEditItem(item){
                 this.hideShowing();
-                console.log('Edit Item - Main Component');
+                this.curr.itemId = item.id;
                 this.showing.editItem = true;
             },
             showCreateItem(item){
                 this.hideShowing();
                 console.log('Create Item - Main Component');
                 this.showing.createItem = true;
+            },
+
+
+
+            onListCreated(list){
+                this.$emit('list-created')
+                this.showList(list);
             },
 
         }

@@ -20,20 +20,50 @@
 <script>
     export default {
         name: "sidebar-ul",
-        props: {
-            lists: Array,
-        },
         data() {
             return {
-
+                firstLoad: true,
+                lists: null,
             }
+        },
+        beforeMount() {
+            this.loadLists();
         },
         mounted() {
-            if(this.lists.length > 0){
-                this.onListSelected(this.lists[0]);
-            }
+
         },
         methods: {
+            showDefaultList(){
+                if(this.lists.length > 0){
+                    this.onListSelected(this.lists[0]);
+                }
+            },
+            async loadLists(){
+                let response = await this.reqListsData();
+                if(response.status === 200){
+                    this.lists = response.data;
+                    if(this.firstLoad){
+                        this.showDefaultList();
+                        this.firstLoad = false;
+                    }
+                }else{
+                    //TODO
+                }
+            },
+
+            reqListsData: async function () {
+                const URL = '/api/list/';
+                return axios.get(URL, {})
+                    .then(function (resp) {
+                        // console.log(resp);
+                        return resp;
+                    })
+                    .catch(function (err) {
+                        // console.error(err.response);
+                        return err;
+                    });
+            },
+
             onListSelected(list){
                 this.$emit('list-selected', list)
             },

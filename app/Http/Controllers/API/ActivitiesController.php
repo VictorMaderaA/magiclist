@@ -13,6 +13,18 @@ use Illuminate\Support\Facades\Validator;
 class ActivitiesController extends BaseController
 {
 
+    public function getData($activityId)
+    {
+        //Buscamos que exista la actividad
+        $activity = Activities::query()->findOrFail($activityId);
+        //Comprobamos que el usuario tenga acceso a la lista de la actividad
+        if(!auth('api')->user()->lists()->find($activity->list_id)){
+            return response('',403);
+        }
+
+        return response($activity, 200);
+    }
+
     public function changeCompletedState(Request $request, $activityId)
     {
         //Validamos

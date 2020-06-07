@@ -21,9 +21,16 @@ window.Vue = require('vue');
 
 Vue.component('app-master', require('./web_1/app-master.vue').default);
 Vue.component('main-component', require('./web_1/main-component.vue').default);
-Vue.component('sidebar-ul', require('./web_1/components/sidebar-ul.vue').default);
-// Vue.component('app', require('./components/ExampleComponent.vue').default);
 
+Vue.component('create-item', require('./web_1/components/create-item.vue').default);
+Vue.component('create-list', require('./web_1/components/create-list.vue').default);
+Vue.component('edit-item', require('./web_1/components/edit-item.vue').default);
+Vue.component('show-item', require('./web_1/components/show-item.vue').default);
+Vue.component('show-list', require('./web_1/components/show-list.vue').default);
+
+Vue.component('sidebar-ul', require('./web_1/components/sidebar-ul.vue').default);
+
+// Vue.component('create', require('./web_1/components/NULL.vue').default);
 
 
 /**

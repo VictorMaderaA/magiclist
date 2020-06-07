@@ -22,6 +22,11 @@ class ListController extends BaseController
         return response($list);
     }
 
+    public function get(){
+        $lists = auth('api')->user()->lists()->orderBy('priority')->get();
+        return response($lists->toArray(), 200);
+    }
+
     public function modifyActivitiesOrder(Request $request, $listId){
         //Validamos
         $validator = Validator::make($request->all(), [
@@ -97,6 +102,7 @@ class ListController extends BaseController
         //Validamos
         $validator = Validator::make($request->all(), [
             'name' => 'required|string',
+            'description' => 'required|string',
         ]);
         if($validator->fails()) {
             return response($validator->errors(), 404);
@@ -104,6 +110,7 @@ class ListController extends BaseController
 
         $list = new Lists();
         $list->name = $request->input('name');
+        $list->description = $request->input('description');
         $list->user_id = auth()->id();
         $list->saveOrFail();
         $list->syncOriginal();
