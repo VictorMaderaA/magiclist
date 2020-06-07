@@ -78,7 +78,7 @@
                             <i class="fas fa-plus text-green"></i>
                         </a>
 
-                        <a class="btn btn-sm" v-on:click="onClickEditList">
+                        <a class="btn btn-sm" data-toggle="modal" data-target="#modal-editList">
                             <i class="fas fa-edit text-blue"></i>
                         </a>
 
@@ -97,7 +97,7 @@
                         </div>
                     </div>
 
-                    <div class="row" >
+                    <div class="row justify-content-around" >
                         <div class="col-3">
                             <h5>
                                 Show options
@@ -131,8 +131,8 @@
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col-12">
+                    <div class="row justify-content-center">
+                        <div class="col-md-10">
                             <ul class="todo-list ui-sortable" data-widget="todo-list">
                                 <draggable
                                     v-model="listItems"
@@ -249,12 +249,16 @@
             },
 
 
-            onClickDeleteList(list){
-                console.log('onClickDeleteList');
+            async onClickDeleteList(list){
+                let response = await this.reqListDelete(list.id);
+                if(response.status === 200){
+                    this.$emit('list-deleted', this.list);
+                }
             },
-            onClickEditList(){
+
+            async onClickEditList(){
                 console.log('onClickEditList');
-                this.$emit('edit-list', this.list);
+                //TODO
             },
 
             onClickModalDeleteItem(item){
@@ -262,21 +266,47 @@
             },
             onClickDeleteItem(){
                 console.log('onClickDeleteItem');
+                //TODO
             },
             onClickEditItem(item){
-                console.log('onClickEditItem');
                 this.$emit('edit-item', item);
             },
             onClickNewItem(){
-                console.log('onClickNewItem');
                 this.$emit('create-item', this.list);
             },
             onClickItem(item){
-                console.log('onClickItem');
                 this.$emit('selected-item', item);
 
             },
 
+            reqListUpdate: async function (listId, name, description) {
+                const URL = '/api/list/' + listId;
+                return axios.post(URL, {
+                    name: name,
+                    description: description
+                })
+                    .then(function (resp) {
+                        // console.log(resp);
+                        return resp;
+                    })
+                    .catch(function (err) {
+                        // console.error(err.response);
+                        return err;
+                    });
+            },
+
+            reqListDelete: async function (listId) {
+                const URL = '/api/list/' + listId;
+                return axios.delete(URL, {})
+                    .then(function (resp) {
+                        // console.log(resp);
+                        return resp;
+                    })
+                    .catch(function (err) {
+                        // console.error(err.response);
+                        return err;
+                    });
+            },
 
             reqListData: async function (listId) {
                 const URL = '/api/list/' + listId;

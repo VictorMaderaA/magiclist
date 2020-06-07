@@ -80,7 +80,6 @@
             }
         },
         beforeMount() {
-            console.log('edit-item prop.item', this.item);
             if(this.item){
                 this.load(this.item);
             }else{

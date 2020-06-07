@@ -77,10 +77,15 @@
             },
             reqSaveList: async function (name, description) {
                 const URL = '/api/list';
-                return await axios.post(URL, {
-                    name: name,
-                    description: description
-                })
+
+                let data = {
+                    name: name
+                };
+                if(description){
+                    data.description = description;
+                }
+
+                return await axios.post(URL, data)
                     .then(function (resp) {
                         // console.log(resp);
                         return resp;

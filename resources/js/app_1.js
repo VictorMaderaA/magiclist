@@ -30,6 +30,11 @@ Vue.component('show-list', require('./web_1/components/show-list.vue').default);
 
 Vue.component('sidebar-ul', require('./web_1/components/sidebar-ul.vue').default);
 
+
+import vSelect from 'vue-select'
+
+Vue.component('v-select', vSelect)
+
 // Vue.component('create', require('./web_1/components/NULL.vue').default);
 
 

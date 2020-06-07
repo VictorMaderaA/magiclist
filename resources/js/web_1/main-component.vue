@@ -2,8 +2,9 @@
     <div>
 
         <create-item ref="createItem"
-                     @edit-item="showEditItem"
-                     @created-item="showItem"
+                     :listid="curr.listId"
+                     @list-show="showList"
+                     @item-edit="showEditItem"
                      @cancel="showList"
                      v-if="showing.createItem"
         ></create-item>
@@ -15,7 +16,7 @@
         ></create-list>
 
         <edit-item ref="editItem"
-                   :item="this.curr.listId"
+                   :item="this.curr.itemId"
                    @saved-item="showItem"
                    @cancel="showList"
                    v-if="showing.editItem"
@@ -28,6 +29,7 @@
         ></show-item>
 
         <show-list ref="showList"
+                   @list-deleted="onListDeleted"
                    @edit-item="showEditItem"
                    @create-item="showCreateItem"
                    @selected-item="showItem"
@@ -67,7 +69,11 @@
 
             showList(list){
                 if(list){
-                    this.curr.listId = list.id;
+                    if(Number.isInteger(list)){
+                        this.curr.listId = list;
+                    }else{
+                        this.curr.listId = list.id;
+                    }
                 }
 
                 if(this.showing.list){
@@ -103,6 +109,11 @@
             onListCreated(list){
                 this.$emit('list-created')
                 this.showList(list);
+            },
+            onListDeleted(){
+                this.$emit('list-created')
+                this.hideShowing();
+                //TODO CHANGE EMIT METHOD
             },
 
         }

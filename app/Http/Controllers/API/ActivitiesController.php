@@ -66,7 +66,7 @@ class ActivitiesController extends BaseController
 
         $activity = new Activities();
         $activity->name = $request->input('name');
-        $activity->description = $request->input('description')?? '';
+        $activity->description = $request->input('description', '');
         $activity->list_id = $request->input('listId');
         $activity->saveOrFail();
         $activity->syncOriginal();

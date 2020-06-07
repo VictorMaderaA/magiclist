@@ -34,7 +34,7 @@ class ListController extends BaseController
             'data.*' => 'required|integer',
         ]);
         if($validator->fails()) {
-            return response($validator->errors(), 404);
+            return response($validator->errors(), 400);
         }
 
         //Comprobamos que el usuario tenga acceso a la lista de la actividad
@@ -73,7 +73,7 @@ class ListController extends BaseController
             'data.*' => 'required|integer',
         ]);
         if($validator->fails()) {
-            return response($validator->errors(), 404);
+            return response($validator->errors(), 400);
         }
 
         $newOrderArray = $request->input('data');
@@ -102,21 +102,43 @@ class ListController extends BaseController
         //Validamos
         $validator = Validator::make($request->all(), [
             'name' => 'required|string',
-            'description' => 'required|string',
+            'description' => 'string',
         ]);
         if($validator->fails()) {
-            return response($validator->errors(), 404);
+            return response($validator->errors(), 400);
         }
 
         $list = new Lists();
         $list->name = $request->input('name');
-        $list->description = $request->input('description');
+        $list->description = $request->input('description', '');
         $list->user_id = auth()->id();
         $list->saveOrFail();
         $list->syncOriginal();
 
         //Devolvemos mod correcta
         return response($list->toArray(), 200);
+    }
+
+    public function delete($listId){
+        //Comprobamos que el usuario tenga acceso a la lista de la actividad
+        if(!$list = auth('api')->user()->lists()->find($listId)){
+            return response('',403);
+        }
+        $list->delete();
+        //Devolvemos mod correcta
+        return response('', 200);
+    }
+
+    public function update(Request $request, $listId){
+        //Comprobamos que el usuario tenga acceso a la lista de la actividad
+        if(!$list = auth('api')->user()->lists()->find($listId)){
+            return response('',403);
+        }
+
+        $attributes = \request(['name', 'description']);
+
+        response($attributes->toArray());
+
     }
 
 }

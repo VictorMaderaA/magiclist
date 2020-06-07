@@ -33,6 +33,8 @@ Route::group([
     Route::post('/list/change-order', 'ListController@modifyOrder');
     Route::post('/list', 'ListController@create');
     Route::get('/list/{listId}', 'ListController@getData');
+    Route::delete('/list/{listId}', 'ListController@delete');
+    Route::post('/list/{listId}', 'ListController@update');
     Route::get('/list', 'ListController@get');
     Route::get('/activity/{activityId}', 'ActivitiesController@getData');
     Route::post('/activity', 'ActivitiesController@create');
