@@ -1,7 +1,7 @@
 <template>
     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
         <li class="nav-item">
-            <a href="#" class="nav-link">
+            <a href="" class="nav-link" v-on:click.stop.prevent="onCreateNewList()">
                 <i class="fas fa-plus-circle"></i>
                 <p>Create New List</p>
             </a>
@@ -36,6 +36,9 @@
         methods: {
             onListSelected(list){
                 this.$emit('list-selected', list)
+            },
+            onCreateNewList(){
+                this.$emit('create-list');
             }
         }
     }

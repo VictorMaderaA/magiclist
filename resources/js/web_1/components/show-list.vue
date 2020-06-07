@@ -1,4 +1,70 @@
 <template>
+    <div class="content">
+
+        <div class="modal fade" id="modal-deleteItem" style="display: none;" aria-hidden="true" v-if="modalItem">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Are you sure? - Delete <strong><i>{{ modalItem.name }}</i></strong></h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Please Confirm You Want To Delete This Item</p>
+                        <p><strong>You will not be able to restore it later.</strong></p>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal"
+                                v-on:click="onClickDeleteItem(modalItem)">
+                            <strong>
+                                DELETE
+                            </strong>
+                        </button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+
+        <div class="modal fade" id="modal-deleteList" style="display: none;" aria-hidden="true" v-if="list">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Are you sure? - Delete <strong><i>{{ list.name }}</i></strong></h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Please Confirm You Want To Delete This List</p>
+                        <p>
+                            <strong>
+                                You'll lose access to all items from this list.
+                                <br>
+                                You will not be able to restore it later.
+                            </strong>
+                        </p>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal"
+                                v-on:click="onClickDeleteList(list)">
+                            <strong>
+                                DELETE
+                            </strong>
+                        </button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+
+
+
     <div class="row justify-content-center">
         <div class="col-md-10">
             <div class="card card-outline card-info" v-if="list">
@@ -8,11 +74,15 @@
                     </h3>
 
                     <div class="card-tools">
-                        <a class="btn btn-sm">
+                        <a class="btn btn-sm" v-on:click="onClickNewItem">
+                            <i class="fas fa-plus text-green"></i>
+                        </a>
+
+                        <a class="btn btn-sm" v-on:click="onClickEditList">
                             <i class="fas fa-edit text-blue"></i>
                         </a>
 
-                        <a class="btn btn-sm">
+                        <a class="btn btn-sm" data-toggle="modal" data-target="#modal-deleteList">
                             <i class="fas fa-trash text-red"></i>
                         </a>
                     </div>
@@ -85,8 +155,10 @@
                                         <span class="text">{{item.name}}</span>
                                         <!-- General tools such as edit or delete-->
                                         <div class="tools">
-                                            <i class="fas fa-edit"></i>
-                                            <i class="fas fa-trash"></i>
+                                            <i class="fas fa-eye text-gray" v-on:click="onClickItem"></i>
+                                            <i class="fas fa-edit text-blue" v-on:click="onClickEditItem"></i>
+                                            <i class="fas fa-trash text-red" v-on:click="onClickModalDeleteItem(item)"
+                                               data-toggle="modal" data-target="#modal-deleteItem"></i>
                                         </div>
                                     </li>
                             </transition-group>
@@ -100,6 +172,9 @@
         <!-- /.col-->
     </div>
     <!-- ./row -->
+
+    </div>
+
 </template>
 
 <script>
@@ -122,6 +197,7 @@
                 card:{
                     showOptions: "0"
                 },
+                modalItem: null,
                 list: {},
                 listItems: [],
 
@@ -161,21 +237,30 @@
             },
 
 
-            onClickDeleteList(){
+            onClickDeleteList(list){
                 console.log('onClickDeleteList');
             },
             onClickEditList(){
                 console.log('onClickEditList');
+                this.$emit('edit-list');
             },
 
+            onClickModalDeleteItem(item){
+                this.modalItem = item;
+            },
             onClickDeleteItem(){
                 console.log('onClickDeleteItem');
             },
             onClickEditItem(){
                 console.log('onClickEditItem');
+                this.$emit('edit-item');
             },
             onClickNewItem(){
                 console.log('onClickNewItem');
+                this.$emit('create-item', this.list);
+            },
+            onClickItem(){
+                console.log('onClickItem');
             },
 
 

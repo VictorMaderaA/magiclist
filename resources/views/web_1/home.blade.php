@@ -2,8 +2,9 @@
 
 @section('sidebar-menu')
     <sidebar-ul :lists="{{json_encode(auth()->user()->lists()->get()->toArray())}}"
-                @list-selected="onListSelected"
-                ></sidebar-ul>
+                @create-list="onShowCreateNewList"
+                @list-selected="onListSelected">
+    </sidebar-ul>
 @endsection
 
 @section('navbar-links')
@@ -35,7 +36,12 @@
 
 @section('content')
 
-    <main-component ref="mainComponent"></main-component>
+    <main-component ref="mainComponent"
+                    @edit-list=""
+                    @edit-item=""
+                    @create-item=""
+
+    ></main-component>
 
 
     <section class="content">

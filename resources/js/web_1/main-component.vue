@@ -1,5 +1,8 @@
 <template>
-    <show-list ref="showList" v-if="showing.list" :listId="curr.listId"></show-list>
+    <show-list ref="showList"
+               :listId="curr.listId"
+               v-if="showing.list"
+    ></show-list>
 
 </template>
 
@@ -27,6 +30,9 @@
                     this.$refs.showList.updateComponent(this.curr.listId);
                 }
                 this.showing.list = true;
+            },
+            showCreateNewList(){
+                console.log('Create New List - Main Component');
             }
         }
     }
