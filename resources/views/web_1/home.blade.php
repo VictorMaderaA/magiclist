@@ -1,7 +1,9 @@
 @extends('web_1.layouts.app')
 
 @section('sidebar-menu')
-   @include('web_1.app.sidebar')
+    <sidebar-ul :lists="{{json_encode(auth()->user()->lists()->get()->toArray())}}"
+                @list-selected="onListSelected"
+                ></sidebar-ul>
 @endsection
 
 @section('navbar-links')
@@ -33,105 +35,10 @@
 
 @section('content')
 
-    <main-component></main-component>
+    <main-component ref="mainComponent"></main-component>
 
 
     <section class="content">
-        <div class="row justify-content-center">
-            <div class="col-md-10">
-                <div class="card card-outline card-info">
-                    <div class="card-header">
-                        <h3 class="card-title align-middle">
-                            Nombre de la Lista 1
-                        </h3>
-
-                        <div class="card-tools">
-                            <a class="btn btn-sm">
-                                <i class="fas fa-edit text-blue"></i>
-                            </a>
-
-                            <a class="btn btn-sm">
-                                <i class="fas fa-trash text-red"></i>
-                            </a>
-                        </div>
-                    </div>
-                    <!-- /.card-header -->
-                    <div class="row" style="margin: 10px;">
-                        <div class="col-3">
-                            <h5>
-                                Show...
-                            </h5>
-                            <div class="form-group">
-                                <div class="custom-control custom-radio">
-                                    <input class="custom-control-input" type="radio" id="customRadio1" name="customRadio" checked>
-                                    <label for="customRadio1" class="custom-control-label">Pending</label>
-                                </div>
-                                <div class="custom-control custom-radio">
-                                    <input class="custom-control-input" type="radio" id="customRadio2" name="customRadio">
-                                    <label for="customRadio2" class="custom-control-label">All</label>
-                                </div>
-                                <div class="custom-control custom-radio">
-                                    <input class="custom-control-input" type="radio" id="customRadio3">
-                                    <label for="customRadio3" class="custom-control-label">Completed</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6">
-
-                        </div>
-                    </div>
-
-                    <div class="card-body">
-                        <ul class="todo-list ui-sortable" data-widget="todo-list">
-
-
-                            <li class="">
-                                <!-- drag handle -->
-                                <span class="handle ui-sortable-handle">
-                                    <i class="fas fa-ellipsis-v"></i>
-                                    <i class="fas fa-ellipsis-v"></i>
-                                </span>
-                                <!-- checkbox -->
-                                <div class="icheck-primary d-inline ml-2">
-                                    <input type="checkbox" value="" name="todo1" id="todoCheck1">
-                                    <label for="todoCheck1"></label>
-                                </div>
-                                <span class="text">Design a nice theme</span>
-                                <!-- General tools such as edit or delete-->
-                                <div class="tools">
-                                    <i class="fas fa-edit"></i>
-                                    <i class="fas fa-trash"></i>
-                                </div>
-                            </li>
-
-                            <li class="done">
-                                <!-- drag handle -->
-                                <span class="handle ui-sortable-handle">
-                                    <i class="fas fa-ellipsis-v"></i>
-                                    <i class="fas fa-ellipsis-v"></i>
-                                </span>
-                                <!-- checkbox -->
-                                <div class="icheck-primary d-inline ml-2">
-                                    <input type="checkbox" value="" name="todo1" id="todoCheck1">
-                                    <label for="todoCheck1"></label>
-                                </div>
-                                <!-- todo text -->
-                                <span class="text">Design a nice theme</span>
-                                <!-- General tools such as edit or delete-->
-                                <div class="tools">
-                                    <i class="fas fa-edit"></i>
-                                    <i class="fas fa-trash"></i>
-                                </div>
-                            </li>
-
-                        </ul>
-                    </div>
-
-                </div>
-            </div>
-            <!-- /.col-->
-        </div>
-        <!-- ./row -->
 
 
         <section class="content">

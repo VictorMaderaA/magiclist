@@ -38,7 +38,7 @@ class ActivitiesController extends BaseController
         }
 
         //Devolvemos mod correcta
-        return response('', 200);
+        return response($activity->toArray(), 200);
     }
 
     public function create(Request $request){

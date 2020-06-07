@@ -14,6 +14,14 @@ use Mavinoo\Batch\BatchFacade;
 class ListController extends BaseController
 {
 
+    public function getData($listId){
+        //Comprobamos que el usuario tenga acceso a la lista de la actividad
+        if(!$list = auth('api')->user()->lists()->with('activities')->find($listId)){
+            return response('',403);
+        }
+        return response($list);
+    }
+
     public function modifyActivitiesOrder(Request $request, $listId){
         //Validamos
         $validator = Validator::make($request->all(), [
