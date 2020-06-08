@@ -38,79 +38,89 @@
                                         <editor-menu-bar :editor="form.editor" v-slot="{ commands, isActive, focused }">
                                             <div class="menubar is-hidden">
 
-                                                <button class="menubar__button" :class="{ 'is-active': isActive.bold() }" @click="commands.bold">
+                                                <button class="btn bt-sm"
+                                                        :class="{ 'btn-default': isActive.bold() }"
+                                                        v-on:click.capture.prevent="commands.bold">
                                                     <i class="fas fa-bold"></i>
                                                 </button>
 
-                                                <button class="menubar__button" :class="{ 'is-active': isActive.italic() }"
-                                                        @click="commands.italic">
+                                                <button class="btn bt-sm"
+                                                        :class="{ 'btn-default': isActive.italic() }"
+                                                        v-on:click.capture.prevent="commands.italic">
                                                     <i class="fas fa-italic"></i>
                                                 </button>
 
-                                                <button class="menubar__button" :class="{ 'is-active': isActive.strike() }"
-                                                        @click="commands.strike">
+                                                <button class="btn bt-sm"
+                                                        :class="{ 'btn-default': isActive.strike() }"
+                                                        v-on:click.capture.prevent="commands.strike">
                                                     <i class="fas fa-strikethrough"></i>
                                                 </button>
 
-                                                <button class="menubar__button" :class="{ 'is-active': isActive.underline() }"
-                                                        @click="commands.underline">
+                                                <button class="btn bt-sm"
+                                                        :class="{ 'btn-default': isActive.underline() }"
+                                                        v-on:click.capture.prevent="commands.underline">
                                                     <i class="fas fa-underline"></i>
                                                 </button>
 
-                                                <button class="menubar__button" :class="{ 'is-active': isActive.paragraph() }"
-                                                        @click="commands.paragraph">
+                                                <button class="btn bt-sm"
+                                                        :class="{ 'btn-default': isActive.paragraph() }"
+                                                        v-on:click.capture.prevent="commands.paragraph">
                                                     <i class="fas fa-paragraph"></i>
                                                 </button>
 
-                                                <button class="menubar__button" :class="{ 'is-active': isActive.heading({ level: 1 }) }"
-                                                        @click="commands.heading({ level: 1 })">
+                                                <button class="btn bt-sm"
+                                                        :class="{ 'btn-default': isActive.heading({ level: 1 }) }"
+                                                        v-on:click.capture.prevent="commands.heading({ level: 1 })">
                                                     H1
                                                 </button>
 
-                                                <button class="menubar__button" :class="{ 'is-active': isActive.heading({ level: 2 }) }"
-                                                        @click="commands.heading({ level: 2 })">
+                                                <button class="btn bt-sm"
+                                                        :class="{ 'btn-default': isActive.heading({ level: 2 }) }"
+                                                        v-on:click.capture.prevent="commands.heading({ level: 2 })">
                                                     H2
                                                 </button>
 
-                                                <button class="menubar__button" :class="{ 'is-active': isActive.heading({ level: 3 }) }"
-                                                        @click="commands.heading({ level: 3 })">
+                                                <button class="btn bt-sm"
+                                                        :class="{ 'btn-default': isActive.heading({ level: 3 }) }"
+                                                        v-on:click.capture.prevent="commands.heading({ level: 3 })">
                                                     H3
                                                 </button>
 
-                                                <button class="menubar__button" :class="{ 'is-active': isActive.bullet_list() }"
-                                                        @click="commands.bullet_list">
+                                                <button class="btn bt-sm"
+                                                        :class="{ 'btn-default': isActive.bullet_list() }"
+                                                        v-on:click.capture.prevent="commands.bullet_list">
                                                     <i class="fas fa-list-ul"></i>
                                                 </button>
 
-                                                <button class="menubar__button" :class="{ 'is-active': isActive.ordered_list() }"
-                                                        @click="commands.ordered_list">
+                                                <button class="btn bt-sm"
+                                                        :class="{ 'btn-default': isActive.ordered_list() }"
+                                                        v-on:click.capture.prevent="commands.ordered_list">
                                                     <i class="fas fa-list-ol"></i>
                                                 </button>
 
 
-                                                <button class="menubar__button"
-                                                        @click="onClickRawDesc">
+                                                <button class="btn bt-sm btn-default"
+                                                        v-on:click.capture.prevent="onClickRawDesc">
                                                     HTML
                                                 </button>
                                             </div>
                                         </editor-menu-bar>
-                                        <editor-content :editor="form.editor" style="background: white; color: black; outline: none"/>
+                                        <editor-content :editor="form.editor"
+                                                        style="background: white; color: black; outline: none"/>
                                     </div>
 
                                     <div class="form-group" v-if="form.showRawDesc">
                                         <label for="rawDesc">
                                             Example textarea
-                                            <button class="menubar__button"
-                                                    @click="onClickRawDesc">
+                                            <button class="btn bt-sm btn-default"
+                                                    v-on:click.capture.prevent="onClickRawDesc">
                                                 Preview
                                             </button>
                                         </label>
                                         <textarea class="form-control" id="rawDesc" rows="5"
-                                                  style="margin-top: 0px; margin-bottom: 0px; height: 266px;"
+                                                  style="margin-top: 0; margin-bottom: 0; height: 266px;"
                                                   v-model="form.rawDesc"></textarea>
                                     </div>
-
-
 
 
                                 </div>
@@ -127,7 +137,7 @@
                             </div>
                         </div>
                         <div>
-                            Show interactable gallery
+                            Show intractable gallery
                         </div>
 
                     </form>
@@ -136,7 +146,8 @@
                 <div class="card-footer" v-if="itemData">
                     <button type="submit" class="btn btn-primary">Save</button>
                     <button type="submit" class="btn btn-default float-right"
-                            v-on:click="onClickCancel">Cancel</button>
+                            v-on:click="onClickCancel">Cancel
+                    </button>
                 </div>
 
             </div>
@@ -147,29 +158,24 @@
 </template>
 
 <script>
-    import {
-        Editor,
-        EditorContent,
-        EditorMenuBar
-    } from 'tiptap'
+    import {Editor, EditorContent, EditorMenuBar} from 'tiptap'
     import {
         Blockquote,
+        Bold,
+        BulletList,
+        Code,
         CodeBlock,
         HardBreak,
         Heading,
-        OrderedList,
-        BulletList,
-        ListItem,
-        TodoItem,
-        TodoList,
-        Bold,
-        Code,
+        History,
         Italic,
         Link,
+        ListItem,
+        OrderedList,
         Strike,
-        Underline,
-        History,
-        Placeholder
+        TodoItem,
+        TodoList,
+        Underline
     } from 'tiptap-extensions'
 
     export default {
@@ -181,10 +187,12 @@
         props: [
             'item'
         ],
-        data(){
-            return{
+        data() {
+            return {
                 form: {
                     name: null,
+                    filesUploaded: [],
+
                     showRawDesc: false,
                     rawDesc: '',
                     editor: new Editor({
@@ -207,49 +215,42 @@
                             new Strike(),
                             new Underline(),
                             new History(),
-                            new Placeholder({
-                                emptyEditorClass: 'is-editor-empty',
-                                emptyNodeClass: 'is-empty',
-                                emptyNodeText: 'Here You can Write your Descriptions' +
-                                    '1. Do it your way',
-                                showOnlyWhenEditable: true,
-                                showOnlyCurrent: true,
-                            }),
                         ],
                         content: null,
-                })},
+                    })
+                },
 
                 itemData: null,
             }
         },
         beforeMount() {
-            if(this.item){
+            if (this.item) {
                 this.load(this.item);
-            }else{
+            } else {
                 console.error('Missing Item');
             }
         },
         beforeDestroy() {
             this.form.editor.destroy()
         },
-        methods:{
-            async load(item){
-                if(Number.isInteger(item)){
+        methods: {
+            async load(item) {
+                if (Number.isInteger(item)) {
                     let response = await this.reqActivityData(item);
-                    if(response.status === 200){
+                    if (response.status === 200) {
                         this.loadItem(response.data)
-                    }else{
+                    } else {
                         this.failedLoad();
                     }
-                }else{
+                } else {
                     this.loadItem(item);
                 }
             },
 
-            loadItem(item){
+            loadItem(item) {
                 this.itemData = item;
             },
-            failedLoad(){
+            failedLoad() {
                 console.error('Failed to load Item Data');
             },
 
@@ -267,11 +268,11 @@
                     });
             },
 
-            onClickRawDesc(){
-                if(this.form.showRawDesc){
+            onClickRawDesc() {
+                if (this.form.showRawDesc) {
                     //Mostrando Raw
                     this.form.editor.setContent(this.form.rawDesc);
-                }else{
+                } else {
                     //Mostrando Editor
                     this.form.rawDesc = this.form.editor.getHTML()
                 }
@@ -279,9 +280,9 @@
             },
 
 
-            onClickCancel(){
+            onClickCancel() {
                 this.$emit('cancel');
-            }
+            },
         }
     }
 </script>

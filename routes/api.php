@@ -37,6 +37,7 @@ Route::group([
     Route::post('/list/{listId}', 'ListController@update');
     Route::get('/list', 'ListController@get');
     Route::get('/activity/{activityId}', 'ActivitiesController@getData');
+    Route::post('/activity/{activityId}/media', 'ActivitiesController@addMediaFile');
     Route::post('/activity', 'ActivitiesController@create');
 
 

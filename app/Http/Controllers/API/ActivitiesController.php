@@ -6,7 +6,6 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Base\BaseController;
 use App\Models\Activities;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -73,6 +72,10 @@ class ActivitiesController extends BaseController
 
         //Devolvemos mod correcta
         return response($activity->toArray(), 200);
+    }
+
+    public function addMediaFile(Request $request){
+        return response('working',200)->header('Content-Type', 'text/plain');;
     }
 
 }
