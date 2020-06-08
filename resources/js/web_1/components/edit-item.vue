@@ -38,6 +38,11 @@
                                         <editor-menu-bar :editor="form.editor" v-slot="{ commands, isActive, focused }">
                                             <div class="menubar is-hidden">
 
+                                                <button class="btn bt-sm btn-default"
+                                                        v-on:click.capture.prevent="onClickRawDesc">
+                                                    HTML
+                                                </button>
+
                                                 <button class="btn bt-sm"
                                                         :class="{ 'btn-default': isActive.bold() }"
                                                         v-on:click.capture.prevent="commands.bold">
@@ -98,11 +103,6 @@
                                                     <i class="fas fa-list-ol"></i>
                                                 </button>
 
-
-                                                <button class="btn bt-sm btn-default"
-                                                        v-on:click.capture.prevent="onClickRawDesc">
-                                                    HTML
-                                                </button>
                                             </div>
                                         </editor-menu-bar>
                                         <editor-content :editor="form.editor"
@@ -111,7 +111,6 @@
 
                                     <div class="form-group" v-if="form.showRawDesc">
                                         <label for="rawDesc">
-                                            Example textarea
                                             <button class="btn bt-sm btn-default"
                                                     v-on:click.capture.prevent="onClickRawDesc">
                                                 Preview
@@ -146,9 +145,22 @@
                             </div>
                         </div>
 
-
-                        <div>
-                            Show intractable gallery
+                        <div class="input-group row justify-content-center">
+                            <div class="col-10">
+                                <gallery :images="gallery" :index="index" @close="index = null"></gallery>
+                                <div
+                                    class="image"
+                                    v-for="(image, imageIndex) in gallery"
+                                    :key="imageIndex"
+                                    @click="index = imageIndex"
+                                    :style="{ backgroundImage: 'url(' + image.href + ')', width: '150px', height: '100px' }"
+                                >
+                                    <video width="150px" height="100px" controls v-if="image.isVideo">
+                                        <source :src="image.href" :type="image.mimeType">
+                                        Your browser does not support the video tag.
+                                    </video>
+                                </div>
+                            </div>
                         </div>
 
                     </form>
@@ -188,18 +200,23 @@
         TodoList,
         Underline
     } from 'tiptap-extensions'
+    import VueGallery from 'vue-gallery';
 
     export default {
         name: "edit-item",
         components: {
             EditorContent,
             EditorMenuBar,
+            'gallery': VueGallery,
         },
         props: [
             'item'
         ],
         data() {
             return {
+                index: null,
+
+
                 form: {
                     name: null,
                     filesUploaded: [],
@@ -330,6 +347,23 @@
                 }
                 this.form.fileUploading = false;
             },
+        },
+        computed: {
+            gallery(){
+                let gallery = [];
+                if(this.itemData && this.itemData.media){
+                    for (let i = 0; i < this.itemData.media.length; i++) {
+                        let media = this.itemData.media[i];
+                        gallery.push({
+                            title: media.name,
+                            href: media.temp_url,
+                            type: media.mimeType,
+                            isVideo: (media.mimeType).includes('video')
+                        })
+                    }
+                }
+                return gallery;
+            },
 
         }
     }
@@ -357,4 +391,17 @@
     .ProseMirror:focus {
         outline: none !important;
     }
+</style>
+
+<style scoped>
+
+    .image {
+        float: left;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+        border: 1px solid #ebebeb;
+        margin: 5px;
+    }
+
 </style>

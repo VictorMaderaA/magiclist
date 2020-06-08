@@ -14,10 +14,15 @@ use Illuminate\Support\Facades\Validator;
 class ActivitiesController extends BaseController
 {
 
+    public function __construct()
+    {
+        self::middleware('optimizeImages');
+    }
+
     public function getData($activityId)
     {
         //Buscamos que exista la actividad
-        $activity = Activities::query()->with('media:id,name,path')->findOrFail($activityId);
+        $activity = Activities::query()->with('media:id,name,path,mimeType')->findOrFail($activityId);
         //Comprobamos que el usuario tenga acceso a la lista de la actividad
         if (!auth('api')->user()->lists()->find($activity->list_id)) {
             return response('', 403);
