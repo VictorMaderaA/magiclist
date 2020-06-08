@@ -7,6 +7,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Base\BaseController;
 use App\Models\Activities;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class ActivitiesController extends BaseController
@@ -75,7 +76,7 @@ class ActivitiesController extends BaseController
     }
 
     public function addMediaFile(Request $request){
-        return response('working',200)->header('Content-Type', 'text/plain');;
+        return response($request->all(),200);
     }
 
 }

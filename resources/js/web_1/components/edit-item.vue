@@ -131,7 +131,7 @@
                             <div class="col-10">
                                 <div class="custom-file">
                                     <input type="file" class="custom-file-input" id="inputGroupFile01"
-                                           accept="image/*|.mp4">
+                                           accept="image/*|.mp4" @change="onInputFile" multiple>
                                     <label class="custom-file-label" for="inputGroupFile01">Upload Images</label>
                                 </div>
                             </div>
@@ -268,6 +268,23 @@
                     });
             },
 
+            reqPostMedia: async function (activityId, mediaFiles) {
+                const URL = '/api/activity/' + activityId + '/media';
+                return axios.post(URL, mediaFiles[0], {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                })
+                    .then(function (resp) {
+                        console.log(resp);
+                        return resp;
+                    })
+                    .catch(function (err) {
+                        console.error(err.response);
+                        return err;
+                    });
+            },
+
             onClickRawDesc() {
                 if (this.form.showRawDesc) {
                     //Mostrando Raw
@@ -282,6 +299,11 @@
 
             onClickCancel() {
                 this.$emit('cancel');
+            },
+
+            onInputFile(event) {
+                console.log(this.itemData.id, event.target.files);
+                this.reqPostMedia(this.itemData.id, event.target.files);
             },
         }
     }
