@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Storage;
 class ImageManager
 {
 
-    public function uploadImage(UploadedFile $file){
+    public function uploadImage(UploadedFile $file) : Media{
 
         $realName = $file->getClientOriginalName();
         $internalName = $file->hashName();
@@ -23,6 +23,8 @@ class ImageManager
         $media->path = $path = 'magicList/userImages/' . $internalName;
         $media->user_id = auth()->id();
         $media->saveOrFail();
+        $media->syncOriginal();
+        return $media;
     }
 
 }

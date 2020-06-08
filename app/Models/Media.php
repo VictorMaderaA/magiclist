@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Models\Base\BaseModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 
 class Media extends BaseModel
 {
@@ -80,5 +81,15 @@ class Media extends BaseModel
 
 
     //-----------------------------------------------------------------------------------------------------------------
+
+    public function activities()
+    {
+        return $this->belongsToMany(Activities::class, 'activity_media', 'media_id', 'activity_id');
+    }
+
+    public function getTempUrlAttribute()
+    {
+        return Storage::disk('s3')->temporaryUrl($this->getAttribute('path'), now()->addMinutes(5));
+    }
 
 }

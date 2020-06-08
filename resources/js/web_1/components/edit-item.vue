@@ -130,12 +130,23 @@
                         <div class="input-group row justify-content-center">
                             <div class="col-10">
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file-input" id="inputGroupFile01"
-                                           accept="image/*|.mp4" @change="onInputFile" multiple>
+                                    <input type="file" class="custom-file-input" id="inputGroupFile01" ref="files"
+                                           accept="image/*,.mp4,.gif" v-on:change="handleFileUploads()" multiple>
                                     <label class="custom-file-label" for="inputGroupFile01">Upload Images</label>
                                 </div>
                             </div>
                         </div>
+
+                        <div class="row justify-content-center" v-if="form.fileUploading">
+                            <div class="col-auto text-center">
+                                <br>
+                                <i class="fas fa-3x fa-sync-alt fa-spin"></i>
+                                <div class="text-bold">Uploading...</div>
+                                <br>
+                            </div>
+                        </div>
+
+
                         <div>
                             Show intractable gallery
                         </div>
@@ -192,6 +203,7 @@
                 form: {
                     name: null,
                     filesUploaded: [],
+                    fileUploading: false,
 
                     showRawDesc: false,
                     rawDesc: '',
@@ -268,19 +280,19 @@
                     });
             },
 
-            reqPostMedia: async function (activityId, mediaFiles) {
+            reqAddMedia: async function (activityId, formData) {
                 const URL = '/api/activity/' + activityId + '/media';
-                return axios.post(URL, mediaFiles[0], {
+                return axios.post(URL, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data'
                     }
                 })
                     .then(function (resp) {
-                        console.log(resp);
+                        // console.log(resp);
                         return resp;
                     })
                     .catch(function (err) {
-                        console.error(err.response);
+                        // console.error(err.response);
                         return err;
                     });
             },
@@ -301,10 +313,24 @@
                 this.$emit('cancel');
             },
 
-            onInputFile(event) {
-                console.log(this.itemData.id, event.target.files);
-                this.reqPostMedia(this.itemData.id, event.target.files);
+            async handleFileUploads() {
+                this.form.fileUploading = true;
+                let files = this.$refs.files.files;
+                if(files.length > 0)
+                {
+                    let formData = new FormData();
+                    for(let i = 0; i < files.length; i++){
+                        let file = files[i];
+                        formData.append('files[' + i + ']', file);
+                    }
+                    let response = await this.reqAddMedia(this.itemData.id, formData);
+                    if(response.status === 200){
+                        console.log(response.data);
+                    }
+                }
+                this.form.fileUploading = false;
             },
+
         }
     }
 </script>
