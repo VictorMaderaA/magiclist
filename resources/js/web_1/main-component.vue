@@ -22,6 +22,12 @@
                    v-if="showing.editItem"
         ></edit-item>
 
+        <edit-list ref="editList"
+                   @cancel="showList"
+                   :listId="this.curr.listId"
+                   v-if="showing.editList">
+        </edit-list>
+
         <show-item ref="showItem"
                    @edit-item="showEditItem"
                    @return="showList"
@@ -33,6 +39,7 @@
                    @edit-item="showEditItem"
                    @create-item="showCreateItem"
                    @selected-item="showItem"
+                   @edit-list="showEditList"
                    :listId="curr.listId"
                    v-if="showing.list"
         ></show-list>
@@ -43,6 +50,14 @@
 </template>
 
 <script>
+
+    // export const S_LIST = 'list';
+    // export const S_ITEM = 'item';
+    // export const S_LIST_CREATE = 'createList';
+    // export const S_LIST_EDIT = 'editList';
+    // export const S_ITEM_EDIT = 'editItem';
+    // export const S_ITEM_CREATE = 'createItem';
+
     export default {
         name: "main-component",
         data(){
@@ -52,6 +67,7 @@
                     item: false,
                     createList: false,
                     editItem: false,
+                    editList: false,
                     createItem: false
                 },
                 curr:{
@@ -66,14 +82,15 @@
                     this.showing[k] = false;
                 }
             },
+            show(showKey){
+                this.hideShowing();
+                this.showing[showKey] = true;
+            },
 
             showList(list){
-                if(list){
-                    if(Number.isInteger(list)){
-                        this.curr.listId = list;
-                    }else{
-                        this.curr.listId = list.id;
-                    }
+                if(!this.setCurrList(list)){
+                    console.error('Missing List - Aborting')
+                    return;
                 }
 
                 if(this.showing.list){
@@ -98,6 +115,13 @@
                 this.curr.itemId = item.id;
                 this.showing.editItem = true;
             },
+            showEditList(list){
+                if(!this.setCurrList(list)){
+                    console.error('Missing List - Aborting')
+                    return;
+                }
+                this.show('editList');
+            },
             showCreateItem(item){
                 this.hideShowing();
                 console.log('Create Item - Main Component');
@@ -115,6 +139,38 @@
                 this.hideShowing();
                 //TODO CHANGE EMIT METHOD
             },
+
+
+            setCurrList(list){
+                if(!list) {
+                    if(!this.curr.listId){
+                        console.error('No Current List Selected')
+                        return false;
+                    }
+                    return true;
+                }
+                if(Number.isInteger(list)){
+                    this.curr.listId = list;
+                }else{
+                    this.curr.listId = list.id;
+                }
+                return true;
+            },
+            setCurrItem(item){
+                if(!item) {
+                    if(!this.curr.itemId){
+                        console.error('No Current Item Selected')
+                        return false;
+                    }
+                    return true;
+                }
+                if(Number.isInteger(item)){
+                    this.curr.itemId = item;
+                }else{
+                    this.curr.itemId = item.id;
+                }
+                return true;
+            }
 
         }
     }

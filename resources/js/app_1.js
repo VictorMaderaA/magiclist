@@ -27,6 +27,7 @@ Vue.component('create-list', require('./web_1/components/create-list.vue').defau
 Vue.component('edit-item', require('./web_1/components/edit-item.vue').default);
 Vue.component('show-item', require('./web_1/components/show-item.vue').default);
 Vue.component('show-list', require('./web_1/components/show-list.vue').default);
+Vue.component('edit-list', require('./web_1/components/edit-list.vue').default);
 
 Vue.component('sidebar-ul', require('./web_1/components/sidebar-ul.vue').default);
 

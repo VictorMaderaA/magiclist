@@ -78,7 +78,8 @@
                             <i class="fas fa-plus text-green"></i>
                         </a>
 
-                        <a class="btn btn-sm" data-toggle="modal" data-target="#modal-editList">
+                        <a class="btn btn-sm" data-toggle="modal" data-target="#modal-editList"
+                           v-on:click="onClickEditList">
                             <i class="fas fa-edit text-blue"></i>
                         </a>
 
@@ -257,8 +258,7 @@
             },
 
             async onClickEditList(){
-                console.log('onClickEditList');
-                //TODO
+                this.$emit('edit-list', this.list);
             },
 
             onClickModalDeleteItem(item){

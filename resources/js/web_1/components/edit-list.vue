@@ -4,7 +4,7 @@
             <div class="card card-outline card-info">
                 <div class="card-header">
                     <h3 class="card-title align-middle">
-                        Create New List
+                        Edit <strong>{{name}}</strong>
                     </h3>
 
                     <div class="card-tools">
@@ -22,7 +22,7 @@
                                 <label for="name">List Name</label>
                                 <input type="text" class="form-control" id="name" ref="inputName"
                                        v-on:keyup.enter="$refs.inputDescription.focus()"
-                                       placeholder="Cooking List..." v-model="form.name">
+                                       placeholder="Cooking List..." v-model="list.name">
                             </div>
                         </div>
                     </div>
@@ -33,7 +33,7 @@
                             <div class="form-group">
                                 <label for="description">Description</label>
                                 <textarea class="form-control" rows="3" id="description" ref="inputDescription"
-                                          placeholder="Enter description..." v-model="form.description"
+                                          placeholder="Enter description..." v-model="list.description"
                                           v-on:keyup.ctrl.enter="onClickSave"></textarea>
                             </div>
                         </div>
@@ -42,7 +42,7 @@
 
                 <div class="card-footer">
                     <button type="submit" class="btn btn-primary"
-                            :disabled="!form.name" v-on:click="onClickSave">Save</button>
+                            :disabled="!list.name" v-on:click="onClickSave">Save</button>
                     <button type="submit" class="btn btn-default float-right"
                             v-on:click="onClickCancel">Cancel</button>
                 </div>
@@ -57,39 +57,35 @@
 
 <script>
     export default {
-        name: "create-list",
+        name: "edit-list",
+        props: {
+            listId: Number,
+        },
         data() {
             return {
-                form: {
+                name: null,
+                list: {
                     name: null,
-                    description: '',
+                    description: null,
                 }
             }
         },
-        methods:{
-            async onClickSave(){
-                if(!this.form.name){
-                    this.$refs.inputName.focus();
-                    return;
-                }
-                let response = await this.reqSaveList(this.form.name, this.form.description);
+        beforeMount() {
+            if(this.list){
+                this.loadListData();
+            }
+        },
+        methods: {
+            async loadListData(){
+                let response = await this.reqListData(this.listId);
                 if(response.status === 200){
-                    this.$emit('created-list', response.data);
-                }else{
-                    //TODO
+                    this.list = response.data;
+                    this.name = this.list.name;
                 }
             },
-            reqSaveList: async function (name, description) {
-                const URL = '/api/list';
-
-                let data = {
-                    name: name
-                };
-                if(description){
-                    data.description = description;
-                }
-
-                return await axios.post(URL, data)
+            reqListData: async function (listId) {
+                const URL = '/api/list/' + listId;
+                return axios.get(URL, {})
                     .then(function (resp) {
                         // console.log(resp);
                         return resp;
@@ -99,6 +95,42 @@
                         return err;
                     });
             },
+
+
+            async onClickSave(){
+                if(!this.list.name){
+                    this.$refs.inputName.focus();
+                    return;
+                }
+                let response = await this.reqSaveList(this.list.id, this.list.name, this.list.description);
+                if(response.status === 200){
+                    this.list = response.data;
+                    // this.$emit('updated-list', response.data);
+                }else{
+                    //TODO
+                }
+            },
+            reqSaveList: async function (listId, name, description) {
+                const URL = '/api/list/' + listId;
+
+                let data = {
+                    name: name
+                };
+                if(description){
+                    data.description = description;
+                }
+
+                return axios.post(URL, data)
+                    .then(function (resp) {
+                        // console.log(resp);
+                        return resp;
+                    })
+                    .catch(function (err) {
+                        // console.error(err.response);
+                        return err;
+                    });
+            },
+
 
 
             onClickCancel(){
