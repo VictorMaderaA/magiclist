@@ -4,6 +4,8 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Base\BaseController;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Log;
 
 class AuthController extends BaseController
 {
@@ -27,7 +29,7 @@ class AuthController extends BaseController
     {
         $credentials = request(['email', 'password']);
 
-        if (! $token = auth()->attempt($credentials)) {
+        if (!$token = auth()->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
@@ -69,17 +71,44 @@ class AuthController extends BaseController
     /**
      * Get the token array structure.
      *
-     * @param  string $token
+     * @param string $token
      *
      * @return \Illuminate\Http\JsonResponse
      */
     protected function respondWithToken($token)
     {
-        return response()->json([
+        $response = response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => auth()->factory()->getTTL() * 60
         ]);
+        if (request('cookie', false)) {
+            $cookie = $this->getCookieDetails($token);
+            $val = Crypt::encrypt($cookie['value'], true);
+            Log::debug($val, [1]);
+            $response->headers->setCookie(\cookie($cookie['name'], $val, $cookie['minutes'], $cookie['path'],
+                $cookie['domain'], $cookie['secure'], $cookie['httponly'], true));
+        }
+        return $response;
+    }
+
+    /**
+     * @param $token
+     * @return array
+     */
+    private function getCookieDetails($token)
+    {
+        return [
+            'name' => '_token',
+            'value' => $token,
+            'minutes' => auth()->factory()->getTTL() * 60,
+            'path' => null,
+            'domain' => null,
+            // 'secure' => true, // for production
+            'secure' => (app()->environment('app.env') === 'production') ? true : null,
+            'httponly' => true,
+            'samesite' => true,
+        ];
     }
 
 }

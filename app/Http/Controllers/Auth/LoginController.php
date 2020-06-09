@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Log;
 
 class LoginController extends Controller
 {
@@ -61,11 +63,12 @@ class LoginController extends Controller
         if ($response = $this->authenticated($request, $this->guard()->user())) {
             return $response;
         }
-
+        $val = Crypt::encrypt($cookie['value'], true);
+        Log::debug($val, [2]);
         return redirect()
             ->intended($this->redirectPath())
             ->withCookies([
-                \cookie($cookie['name'], $cookie['value'], $cookie['minutes'], $cookie['path'],
+                \cookie($cookie['name'], $val, $cookie['minutes'], $cookie['path'],
                     $cookie['domain'], $cookie['secure'], $cookie['httponly'], true)
             ]);
     }

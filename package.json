@@ -26,6 +26,7 @@
     "dependencies": {
         "tiptap": "^1.27.1",
         "tiptap-extensions": "^1.29.1",
+        "vue-cookies": "^1.7.0",
         "vue-gallery": "^2.0.1",
         "vue-select": "^3.10.3",
         "vuedraggable": "^2.23.2"

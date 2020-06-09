@@ -28,12 +28,17 @@ Vue.component('edit-item', require('./web_1/components/edit-item.vue').default);
 Vue.component('show-item', require('./web_1/components/show-item.vue').default);
 Vue.component('show-list', require('./web_1/components/show-list.vue').default);
 Vue.component('edit-list', require('./web_1/components/edit-list.vue').default);
+Vue.component('auth-refresher', require('./web_1/components/auth-refresher.vue').default);
 
 Vue.component('sidebar-ul', require('./web_1/components/sidebar-ul.vue').default);
 
 
 import vSelect from 'vue-select'
 Vue.component('v-select', vSelect)
+
+import VueCookies from 'vue-cookies'
+Vue.use(VueCookies)
+Vue.$cookies.config('7d')
 
 // Vue.component('create', require('./web_1/components/NULL.vue').default);
 

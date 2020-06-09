@@ -165,7 +165,7 @@
                                     @click="index = imageIndex"
                                     :style="{ backgroundImage: 'url(' + image.href + ')', width: '150px', height: '100px' }"
                                 >
-                                    <video width="150px" height="100px" controls v-if="image.isVideo">
+                                    <video width="150px" height="100px" v-if="image.isVideo">
                                         <source :src="image.href" :type="image.mimeType">
                                         Your browser does not support the video tag.
                                     </video>
