@@ -64,7 +64,6 @@ class LoginController extends Controller
             return $response;
         }
         $val = Crypt::encrypt($cookie['value'], true);
-        Log::debug($val, [2]);
         return redirect()
             ->intended($this->redirectPath())
             ->withCookies([

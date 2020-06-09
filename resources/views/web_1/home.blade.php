@@ -36,12 +36,9 @@
 
 @section('content')
 
-    <auth-refresher></auth-refresher>
-
     <main-component ref="mainComponent"
                     @list-created="onListCreated"
     ></main-component>
-
 
     <section class="content">
 

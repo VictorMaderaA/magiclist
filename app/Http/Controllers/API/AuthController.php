@@ -85,7 +85,6 @@ class AuthController extends BaseController
         if (request('cookie', false)) {
             $cookie = $this->getCookieDetails($token);
             $val = Crypt::encrypt($cookie['value'], true);
-            Log::debug($val, [1]);
             $response->headers->setCookie(\cookie($cookie['name'], $val, $cookie['minutes'], $cookie['path'],
                 $cookie['domain'], $cookie['secure'], $cookie['httponly'], true));
         }

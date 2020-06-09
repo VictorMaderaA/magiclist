@@ -1,20 +1,56 @@
 <template>
-
     <section class="content">
+
+
+        <div class="modal fade" id="modal-deleteItem" style="display: none;" aria-hidden="true" v-if="itemData">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Are you sure? - Delete <strong><i>{{ itemData.name }}</i></strong></h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Please Confirm You Want To Delete This Item</p>
+                        <p><strong>You will not be able to restore it later.</strong></p>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal"
+                                v-on:click="onClickDeleteItem(itemData.id)">
+                            <strong>
+                                DELETE
+                            </strong>
+                        </button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+
+
+
+
         <div class="row justify-content-center">
             <div class="col-md-10">
                 <div class="card card-outline card-info">
                     <div class="card-header">
-                        <h3 class="card-title align-middle">
-                            Item Name like Order Pizza for 10 people
+                        <h3 class="card-title align-middle" v-if="itemData">
+                            {{itemData.name}}
                         </h3>
 
                         <div class="card-tools">
-                            <a class="btn btn-sm">
+                            <a class="btn btn-sm" v-on:click="onClickBack">
+                                <i class="far fa-list-alt"></i>
+                            </a>
+
+                            <a class="btn btn-sm" v-on:click="onClickEdit">
                                 <i class="fas fa-edit text-blue"></i>
                             </a>
 
-                            <a class="btn btn-sm">
+                            <a class="btn btn-sm" data-toggle="modal" data-target="#modal-deleteItem">
                                 <i class="fas fa-trash text-red"></i>
                             </a>
                         </div>
@@ -22,81 +58,38 @@
                     <!-- /.card-header -->
 
                     <div class="card-body">
-                        <h3>
-                            Contents:
-                        </h3>
-                        <br>
                         <div class="row justify-content-center">
                             <div class="col-10">
-                                <dl>
-                                    <dt>Definition list</dt>
-                                    <dd>Consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
-                                        aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                                        commodo consequat.</dd>
-                                    <dt>Lorem ipsum dolor sit amet</dt>
-                                    <dd>Consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
-                                        aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                                        commodo consequat.</dd>
-                                </dl>
-
-                                <ol>
-                                    <li>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</li>
-                                    <li>Aliquam tincidunt mauris eu risus.</li>
-                                    <li>Vestibulum auctor dapibus neque.</li>
-                                </ol>
-
-                                <table>
-                                    <thead>
-                                    <tr>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-
-                                <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo. Quisque sit amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, commodo vitae, ornare sit amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac dui. Donec non enim in turpis pulvinar facilisis. Ut felis. Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus</p>
-
+                                <div v-if="itemData" v-html="itemData.description"></div>
+                                <div v-if="!itemData||!itemData.description">
+                                    <h1>No Description</h1>
+                                    <p v-on:click="onClickEdit">
+                                        <u>Edit and add one.</u>
+                                    </p>
+                                </div>
                             </div>
                         </div>
 
-                    </div>
+                        <div class="input-group row justify-content-center">
 
-                    <div class="row justify-content-center">
-                        <div class="col-11">
-                            <hr>
-                        </div>
-                    </div>
-
-                    <div class="card-body">
-                        <h3>
-                            Gallery:
-                        </h3>
-                        <div class="row justify-content-center">
-                            <br>
-                            <div class="col-10">
-                                Show Here The Gallery
+                            <div class="col-10 justify-items-center">
+                                <gallery :images="gallery"
+                                         :index="index"
+                                         @close="index = null"></gallery>
+                                <div class="d-flex flex-wrap">
+                                    <div class="image"
+                                         v-for="(image, imageIndex) in gallery"
+                                         :key="imageIndex"
+                                         @click="index = imageIndex"
+                                         :style="{ backgroundImage: 'url(' + image.href + ')', width: '150px', height: '100px' }"
+                                    >
+                                        <video
+                                               width="150px" height="100px" v-if="image.isVideo">
+                                            <source :src="image.href" :type="image.mimeType">
+                                            Your browser does not support the video tag.
+                                        </video>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -111,11 +104,152 @@
 </template>
 
 <script>
+    import VueGallery from 'vue-gallery';
+
     export default {
-        name: "show-item"
+        name: "show-item",
+        props: {
+            item: Number,
+        },
+        components: {
+            'gallery': VueGallery,
+        },
+        data() {
+            return {
+                itemData: null,
+                index: null,
+            }
+        },
+        beforeMount() {
+            if (this.item) {
+                this.load(this.item);
+            } else {
+                console.error('Missing Item');
+            }
+        },
+        methods: {
+            async load(item) {
+                if (Number.isInteger(item)) {
+                    let response = await this.reqActivityData(item);
+                    if (response.status === 200) {
+                        this.loadItem(response.data)
+                    } else {
+                        this.failedLoad();
+                    }
+                } else {
+                    this.loadItem(item);
+                }
+            },
+
+            loadItem(item) {
+                this.itemData = item;
+            },
+            failedLoad() {
+                console.error('Failed to load Item Data');
+            },
+
+
+            reqActivityData: async function (activityId) {
+                const URL = '/api/activity/' + activityId;
+                return axios.get(URL, {})
+                    .then(function (resp) {
+                        // console.log(resp);
+                        return resp;
+                    })
+                    .catch(function (err) {
+                        // console.error(err.response);
+                        return err;
+                    });
+            },
+
+
+            async onClickDeleteItem(item){
+                let response = await this.reqItemDelete(item);
+                if(response.status === 200){
+                    this.onDeleted()
+                }else{
+                    console.error('Failed to Delete element');
+                }
+                //TODO ELSE
+            },
+            reqItemDelete: async function (activityId) {
+                const URL = '/api/activity/' + activityId;
+                return axios.delete(URL, {})
+                    .then(function (resp) {
+                        // console.log(resp);
+                        return resp;
+                    })
+                    .catch(function (err) {
+                        // console.error(err.response);
+                        return err;
+                    });
+            },
+
+
+            onClickEdit() {
+                this.$emit('edit-item');
+            },
+            onDeleted(){
+                this.$emit('deleted');
+            },
+            onClickBack(){
+                this.$emit('return');
+            }
+        },
+        computed: {
+            gallery() {
+                let gallery = [];
+                if (this.itemData && this.itemData.media) {
+                    for (let i = 0; i < this.itemData.media.length; i++) {
+                        let media = this.itemData.media[i];
+                        gallery.push({
+                            title: media.name,
+                            href: media.temp_url,
+                            type: media.mimeType,
+                            isVideo: (media.mimeType).includes('video')
+                        })
+                    }
+                }
+                return gallery;
+            },
+
+        }
     }
 </script>
 
+<style>
+
+    .ProseMirror {
+        display: block;
+        width: 100%;
+        height: 120%;
+        padding: 0.375rem 0.75rem;
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #495057;
+        background-color: #ffffff;
+        background-clip: padding-box;
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+        box-shadow: inset 0 0 0 rgba(0, 0, 0, 0);
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+
+    .ProseMirror:focus {
+        outline: none !important;
+    }
+</style>
+
 <style scoped>
+
+    .image {
+        float: left;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+        border: 1px solid #ebebeb;
+        margin: 5px;
+    }
 
 </style>

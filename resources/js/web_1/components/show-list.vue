@@ -264,9 +264,14 @@
             onClickModalDeleteItem(item){
                 this.modalItem = item;
             },
-            onClickDeleteItem(){
-                console.log('onClickDeleteItem');
-                //TODO
+            async onClickDeleteItem(item){
+                let response = await this.reqItemDelete(item.id);
+                if(response.status === 200){
+                    this.loadListData()
+                }else{
+                    console.error('Failed to Delete element');
+                }
+                //TODO ELSE
             },
             onClickEditItem(item){
                 this.$emit('edit-item', item);
@@ -353,6 +358,19 @@
                         return err;
                     });
             },
+            reqItemDelete: async function (activityId) {
+                const URL = '/api/activity/' + activityId;
+                return axios.delete(URL, {})
+                    .then(function (resp) {
+                        // console.log(resp);
+                        return resp;
+                    })
+                    .catch(function (err) {
+                        // console.error(err.response);
+                        return err;
+                    });
+            },
+
 
 
             canShowItem(item){

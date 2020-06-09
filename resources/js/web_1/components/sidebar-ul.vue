@@ -26,12 +26,6 @@
                 lists: null,
             }
         },
-        beforeMount() {
-            this.loadLists();
-        },
-        mounted() {
-
-        },
         methods: {
             showDefaultList(){
                 if(this.lists.length > 0){

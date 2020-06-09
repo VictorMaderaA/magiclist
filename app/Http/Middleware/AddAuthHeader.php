@@ -25,10 +25,7 @@ class AddAuthHeader
     {
         if (!$request->bearerToken()) {
             if ($request->hasCookie('_token')) {
-                if(!$token = preg_match_all('^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$^', Cookie::get('_token'))){
-                    $token = Crypt::decrypt(Cookie::get('_token'), true);
-                }
-                Log::debug($token, [5]);
+                $token = Crypt::decrypt(Cookie::get('_token'), true);
                 $request->headers->add(['Authorization' => 'Bearer ' . $token]);
 
             }

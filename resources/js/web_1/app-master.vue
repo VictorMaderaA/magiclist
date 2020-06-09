@@ -1,6 +1,61 @@
 <script>
+
+    const refresher = {
+        name: 'AuthRefresher',
+        data () {
+            return {
+                timer: '',
+                t: '',
+            }
+        },
+        methods: {
+            start(){
+                this.timer = setInterval(function () {
+                    this.refreshToken();
+                }.bind(this), 600000);
+                this.t = setInterval(function () {
+                    this.refreshToken();
+                }.bind(this), 5000);
+            },
+            destroy(){
+                clearInterval(this.timer);
+            },
+            refreshToken(){
+                this.reqAddMedia();
+                clearInterval(this.t);
+            },
+            reqAddMedia: async function () {
+                const URL = '/api/auth/refresh';
+                return axios.post(URL, {
+                    cookie: true,
+                }, {
+                })
+                    .then(function (resp) {
+                        // console.log(resp);
+                        return resp;
+                    })
+                    .catch(function (err) {
+                        // console.error(err.response);
+                        return err;
+                    });
+            },
+        }
+    };
+
     export default {
         name: "app-master",
+        components: {
+            refresher
+        },
+        beforeCreate() {
+            refresher.methods.start()
+        },
+        mounted() {
+            this.$refs.sidebarUl.loadLists();
+        },
+        beforeDestroy() {
+            refresher.methods.destroy()
+        },
         methods: {
             onListSelected(list){
                 this.$refs.mainComponent.showList(list);

@@ -144,4 +144,23 @@ class ActivitiesController extends BaseController
         return response($activity->toArray());
     }
 
+
+    public function delete($activityId)
+    {
+        //Buscamos que exista la actividad
+        $activity = Activities::query()->findOrFail($activityId);
+        //Comprobamos que el usuario tenga acceso a la lista de la actividad
+        if (!auth('api')->user()->lists()->find($activity->list_id)) {
+            return response('', 403);
+        }
+
+        if(Activities::destroy($activityId))
+        {
+            return response('OK');
+        }else{
+            return response('Failed Deletion', 500);
+        }
+
+    }
+
 }

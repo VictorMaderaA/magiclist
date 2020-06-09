@@ -29,8 +29,10 @@
         </edit-list>
 
         <show-item ref="showItem"
+                   :item="this.curr.itemId"
                    @edit-item="showEditItem"
                    @return="showList"
+                   @deleted="showList"
                    v-if="showing.item"
         ></show-item>
 
@@ -100,9 +102,8 @@
                 this.showing.list = true;
             },
             showItem(item){
-                this.hideShowing();
-                console.log('Show Item - Main Component');
-                this.showing.item = true;
+                this.setCurrItem(item)
+                this.show('item')
             },
 
             showCreateNewList(){
@@ -111,9 +112,8 @@
                 this.showing.createList = true;
             },
             showEditItem(item){
-                this.hideShowing();
-                this.curr.itemId = item.id;
-                this.showing.editItem = true;
+                this.setCurrItem(item)
+                this.show('editItem')
             },
             showEditList(list){
                 if(!this.setCurrList(list)){
