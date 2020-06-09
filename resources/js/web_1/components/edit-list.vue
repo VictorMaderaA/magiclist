@@ -15,6 +15,14 @@
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
+
+                    <div class="row justify-content-center">
+                        <div class="co-10">
+                            <p class="text-danger" v-if="message.danger">{{ message.danger }}</p>
+                            <p class="text-success" v-if="message.success">{{ message.success }}</p>
+                        </div>
+                    </div>
+
                     <div class="row justify-content-center">
                         <div class="col-sm-8">
                             <!-- text input -->
@@ -67,7 +75,11 @@
                 list: {
                     name: null,
                     description: null,
-                }
+                },
+                message: {
+                    danger: null,
+                    success: null,
+                },
             }
         },
         beforeMount() {
@@ -78,7 +90,7 @@
         methods: {
             async loadListData(){
                 let response = await this.reqListData(this.listId);
-                if(response.status === 200){
+                if(response.status === 200) {
                     this.list = response.data;
                     this.name = this.list.name;
                 }
@@ -106,8 +118,11 @@
                 if(response.status === 200){
                     this.list = response.data;
                     // this.$emit('updated-list', response.data);
+                    this.message.success = 'Saved Successfully';
+                    this.message.danger = null;
                 }else{
-                    //TODO
+                    this.message.success = null;
+                    this.message.danger = 'Something went wrong when trying to update';
                 }
             },
             reqSaveList: async function (listId, name, description) {
