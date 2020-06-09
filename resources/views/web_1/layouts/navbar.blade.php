@@ -7,27 +7,21 @@
 
     @yield('navbar-contents')
 
-    <!-- SEARCH FORM -->
-{{--    <form class="form-inline ml-3">--}}
-{{--        <div class="input-group input-group-sm">--}}
-{{--            <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">--}}
-{{--            <div class="input-group-append">--}}
-{{--                <button class="btn btn-navbar" type="submit">--}}
-{{--                    <i class="fas fa-search"></i>--}}
-{{--                </button>--}}
-{{--            </div>--}}
-{{--        </div>--}}
-{{--    </form>--}}
-
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
-        <!-- Messages Dropdown Menu -->
 {{--        @include('web_1.layouts.message-dropdown')--}}
-        <!-- Notifications Dropdown Menu -->
 {{--        @include('web_1.layouts.notification-dropdown')--}}
 
-        @include('web_1.layouts.user-dropdown')
-
+        <li class="nav-item dropdown user user-menu">
+            <a class="dropdown-item" href="{{ route('logout') }}"
+               onclick="event.preventDefault();
+           document.getElementById('logout-form').submit();">
+                {{ __('Logout') }}
+            </a>
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                @csrf
+            </form>
+        </li>
 
 
 {{--        <li class="nav-item">--}}

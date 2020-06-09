@@ -46,5 +46,5 @@
                    class="btn btn-default btn-flat">{{ __('Logout') }}</a>
             </div>
         </li>
-    </ul>
+{{--    </ul>--}}
 </li>
