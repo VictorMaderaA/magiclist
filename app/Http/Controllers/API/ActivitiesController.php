@@ -8,7 +8,6 @@ use App\Http\Controllers\Base\BaseController;
 use App\Managers\ImageManager;
 use App\Models\Activities;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class ActivitiesController extends BaseController
@@ -114,6 +113,35 @@ class ActivitiesController extends BaseController
             array_push($uploadedFiles, $savedFile->toArray());
         }
         return response($uploadedFiles, 200);
+    }
+
+
+
+    public function update(Request $request, $activityId)
+    {
+        //Validamos
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string',
+            'description' => 'string',
+            'listId' => 'required|integer'
+        ]);
+        if ($validator->fails()) {
+            return response($validator->errors(), 400);
+        }
+
+        //Buscamos que exista la actividad
+        $activity = Activities::query()->findOrFail($activityId);
+        //Comprobamos que el usuario tenga acceso a la lista de la actividad
+        if (!auth('api')->user()->lists()->find($activity->list_id)) {
+            return response('', 403);
+        }
+
+        $activity->name = $request->input('name');
+        $activity->description = $request->input('description', '');
+        $activity->list_id = $request->input('listId');
+        $activity->saveOrFail();
+        $activity->syncOriginal();
+        return response($activity->toArray());
     }
 
 }

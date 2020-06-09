@@ -16,6 +16,16 @@
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body" v-if="itemData">
+
+                    <div class="row justify-content-center">
+                        <div class="col-10 text-center">
+                            <p class="text-danger" v-if="message.danger">{{ message.danger }}</p>
+                            <p class="text-success" v-if="message.success">{{ message.success }}</p>
+                        </div>
+                    </div>
+
+
+
                     <form role="form">
                         <div class="row justify-content-center">
                             <div class="col-sm-8">
@@ -167,7 +177,8 @@
                 </div>
 
                 <div class="card-footer" v-if="itemData">
-                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="submit" class="btn btn-primary"
+                            v-on:click="onClickSave" :disabled="!canSave">Save</button>
                     <button type="submit" class="btn btn-default float-right"
                             v-on:click="onClickCancel">Cancel
                     </button>
@@ -216,12 +227,13 @@
             return {
                 index: null,
 
+                message: {
+                    danger: null,
+                    success: null,
+                },
 
                 form: {
-                    name: null,
-                    filesUploaded: [],
                     fileUploading: false,
-
                     showRawDesc: false,
                     rawDesc: '',
                     editor: new Editor({
@@ -278,6 +290,7 @@
 
             loadItem(item) {
                 this.itemData = item;
+                this.form.editor.setContent(item.description);
             },
             failedLoad() {
                 console.error('Failed to load Item Data');
@@ -314,6 +327,23 @@
                     });
             },
 
+            reqUpdateActivity: async function (activityId, name, description, listId) {
+                const URL = '/api/activity/'+ activityId;
+                return axios.post(URL, {
+                    name: name,
+                    description: description,
+                    listId: listId
+                })
+                    .then(function (resp) {
+                        console.log(resp);
+                        return resp;
+                    })
+                    .catch(function (err) {
+                        console.error(err.response);
+                        return err;
+                    });
+            },
+
             onClickRawDesc() {
                 if (this.form.showRawDesc) {
                     //Mostrando Raw
@@ -330,29 +360,62 @@
                 this.$emit('cancel');
             },
 
+            async onClickSave(){
+                let data = this.itemData;
+                if (data.name) {
+                    let desc = null;
+                    if (this.form.showRawDesc) {
+                        //Mostrando Raw
+                        desc = this.form.rawDesc;
+                    } else {
+                        //Mostrando Editor
+                        desc = this.form.editor.getHTML();
+                    }
+
+                    let response = await this.reqUpdateActivity(data.id, data.name, desc, data.list_id);
+                    if (response.status === 200) {
+                        this.message.success = 'Created Successfully';
+                        this.message.danger = null;
+
+                    } else {
+                        this.message.success = null;
+                        this.message.danger = 'Something went wrong when trying to create the new activity';
+                    }
+                }
+            },
+
             async handleFileUploads() {
                 this.form.fileUploading = true;
                 let files = this.$refs.files.files;
-                if(files.length > 0)
-                {
+                if (files.length > 0) {
                     let formData = new FormData();
-                    for(let i = 0; i < files.length; i++){
+                    for (let i = 0; i < files.length; i++) {
                         let file = files[i];
                         formData.append('files[' + i + ']', file);
                     }
                     let response = await this.reqAddMedia(this.itemData.id, formData);
-                    if(response.status === 200){
+                    if (response.status === 200) {
                         this.itemData.media = this.itemData.media.concat(response.data);
                         console.log(response.data);
                     }
                 }
                 this.form.fileUploading = false;
             },
+
+            canSave(){
+                if(!this.itemData.name){
+                    return false;
+                }
+                if(!this.itemData.list_id){
+                    return false;
+                }
+                return true;
+            }
         },
         computed: {
-            gallery(){
+            gallery() {
                 let gallery = [];
-                if(this.itemData && this.itemData.media){
+                if (this.itemData && this.itemData.media) {
                     for (let i = 0; i < this.itemData.media.length; i++) {
                         let media = this.itemData.media[i];
                         gallery.push({
