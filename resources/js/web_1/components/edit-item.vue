@@ -342,6 +342,7 @@
                     }
                     let response = await this.reqAddMedia(this.itemData.id, formData);
                     if(response.status === 200){
+                        this.itemData.media = this.itemData.media.concat(response.data);
                         console.log(response.data);
                     }
                 }
