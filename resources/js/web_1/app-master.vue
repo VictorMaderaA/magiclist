@@ -12,7 +12,7 @@
             start(){
                 this.timer = setInterval(function () {
                     this.refreshToken();
-                }.bind(this), 6000);
+                }.bind(this), 600000);
                 this.t = setInterval(function () {
                     this.refreshToken();
                 }.bind(this), 5000);
