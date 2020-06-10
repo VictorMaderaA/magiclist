@@ -35,10 +35,6 @@ Vue.component('sidebar-ul', require('./web_1/components/sidebar-ul.vue').default
 import vSelect from 'vue-select'
 Vue.component('v-select', vSelect)
 
-import VueCookies from 'vue-cookies'
-Vue.use(VueCookies)
-Vue.$cookies.config('7d')
-
 // Vue.component('create', require('./web_1/components/NULL.vue').default);
 
 
