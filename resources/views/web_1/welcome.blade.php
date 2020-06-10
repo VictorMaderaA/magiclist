@@ -36,7 +36,7 @@
                         <h1 class="hero-title mt-0">Keep track of what you want</h1>
                         <p class="hero-paragraph">Our landing page template works on all devices, so you only have to set it up once, and get beautiful results forever.</p>
                         <div class="hero-cta">
-                            <a class="button button-primary" href="#">Buy it now</a>
+                            <a class="button button-primary" href="{{route('login')}}">Start Now Free</a>
                             <div class="lights-toggle">
                                 <input id="lights-toggle" type="checkbox" name="lights-toggle" class="switch" checked="checked">
                                 <label for="lights-toggle" class="text-xs"><span>Turn me <span class="label-text">dark</span></span></label>

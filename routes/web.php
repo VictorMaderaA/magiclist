@@ -22,7 +22,7 @@ Route::get('/', 'WelcomeController');
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/app', 'HomeController@index')->name('home');
 
 Route::get('/list/{listId}', 'Views\Web\ListController@index')->name('list_index');
 
