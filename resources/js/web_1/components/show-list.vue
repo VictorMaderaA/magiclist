@@ -158,8 +158,10 @@
                                                 <button type="button" class="btn btn-sm"
                                                         data-placement="top" data-original-title="Tooltip on top"
                                                         v-on:click="onClickCheck(item)">
-                                                    <i class="far fa-square" v-if="!item.completed_at"></i>
-                                                    <i class="far fa-check-square" v-if="item.completed_at"></i>
+                                                    <i class="far fa-square" v-if="!item.completed_at"
+                                                       style="font-size: 1.5em;"></i>
+                                                    <i class="far fa-check-square" v-if="item.completed_at"
+                                                       style="font-size: 1.5em;"></i>
                                                 </button>
                                             </div>
                                             <span class="text">{{item.name}}</span>
@@ -211,7 +213,11 @@
                     showOptions: "0"
                 },
                 modalItem: null,
-                list: {},
+                list: {
+                    activities_pending_count: 0,
+                    activities_count: 0,
+                    activities_completed_count: 0,
+                },
                 listItems: [],
 
 
@@ -244,8 +250,24 @@
                 if(response.status === 200){
                     let newItems = this.listItems.slice(0);
                     let found = newItems.findIndex(e => e.id === item.id);
+                    this.updateCounters(newItems[found].completed_at, response.data.completed_at);
                     newItems[found] = response.data;
                     this.listItems = newItems;
+                }
+            },
+
+            updateCounters(oldState, newState){
+                if(oldState && !newState){
+                    //Estaba Activado
+                    //Y ahora no esta Activado
+                    this.list.activities_completed_count -= 1;
+                    this.list.activities_pending_count += 1;
+
+                }else if(newState){
+                    //NO estaba Activado
+                    //Y ahora esta Activado
+                    this.list.activities_completed_count += 1;
+                    this.list.activities_pending_count -= 1;
                 }
             },
 

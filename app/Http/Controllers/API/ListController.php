@@ -140,9 +140,8 @@ class ListController extends BaseController
         $attributes = array_intersect_key($request->all(), array_flip(['name', 'description']));
         $list->setRawAttributes($attributes);
         $list->saveOrFail();
-        $list->syncOriginal();
 
-        return response($list->toArray());
+        return response(Lists::find($listId)->toArray());
     }
 
 }
