@@ -12,7 +12,7 @@
             start(){
                 this.timer = setInterval(function () {
                     this.refreshToken();
-                }.bind(this), 600000);
+                }.bind(this), 6000);
                 this.t = setInterval(function () {
                     this.refreshToken();
                 }.bind(this), 5000);
@@ -20,11 +20,18 @@
             destroy(){
                 clearInterval(this.timer);
             },
-            refreshToken(){
-                this.reqAddMedia();
+            async refreshToken(){
+                let response = await this.reqRefreshAuth();
+                if(response.status !== 200){
+                    if(response.response.status === 401){
+                        console.error("Unauthorized - Needs to Log in ");
+                        window.location.href = "/login"
+                        //TODO - SHOW ALERT BEFORE REDIRECT
+                    }
+                }
                 clearInterval(this.t);
             },
-            reqAddMedia: async function () {
+            reqRefreshAuth: async function () {
                 const URL = '/api/auth/refresh';
                 return axios.post(URL, {
                     cookie: true,
