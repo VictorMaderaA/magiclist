@@ -24,7 +24,7 @@
                 let response = await this.reqRefreshAuth();
                 if(response.status !== 200){
                     if(response.response.status === 401){
-                        console.error("Unauthorized - Needs to Log in ");
+                        console.error("Unauthorized - Needs to Log in");
                         window.location.href = "/login"
                         //TODO - SHOW ALERT BEFORE REDIRECT
                     }
