@@ -17,8 +17,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="{{asset('vendor/Fontawesome5-13-0/css/all.min.css')}}">
+
     <!-- Theme style -->
-    <link rel="stylesheet" href="{{ asset('css/AdminLTE.css') }}">
+    <link rel="stylesheet" href="{{ asset('mix/adminlte/css/alt/adminlte.core.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('mix/adminlte/css/alt/adminlte.components.min.css') }}">
+
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 </head>
@@ -56,12 +59,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 
     <!-- REQUIRED SCRIPTS -->
-    <!-- jQuery -->
     <script src="{{asset('mix/jquery/jquery.min.js')}}"></script>
-{{--    <!-- Bootstrap 4 -->--}}
-{{--    <script src="{{asset('vendor/Bootrstrap4-5-0/js/bootstrap.bundle.min.js')}}"></script>--}}
-    <!-- AdminLTE App -->
-    <script src="{{asset('js/adminlte.js')}}"></script>
+    <script src="{{asset('mix/adminlte/js/adminlte.min.js')}}"></script>
 
 
 

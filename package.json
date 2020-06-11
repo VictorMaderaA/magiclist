@@ -24,6 +24,7 @@
         "vue-template-compiler": "^2.6.10"
     },
     "dependencies": {
+        "admin-lte": "^3.0.5",
         "tiptap": "^1.27.1",
         "tiptap-extensions": "^1.29.1",
         "vue-gallery": "^2.0.1",
