@@ -61,7 +61,7 @@
             },
 
             onListSelected(list){
-                this.$emit('list-selected', list)
+                this.$emit('list-selected', list);
                 this.hideNavBar();
             },
             onCreateNewList(){
@@ -69,7 +69,7 @@
                 this.hideNavBar();
             },
             hideNavBar(){
-                if ($(window).width() < 1000) {
+                if ($(window).width() < 950) {
                     let element = document.getElementById("sidebar");
                     element.classList.remove("sidebar-open");
                     element.classList.add("sidebar-closed", "sidebar-collapse");
