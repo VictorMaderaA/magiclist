@@ -214,6 +214,7 @@
         Underline
     } from 'tiptap-extensions'
     import VueGallery from 'vue-gallery';
+    import Manager from '../js/dataManager'
 
     export default {
         name: "edit-item",
@@ -221,6 +222,7 @@
             EditorContent,
             EditorMenuBar,
             'gallery': VueGallery,
+            Manager,
         },
         props: [
             'item'
@@ -279,7 +281,7 @@
         methods: {
             async load(item) {
                 if (Number.isInteger(item)) {
-                    let response = await this.reqActivityData(item);
+                    let response = await Manager.reqGetActivity(item);
                     if (response.status === 200) {
                         this.loadItem(response.data)
                     } else {
@@ -296,20 +298,6 @@
             },
             failedLoad() {
                 console.error('Failed to load Item Data');
-            },
-
-
-            reqActivityData: async function (activityId) {
-                const URL = '/api/activity/' + activityId;
-                return axios.get(URL, {})
-                    .then(function (resp) {
-                        // console.log(resp);
-                        return resp;
-                    })
-                    .catch(function (err) {
-                        // console.error(err.response);
-                        return err;
-                    });
             },
 
             reqAddMedia: async function (activityId, formData) {
@@ -329,22 +317,6 @@
                     });
             },
 
-            reqUpdateActivity: async function (activityId, name, description, listId) {
-                const URL = '/api/activity/'+ activityId;
-                return axios.post(URL, {
-                    name: name,
-                    description: description,
-                    listId: listId
-                })
-                    .then(function (resp) {
-                        console.log(resp);
-                        return resp;
-                    })
-                    .catch(function (err) {
-                        console.error(err.response);
-                        return err;
-                    });
-            },
 
             onClickRawDesc() {
                 if (this.form.showRawDesc) {
@@ -374,7 +346,7 @@
                         desc = this.form.editor.getHTML();
                     }
 
-                    let response = await this.reqUpdateActivity(data.id, data.name, desc, data.list_id);
+                    let response = await Manager.reqUpdateActivity(data.id, data.name, desc, data.list_id);
                     if (response.status === 200) {
                         this.message.success = 'Created Successfully';
                         this.message.danger = null;

@@ -193,13 +193,14 @@
         TodoList,
         Underline
     } from 'tiptap-extensions'
-    import VueGallery from "vue-gallery";
+    import Manager from '../js/dataManager'
 
     export default {
         name: "create-item",
         components: {
             EditorContent,
             EditorMenuBar,
+            Manager,
         },
         props: {
             listid: Number
@@ -210,8 +211,6 @@
                     danger: null,
                     success: null,
                 },
-
-
                 form: {
                     name: null,
                     listOptions: [],
@@ -277,7 +276,7 @@
                     //Mostrando Editor
                     desc = this.form.editor.getHTML();
                 }
-                let response = await this.reqSaveActivity(this.form.name, this.form.listId, desc);
+                let response = await Manager.reqCreateActivity(this.form.name, this.form.listId, desc);
                 this.manageResponse(response);
                 return response;
             },
@@ -295,7 +294,7 @@
             },
 
             async loadListsOptions(){
-                let response = await this.reqListsData();
+                let response = await Manager.reqGetLists();
                 if(response.status === 200){
                     this.form.listOptions = [];
                     response.data.forEach((x) => {
@@ -305,38 +304,6 @@
                     //TODO
                 }
             },
-
-            reqListsData: async function () {
-                const URL = '/api/list/';
-                return axios.get(URL, {})
-                    .then(function (resp) {
-                        // console.log(resp);
-                        return resp;
-                    })
-                    .catch(function (err) {
-                        // console.error(err.response);
-                        return err;
-                    });
-            },
-
-            reqSaveActivity: async function (name, listId, description) {
-                const URL = '/api/activity';
-                return axios.post(URL, {
-                    name: name,
-                    listId: listId,
-                    description: description,
-                })
-                    .then(function (resp) {
-                        // console.log(resp);
-                        return resp;
-                    })
-                    .catch(function (err) {
-                        // console.error(err.response);
-                        return err;
-                    });
-            },
-
-
 
             onClickCancel(){
                 this.$emit('cancel');

@@ -108,6 +108,7 @@
 
 <script>
     import VueGallery from 'vue-gallery';
+    import Manager from '../js/dataManager'
 
     export default {
         name: "show-item",
@@ -116,6 +117,7 @@
         },
         components: {
             'gallery': VueGallery,
+            Manager,
         },
         data() {
             return {
@@ -133,7 +135,7 @@
         methods: {
             async load(item) {
                 if (Number.isInteger(item)) {
-                    let response = await this.reqActivityData(item);
+                    let response = await Manager.reqGetActivity(item);
                     if (response.status === 200) {
                         this.loadItem(response.data)
                     } else {
@@ -151,41 +153,14 @@
                 console.error('Failed to load Item Data');
             },
 
-
-            reqActivityData: async function (activityId) {
-                const URL = '/api/activity/' + activityId;
-                return axios.get(URL, {})
-                    .then(function (resp) {
-                        // console.log(resp);
-                        return resp;
-                    })
-                    .catch(function (err) {
-                        // console.error(err.response);
-                        return err;
-                    });
-            },
-
-
             async onClickDeleteItem(item){
-                let response = await this.reqItemDelete(item);
+                let response = await Manager.reqDeleteActivity(item);
                 if(response.status === 200){
                     this.onDeleted()
                 }else{
                     console.error('Failed to Delete element');
                 }
                 //TODO ELSE
-            },
-            reqItemDelete: async function (activityId) {
-                const URL = '/api/activity/' + activityId;
-                return axios.delete(URL, {})
-                    .then(function (resp) {
-                        // console.log(resp);
-                        return resp;
-                    })
-                    .catch(function (err) {
-                        // console.error(err.response);
-                        return err;
-                    });
             },
 
 

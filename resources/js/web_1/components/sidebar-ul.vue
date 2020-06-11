@@ -20,8 +20,13 @@
 </template>
 
 <script>
+    import Manager from '../js/dataManager'
+
     export default {
         name: "sidebar-ul",
+        components: {
+            Manager
+        },
         data() {
             return {
                 firstLoad: true,
@@ -35,7 +40,7 @@
                 }
             },
             async loadLists(){
-                let response = await this.reqListsData();
+                let response = await Manager.reqGetLists();
                 if(response.status === 200){
                     this.lists = response.data;
                     if(this.firstLoad){
@@ -45,19 +50,6 @@
                 }else{
                     //TODO
                 }
-            },
-
-            reqListsData: async function () {
-                const URL = '/api/list/';
-                return axios.get(URL, {})
-                    .then(function (resp) {
-                        // console.log(resp);
-                        return resp;
-                    })
-                    .catch(function (err) {
-                        // console.error(err.response);
-                        return err;
-                    });
             },
 
             onListSelected(list){

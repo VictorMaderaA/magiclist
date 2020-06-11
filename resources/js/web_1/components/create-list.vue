@@ -57,8 +57,13 @@
 </template>
 
 <script>
+    import Manager from '../js/dataManager'
+
     export default {
         name: "create-list",
+        components: {
+            Manager
+        },
         data() {
             return {
                 form: {
@@ -73,35 +78,13 @@
                     this.$refs.inputName.focus();
                     return;
                 }
-                let response = await this.reqSaveList(this.form.name, this.form.description);
+                let response = await Manager.reqCreateList(this.form.name, this.form.description);
                 if(response.status === 200){
                     this.$emit('created-list', response.data);
                 }else{
                     //TODO
                 }
             },
-            reqSaveList: async function (name, description) {
-                const URL = '/api/list';
-
-                let data = {
-                    name: name
-                };
-                if(description){
-                    data.description = description;
-                }
-
-                return await axios.post(URL, data)
-                    .then(function (resp) {
-                        // console.log(resp);
-                        return resp;
-                    })
-                    .catch(function (err) {
-                        // console.error(err.response);
-                        return err;
-                    });
-            },
-
-
             onClickCancel(){
                 this.$emit('cancel');
             }

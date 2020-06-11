@@ -195,12 +195,13 @@
 
 <script>
     import draggable from 'vuedraggable'
-
+    import Manager from '../js/dataManager'
 
     export default {
         name: "show-list",
         components: {
             draggable,
+            Manager,
         },
         props: {
             listId: Number
@@ -238,7 +239,7 @@
                 this.loadListData();
             },
             async loadListData(){
-                let response = await this.reqListData(this.curr.listId);
+                let response = await Manager.reqGetListData(this.curr.listId);
                 if(response.status === 200){
                     this.list = response.data;
                     this.listItems = response.data.activities;
@@ -247,7 +248,7 @@
 
 
             async onClickCheck(item){
-                let response = await this.reqChangeActivityState(item.id, !item.completed_at);
+                let response = await Manager.reqUpdateActivityState(item.id, !item.completed_at);
                 if(response.status === 200){
                     let newItems = this.listItems.slice(0);
                     let found = newItems.findIndex(e => e.id === item.id);
@@ -274,7 +275,7 @@
 
 
             async onClickDeleteList(list){
-                let response = await this.reqListDelete(list.id);
+                let response = await Manager.reqDeleteList(list.id);
                 if(response.status === 200){
                     this.$emit('list-deleted', this.list);
                 }
@@ -288,7 +289,7 @@
                 this.modalItem = item;
             },
             async onClickDeleteItem(item){
-                let response = await this.reqItemDelete(item.id);
+                let response = await Manager.reqDeleteActivity(item.id);
                 if(response.status === 200){
                     this.loadListData()
                 }else{
@@ -306,95 +307,6 @@
                 this.$emit('selected-item', item);
 
             },
-
-            reqListUpdate: async function (listId, name, description) {
-                const URL = '/api/list/' + listId;
-                return axios.post(URL, {
-                    name: name,
-                    description: description
-                })
-                    .then(function (resp) {
-                        // console.log(resp);
-                        return resp;
-                    })
-                    .catch(function (err) {
-                        // console.error(err.response);
-                        return err;
-                    });
-            },
-
-            reqListDelete: async function (listId) {
-                const URL = '/api/list/' + listId;
-                return axios.delete(URL, {})
-                    .then(function (resp) {
-                        // console.log(resp);
-                        return resp;
-                    })
-                    .catch(function (err) {
-                        // console.error(err.response);
-                        return err;
-                    });
-            },
-
-            reqListData: async function (listId) {
-                const URL = '/api/list/' + listId;
-                return axios.get(URL, {})
-                    .then(function (resp) {
-                        // console.log(resp);
-                        return resp;
-                    })
-                    .catch(function (err) {
-                        // console.error(err.response);
-                        return err;
-                    });
-            },
-            reqModifyActivitiesOrder: async function (listId, newOrder) {
-                const URL = '/api/list/' + listId + '/change-activities-order';
-                return axios.post(URL, {
-                    data: newOrder
-                })
-                    .then(function (resp) {
-                        // console.log(resp);
-                        return resp;
-                    })
-                    .catch(function (err) {
-                        // console.error(err.response);
-                        return err;
-                    });
-            },
-            reqChangeActivityState: async function (activityId, bool) {
-                const URL = '/api/activity/' + activityId + '/change-completed-state';
-                if(bool){
-                    bool = 1;
-                }else{
-                    bool = 0;
-                }
-                return axios.post(URL, {
-                    state: bool
-                })
-                    .then(function (resp) {
-                        // console.log(resp);
-                        return resp;
-                    })
-                    .catch(function (err) {
-                        // console.error(err.response);
-                        return err;
-                    });
-            },
-            reqItemDelete: async function (activityId) {
-                const URL = '/api/activity/' + activityId;
-                return axios.delete(URL, {})
-                    .then(function (resp) {
-                        // console.log(resp);
-                        return resp;
-                    })
-                    .catch(function (err) {
-                        // console.error(err.response);
-                        return err;
-                    });
-            },
-
-
 
             canShowItem(item){
                 if(this.card.showOptions === "1"){
@@ -431,7 +343,7 @@
                     this.listItems.forEach((x) => {
                         newOrder.push(x.id);
                     });
-                    this.reqModifyActivitiesOrder(this.curr.listId, newOrder);
+                    Manager.reqUpdateListActivitiesOrder(this.curr.listId, newOrder);
                     this.orderModified = false;
                 }
             }

@@ -66,8 +66,13 @@
 </template>
 
 <script>
+    import Manager from '../js/dataManager'
+
     export default {
         name: "edit-list",
+        components: {
+            Manager
+        },
         props: {
             listId: Number,
         },
@@ -91,32 +96,19 @@
         },
         methods: {
             async loadListData(){
-                let response = await this.reqListData(this.listId);
+                let response = await Manager.reqGetListData(this.listId);
                 if(response.status === 200) {
                     this.list = response.data;
                     this.name = this.list.name;
                 }
             },
-            reqListData: async function (listId) {
-                const URL = '/api/list/' + listId;
-                return axios.get(URL, {})
-                    .then(function (resp) {
-                        // console.log(resp);
-                        return resp;
-                    })
-                    .catch(function (err) {
-                        // console.error(err.response);
-                        return err;
-                    });
-            },
-
 
             async onClickSave(){
                 if(!this.list.name){
                     this.$refs.inputName.focus();
                     return;
                 }
-                let response = await this.reqSaveList(this.list.id, this.list.name, this.list.description);
+                let response = await Manager.reqUpdateList(this.list.id, this.list.name, this.list.description);
                 if(response.status === 200){
                     this.list = response.data;
                     // this.$emit('updated-list', response.data);
@@ -127,28 +119,6 @@
                     this.message.danger = 'Something went wrong when trying to update';
                 }
             },
-            reqSaveList: async function (listId, name, description) {
-                const URL = '/api/list/' + listId;
-
-                let data = {
-                    name: name
-                };
-                if(description){
-                    data.description = description;
-                }
-
-                return axios.post(URL, data)
-                    .then(function (resp) {
-                        // console.log(resp);
-                        return resp;
-                    })
-                    .catch(function (err) {
-                        // console.error(err.response);
-                        return err;
-                    });
-            },
-
-
 
             onClickCancel(){
                 this.$emit('cancel');
