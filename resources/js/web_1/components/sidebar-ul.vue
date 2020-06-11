@@ -1,36 +1,54 @@
 <template>
-    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-        <li class="nav-item">
-            <a class="nav-link"
-               v-on:click.stop.prevent="onCreateNewList()">
-                <i class="fas fa-plus-circle"></i>
-                <p>Create New List</p>
-            </a>
-        </li>
+    <div>
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+            <li class="nav-item">
+                <a class="nav-link"
+                   v-on:click.stop.prevent="onCreateNewList()">
+                    <i class="fas fa-plus-circle"></i>
+                    <p>Create New List</p>
+                </a>
+            </li>
 
-        <li class="nav-item" v-for="list in lists">
-            <a class="nav-link"
-               v-on:click.stop.prevent="onListSelected(list)">
-                <i class="far fa-circle nav-icon"></i>
-                <p>{{list.name}}</p>
-            </a>
-        </li>
+        </ul>
 
-    </ul>
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+            <draggable
+                v-model="lists"
+                v-bind="dragOptions"
+                :move="onMoveCallback"
+                @start="drag = true"
+                @end="drag = false">
+                <transition-group type="transition" :name="!drag ? 'flip-list' : null">
+                    <li v-for="(item) in lists" :key="item.id" class="nav-item">
+                        <a class="nav-link" v-on:click.stop.prevent="onListSelected(item)">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>{{item.name}}</p>
+                        </a>
+                    </li>
+                </transition-group>
+            </draggable>
+
+        </ul>
+    </div>
 </template>
 
 <script>
     import Manager from '../js/dataManager'
+    import draggable from 'vuedraggable'
 
     export default {
         name: "sidebar-ul",
         components: {
-            Manager
+            draggable,
+            Manager,
         },
         data() {
             return {
                 firstLoad: true,
                 lists: null,
+
+                drag: false,
+                orderModified: false,
             }
         },
         methods: {
@@ -66,12 +84,58 @@
                     element.classList.remove("sidebar-open");
                     element.classList.add("sidebar-closed", "sidebar-collapse");
                 }
-            }
+            },
 
+
+            onMoveCallback(evt, originalEvent){
+                this.orderModified = true;
+            },
+
+        },
+        computed: {
+            dragOptions() {
+                return {
+                    animation: 200,
+                    group: "description",
+                    disabled: false,
+                    ghostClass: "ghost"
+                };
+            },
+        },
+        watch: {
+            lists: function () {
+                if(this.orderModified){
+                    let newOrder = []
+                    this.lists.forEach((x) => {
+                        newOrder.push(x.id);
+                    });
+                    Manager.reqUpdateListsOrder(newOrder);
+                    this.orderModified = false;
+                }
+            }
         }
     }
 </script>
 
 <style scoped>
+    .flip-list-move {
+        transition: transform 0.5s;
+    }
+    .no-move {
+        transition: transform 0s;
+    }
+    .ghost {
+        opacity: 0.5;
+        background: #c8ebfb;
+    }
+    .list-group {
+        min-height: 20px;
+    }
 
+    .list-group-item {
+        cursor: move;
+    }
+    .list-group-item i {
+        cursor: pointer;
+    }
 </style>

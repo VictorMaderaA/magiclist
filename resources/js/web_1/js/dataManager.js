@@ -4,6 +4,7 @@ const DELETE_LIST = '/api/list/{listId}';
 const UPDATE_LIST = '/api/list/{listId}';
 const CREATE_LIST = '/api/list';
 const UPDATE_LIST_ACTIVITIES_ORDER = '/api/list/{listId}/change-activities-order';
+const UPDATE_LISTS_ORDER = '/api/list/change-order';
 
 const DELETE_ACTIVITY = '/api/activity/{activityId}';
 const UPDATE_ACTIVITY_STATE = '/api/activity/{activityId}/change-completed-state';
@@ -63,6 +64,14 @@ export default new Vue({
                 .then((resp) => this.onRequest(resp))
                 .catch((err) => this.onRequestError(err));
         },
+        reqUpdateListsOrder(idsOrder){
+            let data = {};
+            data.data = idsOrder;
+            return axios.post(UPDATE_LISTS_ORDER, data)
+                .then((resp) => this.onRequest(resp))
+                .catch((err) => this.onRequestError(err));
+        },
+
 
 
         reqDeleteActivity(activityId){
