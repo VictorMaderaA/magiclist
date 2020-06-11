@@ -32,73 +32,76 @@
 
 
 
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-10">
+                    <div class="card card-outline card-info">
+                        <div class="card-header">
+                            <h3 class="card-title align-middle" v-if="itemData">
+                                {{itemData.name}}
+                            </h3>
 
-        <div class="row justify-content-center">
-            <div class="col-md-10">
-                <div class="card card-outline card-info">
-                    <div class="card-header">
-                        <h3 class="card-title align-middle" v-if="itemData">
-                            {{itemData.name}}
-                        </h3>
+                            <div class="card-tools">
+                                <a class="btn btn-sm" v-on:click="onClickBack">
+                                    <i class="far fa-list-alt"></i>
+                                </a>
 
-                        <div class="card-tools">
-                            <a class="btn btn-sm" v-on:click="onClickBack">
-                                <i class="far fa-list-alt"></i>
-                            </a>
+                                <a class="btn btn-sm" v-on:click="onClickEdit">
+                                    <i class="fas fa-edit text-blue"></i>
+                                </a>
 
-                            <a class="btn btn-sm" v-on:click="onClickEdit">
-                                <i class="fas fa-edit text-blue"></i>
-                            </a>
-
-                            <a class="btn btn-sm" data-toggle="modal" data-target="#modal-deleteItem">
-                                <i class="fas fa-trash text-red"></i>
-                            </a>
-                        </div>
-                    </div>
-                    <!-- /.card-header -->
-
-                    <div class="card-body">
-                        <div class="row justify-content-center">
-                            <div class="col-10">
-                                <div v-if="itemData" v-html="itemData.description"></div>
-                                <div v-if="!itemData||!itemData.description">
-                                    <h1>No Description</h1>
-                                    <p v-on:click="onClickEdit">
-                                        <u>Edit and add one.</u>
-                                    </p>
-                                </div>
+                                <a class="btn btn-sm" data-toggle="modal" data-target="#modal-deleteItem">
+                                    <i class="fas fa-trash text-red"></i>
+                                </a>
                             </div>
                         </div>
+                        <!-- /.card-header -->
 
-                        <div class="input-group row justify-content-center">
+                        <div class="card-body">
+                            <div class="row justify-content-center">
+                                <div class="col-10">
+                                    <div v-if="itemData" v-html="itemData.description"></div>
+                                    <div v-if="!itemData||!itemData.description">
+                                        <h1>No Description</h1>
+                                        <p v-on:click="onClickEdit">
+                                            <u>Edit and add one.</u>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
 
-                            <div class="col-10 justify-items-center">
-                                <gallery :images="gallery"
-                                         :index="index"
-                                         @close="index = null"></gallery>
-                                <div class="d-flex flex-wrap">
-                                    <div class="image"
-                                         v-for="(image, imageIndex) in gallery"
-                                         :key="imageIndex"
-                                         @click="index = imageIndex"
-                                         :style="{ backgroundImage: 'url(' + image.href + ')', width: '150px', height: '100px' }"
-                                    >
-                                        <video
-                                               width="150px" height="100px" v-if="image.isVideo">
-                                            <source :src="image.href" :type="image.mimeType">
-                                            Your browser does not support the video tag.
-                                        </video>
+                            <div class="input-group row justify-content-center">
+
+                                <div class="col-10 justify-items-center">
+                                    <gallery :images="gallery"
+                                             :index="index"
+                                             @close="index = null"></gallery>
+                                    <div class="d-flex flex-wrap">
+                                        <div class="image"
+                                             v-for="(image, imageIndex) in gallery"
+                                             :key="imageIndex"
+                                             @click="index = imageIndex"
+                                             :style="{ backgroundImage: 'url(' + image.href + ')', width: '150px', height: '100px' }"
+                                        >
+                                            <video
+                                                width="150px" height="100px" v-if="image.isVideo">
+                                                <source :src="image.href" :type="image.mimeType">
+                                                Your browser does not support the video tag.
+                                            </video>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
+                    </div>
                 </div>
+                <!-- /.col-->
             </div>
-            <!-- /.col-->
+            <!-- ./row -->
         </div>
-        <!-- ./row -->
+
+
     </section>
 
 </template>

@@ -64,128 +64,129 @@
         </div>
 
 
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-10">
+                    <div class="card card-outline card-info" v-if="list">
+                        <div class="card-header">
+                            <h3 class="card-title align-middle">
+                                {{list.name}}
+                            </h3>
 
-    <div class="row justify-content-center">
-        <div class="col-md-10">
-            <div class="card card-outline card-info" v-if="list">
-                <div class="card-header">
-                    <h3 class="card-title align-middle">
-                        {{list.name}}
-                    </h3>
+                            <div class="card-tools">
+                                <a class="btn btn-sm" v-on:click="onClickNewItem">
+                                    <i class="fas fa-plus text-green"></i>
+                                </a>
 
-                    <div class="card-tools">
-                        <a class="btn btn-sm" v-on:click="onClickNewItem">
-                            <i class="fas fa-plus text-green"></i>
-                        </a>
+                                <a class="btn btn-sm" data-toggle="modal" data-target="#modal-editList"
+                                   v-on:click="onClickEditList">
+                                    <i class="fas fa-edit text-blue"></i>
+                                </a>
 
-                        <a class="btn btn-sm" data-toggle="modal" data-target="#modal-editList"
-                           v-on:click="onClickEditList">
-                            <i class="fas fa-edit text-blue"></i>
-                        </a>
-
-                        <a class="btn btn-sm" data-toggle="modal" data-target="#modal-deleteList">
-                            <i class="fas fa-trash text-red"></i>
-                        </a>
-                    </div>
-                </div>
-                <!-- /.card-header -->
-
-
-                <div class="card-body">
-                    <div class="row justify-content-center">
-                        <div class="col-10">
-                            <p>{{list.description}}</p>
-                        </div>
-                    </div>
-
-                    <div class="row justify-content-around" >
-                        <div class="col-3">
-                            <h5>
-                                Show options
-                            </h5>
-                            <div class="form-group">
-                                <div class="custom-control custom-radio">
-                                    <input class="custom-control-input" type="radio" v-model="card.showOptions"
-                                           id="pending" name="customRadio" value="0">
-                                    <label for="pending" class="custom-control-label">
-                                        Pending <small>{{ list.activities_pending_count }}</small>
-                                    </label>
-                                </div>
-                                <div class="custom-control custom-radio">
-                                    <input class="custom-control-input" type="radio" v-model="card.showOptions"
-                                           id="all" name="customRadio" value="1">
-                                    <label for="all" class="custom-control-label">
-                                        All <small>{{ list.activities_count }}</small>
-                                    </label>
-                                </div>
-                                <div class="custom-control custom-radio">
-                                    <input class="custom-control-input" type="radio" v-model="card.showOptions"
-                                           id="completed" name="customRadio" value="2">
-                                    <label for="completed" class="custom-control-label">
-                                        Completed <small>{{ list.activities_completed_count }}</small>
-                                    </label>
-                                </div>
+                                <a class="btn btn-sm" data-toggle="modal" data-target="#modal-deleteList">
+                                    <i class="fas fa-trash text-red"></i>
+                                </a>
                             </div>
                         </div>
-                        <div class="col-6">
-
-                        </div>
-                    </div>
-
-                    <div class="row justify-content-center">
-                        <div class="col-md-10">
-                            <ul class="todo-list ui-sortable" data-widget="todo-list">
-                                <draggable
-                                    v-model="listItems"
-                                    v-bind="dragOptions"
-                                    :handle="'.handle'"
-                                    :move="onMoveCallback"
-                                    @start="drag = true"
-                                    @end="drag = false">
+                        <!-- /.card-header -->
 
 
-                                    <transition-group type="transition" :name="!drag ? 'flip-list' : null"
-                                                      class="todo-list ui-sortable">
-                                        <li v-for="(item) in listItems" :key="item.id" v-if="canShowItem(item)"
-                                            v-bind:class="{ done: item.completed_at}">
-                                            <!-- drag handle -->
-                                            <span class="handle ui-sortable-handle">
+                        <div class="card-body">
+                            <div class="row justify-content-center">
+                                <div class="col-10">
+                                    <p>{{list.description}}</p>
+                                </div>
+                            </div>
+
+                            <div class="row justify-content-around" >
+                                <div class="col-3">
+                                    <h5>
+                                        Show options
+                                    </h5>
+                                    <div class="form-group">
+                                        <div class="custom-control custom-radio">
+                                            <input class="custom-control-input" type="radio" v-model="card.showOptions"
+                                                   id="pending" name="customRadio" value="0">
+                                            <label for="pending" class="custom-control-label">
+                                                Pending <small>{{ list.activities_pending_count }}</small>
+                                            </label>
+                                        </div>
+                                        <div class="custom-control custom-radio">
+                                            <input class="custom-control-input" type="radio" v-model="card.showOptions"
+                                                   id="all" name="customRadio" value="1">
+                                            <label for="all" class="custom-control-label">
+                                                All <small>{{ list.activities_count }}</small>
+                                            </label>
+                                        </div>
+                                        <div class="custom-control custom-radio">
+                                            <input class="custom-control-input" type="radio" v-model="card.showOptions"
+                                                   id="completed" name="customRadio" value="2">
+                                            <label for="completed" class="custom-control-label">
+                                                Completed <small>{{ list.activities_completed_count }}</small>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+
+                                </div>
+                            </div>
+
+                            <div class="row justify-content-center">
+                                <div class="col-md-10">
+                                    <ul class="todo-list ui-sortable" data-widget="todo-list">
+                                        <draggable
+                                            v-model="listItems"
+                                            v-bind="dragOptions"
+                                            :handle="'.handle'"
+                                            :move="onMoveCallback"
+                                            @start="drag = true"
+                                            @end="drag = false">
+
+
+                                            <transition-group type="transition" :name="!drag ? 'flip-list' : null"
+                                                              class="todo-list ui-sortable">
+                                                <li v-for="(item) in listItems" :key="item.id" v-if="canShowItem(item)"
+                                                    v-bind:class="{ done: item.completed_at}">
+                                                    <!-- drag handle -->
+                                                    <span class="handle ui-sortable-handle">
                                         <i class="fas fa-ellipsis-v"></i>
                                         <i class="fas fa-ellipsis-v"></i>
                                     </span>
-                                            <!-- checkbox -->
-                                            <div class="icheck-primary d-inline ml-2">
-                                                <button type="button" class="btn btn-sm"
-                                                        data-placement="top" data-original-title="Tooltip on top"
-                                                        v-on:click="onClickCheck(item)">
-                                                    <i class="far fa-square" v-if="!item.completed_at"
-                                                       style="font-size: 1.5em;"></i>
-                                                    <i class="far fa-check-square" v-if="item.completed_at"
-                                                       style="font-size: 1.5em;"></i>
-                                                </button>
-                                            </div>
-                                            <span class="text">{{item.name}}</span>
-                                            <!-- General tools such as edit or delete-->
-                                            <div class="tools">
-                                                <i class="fas fa-eye text-gray" v-on:click="onClickItem(item)"></i>
-                                                <i class="fas fa-edit text-blue" v-on:click="onClickEditItem(item)"></i>
-                                                <i class="fas fa-trash text-red" v-on:click="onClickModalDeleteItem(item)"
-                                                   data-toggle="modal" data-target="#modal-deleteItem"></i>
-                                            </div>
-                                        </li>
-                                    </transition-group>
-                                </draggable>
-                            </ul>
+                                                    <!-- checkbox -->
+                                                    <div class="icheck-primary d-inline ml-2">
+                                                        <button type="button" class="btn btn-sm"
+                                                                data-placement="top" data-original-title="Tooltip on top"
+                                                                v-on:click="onClickCheck(item)">
+                                                            <i class="far fa-square" v-if="!item.completed_at"
+                                                               style="font-size: 1.5em;"></i>
+                                                            <i class="far fa-check-square" v-if="item.completed_at"
+                                                               style="font-size: 1.5em;"></i>
+                                                        </button>
+                                                    </div>
+                                                    <span class="text">{{item.name}}</span>
+                                                    <!-- General tools such as edit or delete-->
+                                                    <div class="tools">
+                                                        <i class="fas fa-eye text-gray" v-on:click="onClickItem(item)"></i>
+                                                        <i class="fas fa-edit text-blue" v-on:click="onClickEditItem(item)"></i>
+                                                        <i class="fas fa-trash text-red" v-on:click="onClickModalDeleteItem(item)"
+                                                           data-toggle="modal" data-target="#modal-deleteItem"></i>
+                                                    </div>
+                                                </li>
+                                            </transition-group>
+                                        </draggable>
+                                    </ul>
+                                </div>
+                            </div>
+
+
+
                         </div>
                     </div>
-
-
-
                 </div>
+                <!-- /.col-->
             </div>
         </div>
-        <!-- /.col-->
-    </div>
     <!-- ./row -->
 
     </div>

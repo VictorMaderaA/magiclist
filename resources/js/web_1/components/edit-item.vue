@@ -1,194 +1,196 @@
 <template>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <div class="card card-outline card-info">
+                    <div class="card-header">
+                        <h3 class="card-title align-middle">
+                            Edit Item
+                        </h3>
 
-    <div class="row justify-content-center">
-        <div class="col-md-10">
-            <div class="card card-outline card-info">
-                <div class="card-header">
-                    <h3 class="card-title align-middle">
-                        Edit Item
-                    </h3>
-
-                    <div class="card-tools">
-                        <a class="btn btn-sm" v-on:click="onClickCancel">
-                            <i class="fas fa-times text-red"></i>
-                        </a>
-                    </div>
-                </div>
-                <!-- /.card-header -->
-                <div class="card-body" v-if="itemData">
-
-                    <div class="row justify-content-center">
-                        <div class="col-10 text-center">
-                            <p class="text-danger" v-if="message.danger">{{ message.danger }}</p>
-                            <p class="text-success" v-if="message.success">{{ message.success }}</p>
+                        <div class="card-tools">
+                            <a class="btn btn-sm" v-on:click="onClickCancel">
+                                <i class="fas fa-times text-red"></i>
+                            </a>
                         </div>
                     </div>
+                    <!-- /.card-header -->
+                    <div class="card-body" v-if="itemData">
 
-
-
-                    <form role="form">
                         <div class="row justify-content-center">
-                            <div class="col-sm-8">
-                                <!-- text input -->
-                                <div class="form-group">
-                                    <label for="name">Name</label>
-                                    <input type="text" class="form-control" id="name"
-                                           placeholder="Order Pizza..." v-model="itemData.name">
-                                </div>
+                            <div class="col-10 text-center">
+                                <p class="text-danger" v-if="message.danger">{{ message.danger }}</p>
+                                <p class="text-success" v-if="message.success">{{ message.success }}</p>
                             </div>
                         </div>
 
-                        <div class="row justify-content-center">
-                            <div class="col-sm-10">
-                                <!-- textarea -->
-                                <div class="form-group">
-                                    <label>Description</label>
 
-                                    <div v-if="!form.showRawDesc">
-                                        <editor-menu-bar :editor="form.editor" v-slot="{ commands, isActive, focused }">
-                                            <div class="menubar is-hidden">
 
+                        <form role="form">
+                            <div class="row justify-content-center">
+                                <div class="col-sm-8">
+                                    <!-- text input -->
+                                    <div class="form-group">
+                                        <label for="name">Name</label>
+                                        <input type="text" class="form-control" id="name"
+                                               placeholder="Order Pizza..." v-model="itemData.name">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row justify-content-center">
+                                <div class="col-sm-10">
+                                    <!-- textarea -->
+                                    <div class="form-group">
+                                        <label>Description</label>
+
+                                        <div v-if="!form.showRawDesc">
+                                            <editor-menu-bar :editor="form.editor" v-slot="{ commands, isActive, focused }">
+                                                <div class="menubar is-hidden">
+
+                                                    <button class="btn bt-sm btn-default"
+                                                            v-on:click.capture.prevent="onClickRawDesc">
+                                                        HTML
+                                                    </button>
+
+                                                    <button class="btn bt-sm"
+                                                            :class="{ 'btn-default': isActive.bold() }"
+                                                            v-on:click.capture.prevent="commands.bold">
+                                                        <i class="fas fa-bold"></i>
+                                                    </button>
+
+                                                    <button class="btn bt-sm"
+                                                            :class="{ 'btn-default': isActive.italic() }"
+                                                            v-on:click.capture.prevent="commands.italic">
+                                                        <i class="fas fa-italic"></i>
+                                                    </button>
+
+                                                    <button class="btn bt-sm"
+                                                            :class="{ 'btn-default': isActive.strike() }"
+                                                            v-on:click.capture.prevent="commands.strike">
+                                                        <i class="fas fa-strikethrough"></i>
+                                                    </button>
+
+                                                    <button class="btn bt-sm"
+                                                            :class="{ 'btn-default': isActive.underline() }"
+                                                            v-on:click.capture.prevent="commands.underline">
+                                                        <i class="fas fa-underline"></i>
+                                                    </button>
+
+                                                    <button class="btn bt-sm"
+                                                            :class="{ 'btn-default': isActive.paragraph() }"
+                                                            v-on:click.capture.prevent="commands.paragraph">
+                                                        <i class="fas fa-paragraph"></i>
+                                                    </button>
+
+                                                    <button class="btn bt-sm"
+                                                            :class="{ 'btn-default': isActive.heading({ level: 1 }) }"
+                                                            v-on:click.capture.prevent="commands.heading({ level: 1 })">
+                                                        H1
+                                                    </button>
+
+                                                    <button class="btn bt-sm"
+                                                            :class="{ 'btn-default': isActive.heading({ level: 2 }) }"
+                                                            v-on:click.capture.prevent="commands.heading({ level: 2 })">
+                                                        H2
+                                                    </button>
+
+                                                    <button class="btn bt-sm"
+                                                            :class="{ 'btn-default': isActive.heading({ level: 3 }) }"
+                                                            v-on:click.capture.prevent="commands.heading({ level: 3 })">
+                                                        H3
+                                                    </button>
+
+                                                    <button class="btn bt-sm"
+                                                            :class="{ 'btn-default': isActive.bullet_list() }"
+                                                            v-on:click.capture.prevent="commands.bullet_list">
+                                                        <i class="fas fa-list-ul"></i>
+                                                    </button>
+
+                                                    <button class="btn bt-sm"
+                                                            :class="{ 'btn-default': isActive.ordered_list() }"
+                                                            v-on:click.capture.prevent="commands.ordered_list">
+                                                        <i class="fas fa-list-ol"></i>
+                                                    </button>
+
+                                                </div>
+                                            </editor-menu-bar>
+                                            <editor-content :editor="form.editor"
+                                                            style="background: white; color: black; outline: none"/>
+                                        </div>
+
+                                        <div class="form-group" v-if="form.showRawDesc">
+                                            <label for="rawDesc">
                                                 <button class="btn bt-sm btn-default"
                                                         v-on:click.capture.prevent="onClickRawDesc">
-                                                    HTML
+                                                    Preview
                                                 </button>
+                                            </label>
+                                            <textarea class="form-control" id="rawDesc" rows="5"
+                                                      style="margin-top: 0; margin-bottom: 0; height: 266px;"
+                                                      v-model="form.rawDesc"></textarea>
+                                        </div>
 
-                                                <button class="btn bt-sm"
-                                                        :class="{ 'btn-default': isActive.bold() }"
-                                                        v-on:click.capture.prevent="commands.bold">
-                                                    <i class="fas fa-bold"></i>
-                                                </button>
 
-                                                <button class="btn bt-sm"
-                                                        :class="{ 'btn-default': isActive.italic() }"
-                                                        v-on:click.capture.prevent="commands.italic">
-                                                    <i class="fas fa-italic"></i>
-                                                </button>
-
-                                                <button class="btn bt-sm"
-                                                        :class="{ 'btn-default': isActive.strike() }"
-                                                        v-on:click.capture.prevent="commands.strike">
-                                                    <i class="fas fa-strikethrough"></i>
-                                                </button>
-
-                                                <button class="btn bt-sm"
-                                                        :class="{ 'btn-default': isActive.underline() }"
-                                                        v-on:click.capture.prevent="commands.underline">
-                                                    <i class="fas fa-underline"></i>
-                                                </button>
-
-                                                <button class="btn bt-sm"
-                                                        :class="{ 'btn-default': isActive.paragraph() }"
-                                                        v-on:click.capture.prevent="commands.paragraph">
-                                                    <i class="fas fa-paragraph"></i>
-                                                </button>
-
-                                                <button class="btn bt-sm"
-                                                        :class="{ 'btn-default': isActive.heading({ level: 1 }) }"
-                                                        v-on:click.capture.prevent="commands.heading({ level: 1 })">
-                                                    H1
-                                                </button>
-
-                                                <button class="btn bt-sm"
-                                                        :class="{ 'btn-default': isActive.heading({ level: 2 }) }"
-                                                        v-on:click.capture.prevent="commands.heading({ level: 2 })">
-                                                    H2
-                                                </button>
-
-                                                <button class="btn bt-sm"
-                                                        :class="{ 'btn-default': isActive.heading({ level: 3 }) }"
-                                                        v-on:click.capture.prevent="commands.heading({ level: 3 })">
-                                                    H3
-                                                </button>
-
-                                                <button class="btn bt-sm"
-                                                        :class="{ 'btn-default': isActive.bullet_list() }"
-                                                        v-on:click.capture.prevent="commands.bullet_list">
-                                                    <i class="fas fa-list-ul"></i>
-                                                </button>
-
-                                                <button class="btn bt-sm"
-                                                        :class="{ 'btn-default': isActive.ordered_list() }"
-                                                        v-on:click.capture.prevent="commands.ordered_list">
-                                                    <i class="fas fa-list-ol"></i>
-                                                </button>
-
-                                            </div>
-                                        </editor-menu-bar>
-                                        <editor-content :editor="form.editor"
-                                                        style="background: white; color: black; outline: none"/>
                                     </div>
+                                </div>
+                            </div>
 
-                                    <div class="form-group" v-if="form.showRawDesc">
-                                        <label for="rawDesc">
-                                            <button class="btn bt-sm btn-default"
-                                                    v-on:click.capture.prevent="onClickRawDesc">
-                                                Preview
-                                            </button>
-                                        </label>
-                                        <textarea class="form-control" id="rawDesc" rows="5"
-                                                  style="margin-top: 0; margin-bottom: 0; height: 266px;"
-                                                  v-model="form.rawDesc"></textarea>
+                            <div class="input-group row justify-content-center">
+                                <div class="col-10">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="inputGroupFile01" ref="files"
+                                               accept="image/*,.mp4,.gif" v-on:change="handleFileUploads()" multiple>
+                                        <label class="custom-file-label" for="inputGroupFile01">Upload Images</label>
                                     </div>
-
-
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="input-group row justify-content-center">
-                            <div class="col-10">
-                                <div class="custom-file">
-                                    <input type="file" class="custom-file-input" id="inputGroupFile01" ref="files"
-                                           accept="image/*,.mp4,.gif" v-on:change="handleFileUploads()" multiple>
-                                    <label class="custom-file-label" for="inputGroupFile01">Upload Images</label>
+                            <div class="row justify-content-center" v-if="form.fileUploading">
+                                <div class="col-auto text-center">
+                                    <br>
+                                    <i class="fas fa-3x fa-sync-alt fa-spin"></i>
+                                    <div class="text-bold">Uploading...</div>
+                                    <br>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="row justify-content-center" v-if="form.fileUploading">
-                            <div class="col-auto text-center">
-                                <br>
-                                <i class="fas fa-3x fa-sync-alt fa-spin"></i>
-                                <div class="text-bold">Uploading...</div>
-                                <br>
-                            </div>
-                        </div>
-
-                        <div class="input-group row justify-content-center">
-                            <div class="col-10">
-                                <gallery :images="gallery" :index="index" @close="index = null"></gallery>
-                                <div
-                                    class="image"
-                                    v-for="(image, imageIndex) in gallery"
-                                    :key="imageIndex"
-                                    @click="index = imageIndex"
-                                    :style="{ backgroundImage: 'url(' + image.href + ')', width: '150px', height: '100px' }"
-                                >
-                                    <video width="150px" height="100px" v-if="image.isVideo">
-                                        <source :src="image.href" :type="image.mimeType">
-                                        Your browser does not support the video tag.
-                                    </video>
+                            <div class="input-group row justify-content-center">
+                                <div class="col-10">
+                                    <gallery :images="gallery" :index="index" @close="index = null"></gallery>
+                                    <div
+                                        class="image"
+                                        v-for="(image, imageIndex) in gallery"
+                                        :key="imageIndex"
+                                        @click="index = imageIndex"
+                                        :style="{ backgroundImage: 'url(' + image.href + ')', width: '150px', height: '100px' }"
+                                    >
+                                        <video width="150px" height="100px" v-if="image.isVideo">
+                                            <source :src="image.href" :type="image.mimeType">
+                                            Your browser does not support the video tag.
+                                        </video>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                    </form>
+                        </form>
+                    </div>
+
+                    <div class="card-footer" v-if="itemData">
+                        <button type="submit" class="btn btn-primary"
+                                v-on:click="onClickSave" :disabled="!canSave">Save</button>
+                        <button type="submit" class="btn btn-default float-right"
+                                v-on:click="onClickCancel">Cancel
+                        </button>
+                    </div>
+
                 </div>
-
-                <div class="card-footer" v-if="itemData">
-                    <button type="submit" class="btn btn-primary"
-                            v-on:click="onClickSave" :disabled="!canSave">Save</button>
-                    <button type="submit" class="btn btn-default float-right"
-                            v-on:click="onClickCancel">Cancel
-                    </button>
-                </div>
-
             </div>
+            <!-- /.col-->
         </div>
-        <!-- /.col-->
+        <!-- ./row -->
     </div>
-    <!-- ./row -->
+
 </template>
 
 <script>
