@@ -225,6 +225,7 @@
 
                 drag: false,
                 orderModified: false,
+                reqStateCurrent: [],
             }
         },
         mounted() {
@@ -248,6 +249,10 @@
 
 
             async onClickCheck(item){
+                if(this.reqStateCurrent.findIndex(x => x === item.id) !== -1){
+                    return;
+                }
+                this.reqStateCurrent.push(item.id);
                 let response = await Manager.reqUpdateActivityState(item.id, !item.completed_at);
                 if(response.status === 200){
                     let newItems = this.listItems.slice(0);
@@ -256,6 +261,7 @@
                     newItems[found] = response.data;
                     this.listItems = newItems;
                 }
+                this.reqStateCurrent.splice(this.reqStateCurrent.findIndex(x => x === item.id), 1);
             },
 
             updateCounters(oldState, newState){
