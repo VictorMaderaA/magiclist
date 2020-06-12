@@ -5,8 +5,8 @@
              v-if="showing.empty">
             <div class="container">
                 <div class="row justify-content-around">
-                    <img v-on:click="showCreateNewList"
-                        sizes="(max-width: 1400px) 30vw, 1400px"
+                    <img v-on:click="showCreateNewList" style="max-height: 40vh;"
+                        sizes="(max-width: 1400px) 50vw, 1400px"
                         srcset="
                         img/app/new-list/list-welcome-200.png 200w,
                         img/app/new-list/list-welcome-762.png 762w,

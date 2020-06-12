@@ -131,7 +131,7 @@
 
                             <div v-if="list.activities_count < 1">
                                 <div class="row justify-content-center">
-                                    <img v-on:click="onClickNewItem"
+                                    <img v-on:click="onClickNewItem" style="max-height: 30vh;"
                                          sizes="(max-width: 1400px) 40vw, 1400px"
                                          srcset="
                                         img/app/new-item/item-welcome-200.png 200w,
@@ -144,7 +144,7 @@
                                          alt="Item Create First Image">
                                 </div>
                                 <div class="row justify-content-around">
-                                    <h4 style="font-size:4vw; font-family: sans-serif; font-weight: bold"
+                                    <h4 style="font-size:2vw; font-family: sans-serif; font-weight: bold"
                                         v-on:click="onClickNewItem">
                                         <u>Create your next activity</u>
                                     </h4>
