@@ -14,11 +14,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('dev/views/', 'Views\Develop\ViewsController@index');
+Route::get('dev/views/{id}', 'Views\Develop\ViewsController@show')->name('dev_views_show');
+
+
 Route::get('/', 'WelcomeController');
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/app', 'HomeController@index')->name('home');
+
+Route::get('/list/{listId}', 'Views\Web\ListController@index')->name('list_index');
 
 
 

@@ -6,6 +6,8 @@ namespace App\Models;
 
 use App\Models\Base\BaseModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class Media extends BaseModel
 {
@@ -81,10 +83,29 @@ class Media extends BaseModel
 
     //-----------------------------------------------------------------------------------------------------------------
 
-    public function activity()
+    public function activities()
     {
-        
+        return $this->belongsToMany(Activities::class, 'activity_media', 'media_id', 'activity_id');
     }
 
+    public function getTempUrlAttribute()
+    {
+//        $hour = date('H', time());
+        $expires = now()->addHour();
+//        if( $hour > 0 && $hour <= 6) {
+//            $expires->setTime(12, 0);
+//        }
+//        else if($hour > 6 && $hour <= 12) {
+//            $expires->setTime(18, 0);
+//        }
+//        else if($hour > 12 && $hour <= 18) {
+//            $expires->addDay();
+//        }
+//        else {
+//            $expires->addDay()->setTime(6,0);
+//        }
+
+        return Storage::disk('s3')->temporaryUrl($this->getAttribute('path'), $expires);
+    }
 
 }

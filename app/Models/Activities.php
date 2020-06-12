@@ -11,6 +11,17 @@ class Activities extends BaseModel
 {
     use SoftDeletes;
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        Activities::creating(function ($activity) {
+            $count = Lists::query()->findOrFail($activity->list_id)->activities_count;
+            $activity->listPriority = $count+1;
+        });
+    }
+
+
 
     /**
      * The table associated with the model.
@@ -83,7 +94,7 @@ class Activities extends BaseModel
 
     public function media()
     {
-        $this->belongsToMany(Media::class, 'ActivityMedia');
+        return $this->belongsToMany(Media::class, 'activity_media', 'activity_id', 'media_id');
     }
 
 

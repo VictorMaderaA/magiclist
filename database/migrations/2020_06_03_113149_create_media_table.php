@@ -17,6 +17,7 @@ class CreateMediaTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('path');
+            $table->string('mimeType');
             $table->foreignId('user_id')->references('id')->on('users');
             $table->timestamps();
             $table->softDeletes();

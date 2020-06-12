@@ -9,6 +9,13 @@ $factory->define(\App\Models\Activities::class, function (Faker $faker) {
     return [
         'name' => $faker->name,
         'description' => $faker->realText(),
+        'completed_at' => function () use ($faker) {
+//            if($faker->numberBetween(0,10) < 8){
+                if($faker->boolean){
+                return null;
+            }
+            return $faker->dateTime();
+        },
         'list_id' => function () use ($faker) {
             if($faker->boolean){
                 return \App\Models\Lists::all()->random()->id;

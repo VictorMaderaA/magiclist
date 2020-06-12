@@ -11,6 +11,16 @@ class Lists extends BaseModel
 {
     use SoftDeletes;
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        Lists::creating(function ($list) {
+            $count = auth()->user()->lists()->count();
+            $list->priority = $count+1;
+        });
+    }
+
 
     /**
      * The table associated with the model.
@@ -59,7 +69,11 @@ class Lists extends BaseModel
      *
      * @var array
      */
-    protected $withCount = [];
+    protected $withCount = [
+        'activities',
+        'activitiesPending',
+        'activitiesCompleted'
+    ];
 
     //-----------------------------------------------------------------------------------------------------------------
 
@@ -80,6 +94,24 @@ class Lists extends BaseModel
     protected $fillable = [];
 
     //-----------------------------------------------------------------------------------------------------------------
+
+    public function activities()
+    {
+        return $this->hasMany(Activities::class, 'list_id')
+            ->orderBy('listPriority');
+    }
+
+    public function activitiesCompleted()
+    {
+        return $this->hasMany(Activities::class, 'list_id')
+            ->where('completed_at', '<>', null);
+    }
+
+    public function activitiesPending()
+    {
+        return $this->hasMany(Activities::class, 'list_id')
+            ->where('completed_at',null);
+    }
 
 
 }

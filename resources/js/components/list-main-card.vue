@@ -1,0 +1,308 @@
+<template>
+    <div class="container">
+
+        <div>
+        </div>
+
+
+        <div id="overlay" v-if="showCreate">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card m-md-6" style="top: 35%">
+                        <div class="card-header">Crate New List<button @click="hideCreateOverlay">Close</button></div>
+                        <div class="card-body">
+                            <activity-create :listId="listId" @created-activity="onActivityCreated"></activity-create>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="row justify-content-center">
+            <div class="col-md-9">
+                <div class="card mb-3">
+                    <h3 class="card-header">{{listName}} <button @click="showCreateOverlay">Create</button></h3>
+<!--                    <div class="card-body">-->
+<!--                        <h5 class="card-title">Special title treatment</h5>-->
+<!--                        <h6 class="card-subtitle text-muted">Support card subtitle</h6>-->
+<!--                    </div>-->
+
+<!--                    <img style="height: 200px; width: 100%; display: block;" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22318%22%20height%3D%22180%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20318%20180%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_158bd1d28ef%20text%20%7B%20fill%3Argba(255%2C255%2C255%2C.75)%3Bfont-weight%3Anormal%3Bfont-family%3AHelvetica%2C%20monospace%3Bfont-size%3A16pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_158bd1d28ef%22%3E%3Crect%20width%3D%22318%22%20height%3D%22180%22%20fill%3D%22%23777%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%22129.359375%22%20y%3D%2297.35%22%3EImage%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E" alt="Card image">-->
+                    <div class="card-body">
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" id="customSwitch1"
+                                   v-model="showCompleted" @change="onModifiedShowCompleted">
+                            <label class="custom-control-label" for="customSwitch1">Mostrar Completadas</label>
+                        </div>
+                        <p class="card-text">Contenido:</p>
+                    </div>
+
+                    <ul class="list-group list-group-flush" v-if="itemsList">
+                        <draggable
+                            v-model="itemsList"
+                            v-bind="dragOptions"
+                            :handle="'.handle'"
+                            :move="onMoveCallback"
+                            @start="drag = true"
+                            @end="drag = false">
+                            <transition-group type="transition" :name="!drag ? 'flip-list' : null">
+
+                                <div v-for="(item) in itemsList" :key="item.id">
+                                    <div class="container" v-if="item.canShow">
+                                        <div class="row">
+                                            <div class="col-sm-1 handle">
+                                                <i class="icofont-hand-drag"></i>
+                                            </div>
+
+                                            <div class="col-sm-1">
+                                                <button type="button" class="btn btn-sm btn-outline-primary"
+                                                        data-placement="top" title="" data-original-title="Tooltip on top"
+                                                        v-on:click="onClickCheck(item)">
+                                                    <i class="icofont-ui-check" v-if="item.completed_at"></i>
+                                                    <i class="icofont-square" v-if="!item.completed_at"></i>
+                                                </button>
+                                            </div>
+
+                                            <div class="col-sm">
+                                                {{item.name}}
+                                            </div>
+                                            <div class="col-sm">
+                                                <small>
+                                                    {{reduceDescription(item.description)}}
+                                                </small>
+                                            </div>
+                                            <div class="col-sm">
+
+                                                <div class="btn-group btn-group-sm">
+                                                    <button type="button" class="btn btn-sm btn-outline-info"
+                                                            data-placement="left" title="" data-original-title="Tooltip on left">
+                                                        <i class="icofont-edit"></i>
+                                                    </button>
+                                                    <button type="button" class="btn btn-sm btn-outline-danger"
+                                                            data-placement="top" title="" data-original-title="Tooltip on top">
+                                                        <i class="icofont-trash"></i>
+                                                    </button>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <hr>
+                                    </div>
+                                </div>
+                            </transition-group>
+                        </draggable>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+
+</template>
+
+<script>
+    import draggable from 'vuedraggable'
+
+    export default {
+        name: "list-main-card",
+        components: {
+            draggable,
+        },
+        props: {
+            listimport: Object
+        },
+        data() {
+            return {
+                listName: null,
+                listId: null,
+                itemsList: null,
+                showCompleted: false,
+                drag: false,
+                orderModified: false,
+                showCreate: false,
+            }
+        },
+        beforeMount() {
+            this.listName = this.listimport.name;
+            this.listId = this.listimport.id;
+            this.itemsList = this.listimport.activities;
+            this.loadItemsList();
+        },
+        mounted() {
+            console.log('Mounted')
+        },
+
+        methods: {
+
+            loadItemsList(){
+                let newItemsList = [];
+                this.itemsList.forEach((item) => {
+                    let show = true;
+
+                    if(!this.showCompleted && item.completed_at){
+                        show = false;
+                    }
+
+                    item.canShow = show;
+                    newItemsList.push(item);
+                });
+                this.itemsList = newItemsList;
+            },
+
+            onModifiedShowCompleted(){
+                this.loadItemsList();
+            },
+
+            onMoveCallback(evt, originalEvent){
+                this.orderModified = true;
+            },
+            onActivityCreated(activity){
+                this.itemsList.push(activity);
+                this.loadItemsList();
+            },
+            async onClickCheck(item){
+                let response = await this.reqChangeActivityState(item.id, !item.completed_at);
+                if(response.status === 200){
+                    let found = this.itemsList.find(e => e.id === item.id);
+                    found.completed_at = !found.completed_at;
+                    this.loadItemsList();
+                }
+            },
+
+
+
+            reqChangeActivityState: async function (activityId, bool) {
+                const URL = '/api/activity/' + activityId + '/change-completed-state';
+                if(bool){
+                    bool = 1;
+                }else{
+                    bool = 0;
+                }
+                return await axios.post(URL, {
+                    state: bool
+                })
+                    .then(function (resp) {
+                        // console.log(resp);
+                        return resp;
+                    })
+                    .catch(function (err) {
+                        // console.error(err.response);
+                        return err;
+                    });
+            },
+
+            reqModifyActivitiesOrder: async function (listId, newOrder) {
+                const URL = '/api/list/' + listId + '/change-activities-order';
+                return await axios.post(URL, {
+                    data: newOrder
+                })
+                    .then(function (resp) {
+                        // console.log(resp);
+                        return resp;
+                    })
+                    .catch(function (err) {
+                        // console.error(err.response);
+                        return err;
+                    });
+            },
+
+
+            reduceDescription(desc, maxLenght)
+            {
+                var div = document.createElement("div");
+                div.innerHTML = desc;
+                var text = div.textContent || div.innerText || "";
+
+
+                if(text.length > maxLenght){
+                    return text.substr(0,maxLenght) + '...';
+                }else{
+                    return text;
+                }
+            },
+
+            showCreateOverlay() {
+                this.showCreate = true;
+            },
+            hideCreateOverlay() {
+                this.showCreate = false;
+            },
+        },
+        computed: {
+            dragOptions() {
+                return {
+                    animation: 200,
+                    group: "description",
+                    disabled: false,
+                    ghostClass: "ghost"
+                };
+            }
+        },
+        watch: {
+            itemsList: function (val) {
+                if(this.orderModified){
+                    let newOrder = []
+                    let listId = null;
+                    let valid = true;
+                    this.itemsList.forEach((x) => {
+                        newOrder.push(x.id);
+                        if(listId && listId !== x.list_id)
+                        {
+                            valid = false;
+                        }else{
+                            listId = x.list_id;
+                        }
+                    });
+                    if(valid){
+                        this.reqModifyActivitiesOrder(listId, newOrder);
+                        this.orderModified = false;
+                    }
+                }
+            }
+        }
+
+    }
+</script>
+
+<style scoped>
+
+    #overlay {
+        position: fixed; /* Sit on top of the page content */
+        display: block; /* Hidden by default */
+        width: 100%; /* Full width (cover the whole page) */
+        height: 100%; /* Full height (cover the whole page) */
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0,0,0,0.5); /* Black background with opacity */
+        z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+    }
+
+    .flip-list-move {
+        transition: transform 0.5s;
+    }
+    .no-move {
+        transition: transform 0s;
+    }
+    .ghost {
+        opacity: 0.5;
+        background: #c8ebfb;
+    }
+    .list-group {
+        min-height: 20px;
+    }
+
+    .list-group-item {
+        cursor: move;
+    }
+    .list-group-item i {
+        cursor: pointer;
+    }
+</style>
