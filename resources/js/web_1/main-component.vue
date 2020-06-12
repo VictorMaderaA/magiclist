@@ -1,6 +1,28 @@
 <template>
     <div>
 
+        <div class="container" style="padding-top: 20vh"
+             v-if="showing.empty">
+            <div class="container">
+                <div class="row justify-content-around">
+                    <img v-on:click="showCreateNewList"
+                        sizes="(max-width: 1400px) 30vw, 1400px"
+                        srcset="
+                        img/app/new-list/list-welcome-200.png 200w,
+                        img/app/new-list/list-welcome-762.png 762w,
+                        img/app/new-list/list-welcome-1400.png 1400w"
+                        src="img/app/new-list/list-welcome-1400.png"
+                        alt="">
+                </div>
+                <div class="row justify-content-around"
+                     v-on:click="showCreateNewList">
+                    <h4 style="font-size:2vw; font-family: sans-serif; font-weight: bold">
+                        <u>Select or Create now a new List</u>
+                    </h4>
+                </div>
+            </div>
+        </div>
+
         <create-item ref="createItem"
                      :listid="curr.listId"
                      @list-show="showList"
@@ -53,18 +75,12 @@
 
 <script>
 
-    // export const S_LIST = 'list';
-    // export const S_ITEM = 'item';
-    // export const S_LIST_CREATE = 'createList';
-    // export const S_LIST_EDIT = 'editList';
-    // export const S_ITEM_EDIT = 'editItem';
-    // export const S_ITEM_CREATE = 'createItem';
-
     export default {
         name: "main-component",
         data(){
             return {
                 showing: {
+                    empty: false,
                     list: false,
                     item: false,
                     createList: false,
@@ -89,9 +105,12 @@
                 this.showing[showKey] = true;
             },
 
+            showEmpty(){
+                this.show('empty')
+            },
             showList(list){
                 if(!this.setCurrList(list)){
-                    console.error('Missing List - Aborting')
+                    this.showEmpty();
                     return;
                 }
 
@@ -136,7 +155,7 @@
             },
             onListDeleted(){
                 this.$emit('list-created')
-                this.hideShowing();
+                this.showEmpty();
                 //TODO CHANGE EMIT METHOD
             },
 
@@ -175,7 +194,3 @@
         }
     }
 </script>
-
-<style scoped>
-
-</style>

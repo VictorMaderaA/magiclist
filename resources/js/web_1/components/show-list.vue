@@ -132,6 +132,28 @@
                                 </div>
                             </div>
 
+                            <div class="row justify-content-center" v-if="list.activities_count < 1">
+                                <img v-on:click="onClickNewItem"
+                                    sizes="(max-width: 1400px) 40vw, 1400px"
+                                    srcset="
+                                        img/app/new-item/item-welcome-200.png 200w,
+                                        img/app/new-item/item-welcome-470.png 470w,
+                                        img/app/new-item/item-welcome-660.png 660w,
+                                        img/app/new-item/item-welcome-890.png 890w,
+                                        img/app/new-item/item-welcome-1000.png 1000w,
+                                        img/app/new-item/item-welcome-1400.png 1400w"
+                                    src="img/app/new-item/item-welcome-1400.png"
+                                    alt="">
+                                <div class="row justify-content-around">
+                                    <h4 style="font-size:2vw; font-family: sans-serif; font-weight: bold"
+                                        v-on:click="onClickNewItem">
+                                        <u>Create your next activity</u>
+                                    </h4>
+                                </div>
+                            </div>
+
+
+
                             <div class="row justify-content-center">
                                 <div class="col-md-10">
                                     <ul class="todo-list ui-sortable" data-widget="todo-list">
@@ -178,8 +200,6 @@
                                     </ul>
                                 </div>
                             </div>
-
-
 
                         </div>
                     </div>

@@ -55,6 +55,8 @@
             showDefaultList(){
                 if(this.lists.length > 0){
                     this.onListSelected(this.lists[0]);
+                }else{
+                    this.onListSelected(null);
                 }
             },
             async loadLists(){
