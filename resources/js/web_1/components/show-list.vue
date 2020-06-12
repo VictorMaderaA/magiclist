@@ -143,13 +143,13 @@
                                         img/app/new-item/item-welcome-1000.png 1000w,
                                         img/app/new-item/item-welcome-1400.png 1400w"
                                     src="img/app/new-item/item-welcome-1400.png"
-                                    alt="">
-                                <div class="row justify-content-around">
-                                    <h4 style="font-size:2vw; font-family: sans-serif; font-weight: bold"
-                                        v-on:click="onClickNewItem">
-                                        <u>Create your next activity</u>
-                                    </h4>
-                                </div>
+                                    alt="Item Create First Image">
+                            </div>
+                            <div class="row justify-content-around">
+                                <h4 style="font-size:3vw; font-family: sans-serif; font-weight: bold"
+                                    v-on:click="onClickNewItem">
+                                    <u>Create your next activity</u>
+                                </h4>
                             </div>
 
 

@@ -12,7 +12,7 @@
                         img/app/new-list/list-welcome-762.png 762w,
                         img/app/new-list/list-welcome-1400.png 1400w"
                         src="img/app/new-list/list-welcome-1400.png"
-                        alt="">
+                        alt="List Create First Image">
                 </div>
                 <div class="row justify-content-around"
                      v-on:click="showCreateNewList">
