@@ -99,7 +99,7 @@
                             </div>
 
                             <div class="row justify-content-around" >
-                                <div class="col-3">
+                                <div class="col-10">
                                     <h5>
                                         Show options
                                     </h5>
@@ -127,31 +127,29 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-6">
-
-                                </div>
                             </div>
 
-                            <div class="row justify-content-center" v-if="list.activities_count < 1">
-                                <img v-on:click="onClickNewItem"
-                                    sizes="(max-width: 1400px) 40vw, 1400px"
-                                    srcset="
+                            <div v-if="list.activities_count < 1">
+                                <div class="row justify-content-center">
+                                    <img v-on:click="onClickNewItem"
+                                         sizes="(max-width: 1400px) 40vw, 1400px"
+                                         srcset="
                                         img/app/new-item/item-welcome-200.png 200w,
                                         img/app/new-item/item-welcome-470.png 470w,
                                         img/app/new-item/item-welcome-660.png 660w,
                                         img/app/new-item/item-welcome-890.png 890w,
                                         img/app/new-item/item-welcome-1000.png 1000w,
                                         img/app/new-item/item-welcome-1400.png 1400w"
-                                    src="img/app/new-item/item-welcome-1400.png"
-                                    alt="Item Create First Image">
+                                         src="img/app/new-item/item-welcome-1400.png"
+                                         alt="Item Create First Image">
+                                </div>
+                                <div class="row justify-content-around">
+                                    <h4 style="font-size:4vw; font-family: sans-serif; font-weight: bold"
+                                        v-on:click="onClickNewItem">
+                                        <u>Create your next activity</u>
+                                    </h4>
+                                </div>
                             </div>
-                            <div class="row justify-content-around">
-                                <h4 style="font-size:3vw; font-family: sans-serif; font-weight: bold"
-                                    v-on:click="onClickNewItem">
-                                    <u>Create your next activity</u>
-                                </h4>
-                            </div>
-
 
 
                             <div class="row justify-content-center">
