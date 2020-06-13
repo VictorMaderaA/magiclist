@@ -7,7 +7,7 @@ services:
         uid: 1000
       context: ./
       dockerfile: Dockerfile
-    image: magiclist
+    image: victormaderaa/magiclist
     container_name: magiclist-app
     restart: unless-stopped
     working_dir: /var/www/
@@ -40,11 +40,11 @@ services:
     restart: unless-stopped
     ports:
       - 80:80
-      - 443:443
+#      - 443:443
     volumes:
       - ./:/var/www
       - ./docker-compose/nginx:/etc/nginx/conf.d/
-      - /data/certs:/etc/nginx/certs
+#      - ./data/certs:/etc/nginx/certs
     networks:
       - magiclist
 
