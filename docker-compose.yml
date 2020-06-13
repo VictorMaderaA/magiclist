@@ -20,6 +20,8 @@ services:
     image: mysql:5.7
     container_name: magiclist-db
     restart: unless-stopped
+    ports:
+      - 3306:3306
     environment:
       MYSQL_DATABASE: ${DB_DATABASE}
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
@@ -37,10 +39,12 @@ services:
     container_name: magiclist-nginx
     restart: unless-stopped
     ports:
-      - 8000:80
+      - 80:80
+      - 443:443
     volumes:
       - ./:/var/www
       - ./docker-compose/nginx:/etc/nginx/conf.d/
+      - /data/certs:/etc/nginx/certs
     networks:
       - magiclist
 
