@@ -42,7 +42,7 @@ services:
     volumes:
       - ./:/var/www
       - ./docker-compose/nginx:/etc/nginx/conf.d/
-#      - ./data/certs:/etc/nginx/certs
+     - ./data/certs:/etc/nginx/certs
     networks:
       - magiclist
 
