@@ -55,10 +55,19 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 # Install PHP extensions
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 
+# Create system user to run Composer and Artisan Commands	
+RUN useradd -G www-data,root -u $uid -d /home/$user $user	
+RUN mkdir -p /home/$user/.composer && \	
+    chown -R $user:$user /home/$user
+
 # Set working directory
 WORKDIR /var/www
 COPY . /var/www/
 COPY --from=backend /app /var/www
 COPY --from=frontend /app/public /var/www/public
 RUN chgrp -R www-data /var/www/storage /var/www/bootstrap/cache && chmod -R ug+rwx /var/www/storage /var/www/bootstrap/cache
+RUN chown -R www-data:www-data /var/www
+RUN php artisan key:generate
+RUN php artisan optimize
+RUN php artisan config:clear
 
