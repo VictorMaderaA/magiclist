@@ -1,21 +1,19 @@
+##
+## PHP Dependencies
+##
+#FROM composer:latest as vendor
 #
-# PHP Dependencies
+#COPY database/ database/
 #
-FROM composer:latest as vendor
-
-COPY database/ database/
-
-COPY composer.json composer.json
-COPY composer.lock composer.lock
-
-RUN ls -a
-RUN composer install \
-    --ignore-platform-reqs \
-    --no-interaction \
-    --no-plugins \
-    --no-scripts \
-    --prefer-dist
-RUN ls -a
+#COPY composer.json composer.json
+#COPY composer.lock composer.lock
+#
+#RUN composer install \
+#    --ignore-platform-reqs \
+#    --no-interaction \
+#    --no-plugins \
+#    --no-scripts \
+#    --prefer-dist
 
 ##
 ## Frontend
@@ -41,7 +39,7 @@ ARG user
 ARG uid
 
 # Install system dependencies
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get upgrade -y && apt-get install -y \
     git \
     curl \
     npm \
@@ -58,8 +56,8 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 RUN npm cache clean -f && npm install -g n && n stable
 
-# Get latest Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+## Get latest Composer
+#COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Create system user to run Composer and Artisan Commands
 RUN useradd -G www-data,root -u $uid -d /home/$user $user
@@ -68,16 +66,8 @@ RUN mkdir -p /home/$user/.composer && \
 
 # Set working directory
 WORKDIR /var/www
-
 COPY . /var/www/
-RUN ls -a
-COPY --from=vendor /app/vendor /var/www/vendor
-#COPY --from=frontend /app/public/js/ /var/www/public/js/
-#COPY --from=frontend /app/public/css/ /var/www/public/css/
-#COPY --from=frontend /app/public/mix/ /var/www/public/css/
-#COPY --from=frontend /app/mix-manifest.json /var/www/mix-manifest.json
-RUN ls -a
-
+RUN chown -R www-data:www-data /var/www
 RUN npm install && npm run prod
 
 USER $user
