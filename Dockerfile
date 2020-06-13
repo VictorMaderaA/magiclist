@@ -73,6 +73,8 @@ COPY . /var/www/
 #COPY --from=frontend /app/public/mix/ /var/www/public/css/
 #COPY --from=frontend /app/mix-manifest.json /var/www/mix-manifest.json
 
+RUN chmod -R 777 /var/www && chown -R www-data: storage && chmod -R 755 storage
+
 RUN composer install \
     --ignore-platform-reqs \
     --no-interaction \
