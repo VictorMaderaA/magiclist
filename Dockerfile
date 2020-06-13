@@ -1,7 +1,7 @@
 #
 # PHP Dependencies
 #
-FROM composer:1.7 as vendor
+FROM composer:latest as vendor
 
 COPY database/ database/
 
@@ -67,7 +67,7 @@ RUN mkdir -p /home/$user/.composer && \
 WORKDIR /var/www
 
 COPY . /var/www/
-COPY --from=vendor /app/vendor/ /var/www/vendor/
+COPY --from=vendor /app/vendor /var/www/vendor
 #COPY --from=frontend /app/public/js/ /var/www/public/js/
 #COPY --from=frontend /app/public/css/ /var/www/public/css/
 #COPY --from=frontend /app/public/mix/ /var/www/public/css/
