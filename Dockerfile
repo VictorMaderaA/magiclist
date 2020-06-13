@@ -1,19 +1,19 @@
+##
+## PHP Dependencies
+##
+#FROM composer:latest as vendor
 #
-# PHP Dependencies
+#COPY database/ database/
 #
-FROM composer:latest as vendor
-
-COPY database/ database/
-
-COPY composer.json composer.json
-COPY composer.lock composer.lock
-
-RUN composer install \
-    --ignore-platform-reqs \
-    --no-interaction \
-    --no-plugins \
-    --no-scripts \
-    --prefer-dist
+#COPY composer.json composer.json
+#COPY composer.lock composer.lock
+#
+#RUN composer install \
+#    --ignore-platform-reqs \
+#    --no-interaction \
+#    --no-plugins \
+#    --no-scripts \
+#    --prefer-dist
 
 ##
 ## Frontend
@@ -67,11 +67,21 @@ RUN mkdir -p /home/$user/.composer && \
 WORKDIR /var/www
 
 COPY . /var/www/
-COPY --from=vendor /app/vendor /var/www/vendor
+#COPY --from=vendor /app/vendor /var/www/vendor
 #COPY --from=frontend /app/public/js/ /var/www/public/js/
 #COPY --from=frontend /app/public/css/ /var/www/public/css/
 #COPY --from=frontend /app/public/mix/ /var/www/public/css/
 #COPY --from=frontend /app/mix-manifest.json /var/www/mix-manifest.json
+
+RUN composer install \
+    --ignore-platform-reqs \
+    --no-interaction \
+    --no-plugins \
+    --no-scripts \
+    --prefer-dist
+
+RUN npm cache clean -f && npm install -g n && n stable
+
 RUN npm install && npm run prod
 
 USER $user
