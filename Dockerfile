@@ -57,7 +57,7 @@ RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 RUN npm cache clean -f && npm install -g n && n stable
 
 ## Get latest Composer
-#COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Create system user to run Composer and Artisan Commands
 RUN useradd -G www-data,root -u $uid -d /home/$user $user
@@ -69,5 +69,6 @@ WORKDIR /var/www
 COPY . /var/www/
 RUN chown -R www-data:www-data /var/www
 RUN npm install && npm run prod
+RUN composer install --optimize-autoloader --no-dev
 
 USER $user
