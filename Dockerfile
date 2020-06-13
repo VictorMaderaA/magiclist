@@ -54,6 +54,7 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install PHP extensions
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
+RUN npm cache clean -f && npm install -g n && n stable
 
 # Get latest Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -73,7 +74,7 @@ COPY . /var/www/
 #COPY --from=frontend /app/public/mix/ /var/www/public/css/
 #COPY --from=frontend /app/mix-manifest.json /var/www/mix-manifest.json
 
-RUN chmod -R 777 /var/www && chown -R www-data: storage && chmod -R 755 storage
+RUN chmod -R 777 /var/www
 
 RUN composer install \
     --ignore-platform-reqs \
@@ -82,7 +83,7 @@ RUN composer install \
     --no-scripts \
     --prefer-dist
 
-RUN npm cache clean -f && npm install -g n && n stable
+RUN chown -R www-data: storage && chmod -R 755 storage
 
 RUN npm install && npm run prod
 
