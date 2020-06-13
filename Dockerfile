@@ -8,12 +8,14 @@ COPY database/ database/
 COPY composer.json composer.json
 COPY composer.lock composer.lock
 
+RUN ls -a
 RUN composer install \
     --ignore-platform-reqs \
     --no-interaction \
     --no-plugins \
     --no-scripts \
     --prefer-dist
+RUN ls -a
 
 ##
 ## Frontend
@@ -68,19 +70,13 @@ RUN mkdir -p /home/$user/.composer && \
 WORKDIR /var/www
 
 COPY . /var/www/
-RUN mkdir /var/www/vendor
+RUN ls -a
 COPY --from=vendor /app/vendor /var/www/vendor
 #COPY --from=frontend /app/public/js/ /var/www/public/js/
 #COPY --from=frontend /app/public/css/ /var/www/public/css/
 #COPY --from=frontend /app/public/mix/ /var/www/public/css/
 #COPY --from=frontend /app/mix-manifest.json /var/www/mix-manifest.json
-
-RUN composer install \
-    --ignore-platform-reqs \
-    --no-interaction \
-    --no-plugins \
-    --no-scripts \
-    --prefer-dist
+RUN ls -a
 
 RUN npm install && npm run prod
 
