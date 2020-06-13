@@ -1,19 +1,19 @@
-##
-## PHP Dependencies
-##
-#FROM composer:latest as vendor
 #
-#COPY database/ database/
+# PHP Dependencies
 #
-#COPY composer.json composer.json
-#COPY composer.lock composer.lock
-#
-#RUN composer install \
-#    --ignore-platform-reqs \
-#    --no-interaction \
-#    --no-plugins \
-#    --no-scripts \
-#    --prefer-dist
+FROM composer:latest as vendor
+
+COPY database/ database/
+
+COPY composer.json composer.json
+COPY composer.lock composer.lock
+
+RUN composer install \
+    --ignore-platform-reqs \
+    --no-interaction \
+    --no-plugins \
+    --no-scripts \
+    --prefer-dist
 
 ##
 ## Frontend
@@ -68,13 +68,12 @@ RUN mkdir -p /home/$user/.composer && \
 WORKDIR /var/www
 
 COPY . /var/www/
-#COPY --from=vendor /app/vendor /var/www/vendor
+RUN mkdir /var/www/vendor
+COPY --from=vendor /app/vendor /var/www/vendor
 #COPY --from=frontend /app/public/js/ /var/www/public/js/
 #COPY --from=frontend /app/public/css/ /var/www/public/css/
 #COPY --from=frontend /app/public/mix/ /var/www/public/css/
 #COPY --from=frontend /app/mix-manifest.json /var/www/mix-manifest.json
-
-RUN chmod -R 777 /var/www
 
 RUN composer install \
     --ignore-platform-reqs \
@@ -82,8 +81,6 @@ RUN composer install \
     --no-plugins \
     --no-scripts \
     --prefer-dist
-
-RUN chown -R www-data: storage && chmod -R 755 storage
 
 RUN npm install && npm run prod
 
