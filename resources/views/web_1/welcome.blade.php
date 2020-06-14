@@ -7,6 +7,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Magic List</title>
+    <link rel="icon" href="{{asset('img/app/icon/Icon_w_50.png')}}">
+    <script src="{{ asset('js/app_1.js') }}" defer></script>
+    <script src="{{ asset('js/app.js') }}" defer></script>
+
     <link href="https://fonts.googleapis.com/css?family=Heebo:400,700|IBM+Plex+Sans:600" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('vendor/switch/css/style.css')}}">
     <script src="https://unpkg.com/scrollreveal"></script>
