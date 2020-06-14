@@ -16,6 +16,8 @@ services:
 
   db:
     image: mysql:5.7
+    volumes:
+      - db_data:/var/lib/mysql
     container_name: magiclist-db
     restart: unless-stopped
     ports:
@@ -27,8 +29,6 @@ services:
       MYSQL_USER: ${DB_USERNAME}
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
-    volumes:
-      - ./docker-compose/mysql:/docker-entrypoint-initdb.d
     networks:
       - magiclist
 
@@ -49,3 +49,6 @@ services:
 networks:
   magiclist:
     driver: bridge
+
+volumes:
+  db_data: {}
