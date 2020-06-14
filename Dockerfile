@@ -67,12 +67,9 @@ COPY --from=backend /app /var/www
 # COPY --from=frontend /app/public /var/www/public
 RUN chgrp -R www-data /var/www/storage /var/www/bootstrap/cache && chmod -R ug+rwx /var/www/storage /var/www/bootstrap/cache
 RUN chown -R www-data:www-data /var/www
+RUN chmod +x /var/www/docker-compose/script/cron.sh
+
 # RUN php artisan key:generate
 RUN php artisan optimize
 RUN php artisan config:clear
-
-COPY ./docker-compose/script/entrypoint.sh /var/www/cron.sh
-RUN chmod +x /var/www/cron.sh
-
-CMD ["/var/www/cron.sh"]
 

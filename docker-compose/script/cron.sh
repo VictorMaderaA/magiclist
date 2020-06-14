@@ -1,5 +1,5 @@
 #!/bin/bash
-
+cd /var/www
 # Run scheduler
 while [ true ]
 do
