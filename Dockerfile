@@ -66,7 +66,7 @@ COPY . /var/www/
 COPY --from=backend /app /var/www/
 COPY --from=frontend /app/public /var/www/public/
 RUN chgrp -R www-data /var/www/storage /var/www/bootstrap/cache && chmod -R ug+rwx /var/www/storage /var/www/bootstrap/cache
-RUN chown -R www-data:www-data /var/www
+RUN chown -R www-data:www-data /var/www && chmod -R gu+w storage && chmod -R guo+w storage
 
 # RUN php artisan key:generate
 RUN php artisan optimize

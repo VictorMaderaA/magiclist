@@ -86,7 +86,6 @@ v8-compile-cache-0/
 /public/js
 /public/mix
 public/mix-manifest.json
-/storage
 storage/*.key
 phpunit.phar
 node_modules
