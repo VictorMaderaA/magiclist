@@ -15,19 +15,19 @@ COPY . /app/
 RUN composer dump-autoload --optimize --classmap-authoritative
 
 
-# # Build frontend assets
-# FROM node as frontend
-# WORKDIR /app
+# Build frontend assets
+FROM node as frontend
+WORKDIR /app
 
-# COPY package.json package-lock.json webpack.mix.js /app/
-# RUN npm install
+COPY package.json package-lock.json webpack.mix.js /app/
+RUN npm install
 
-# COPY resources /app/resources
-# RUN mkdir /app/public \
-#     /app/public/css \
-#     /app/public/js \ 
-#     /app/public/mix
-# RUN npm run production
+COPY resources /app/resources
+RUN mkdir /app/public \
+    /app/public/css \
+    /app/public/js \ 
+    /app/public/mix
+RUN npm run production
 
 
 #
@@ -63,11 +63,10 @@ RUN mkdir -p /home/$user/.composer && \
 # Set working directory
 WORKDIR /var/www
 COPY . /var/www/
-COPY --from=backend /app /var/www
-# COPY --from=frontend /app/public /var/www/public
+COPY --from=backend /app /var/www/
+COPY --from=frontend /app/public /var/www/public/
 RUN chgrp -R www-data /var/www/storage /var/www/bootstrap/cache && chmod -R ug+rwx /var/www/storage /var/www/bootstrap/cache
 RUN chown -R www-data:www-data /var/www
-RUN chmod +x /var/www/docker-compose/script/cron.sh
 
 # RUN php artisan key:generate
 RUN php artisan optimize
