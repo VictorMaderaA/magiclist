@@ -22,6 +22,16 @@
 
     <link rel="stylesheet" href="{{asset('vendor/icofont/icofont.min.css')}}">
 
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-158934272-2"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-158934272-2');
+    </script>
+
 </head>
 <body>
     <div id="app">
