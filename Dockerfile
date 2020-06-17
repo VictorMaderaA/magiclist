@@ -65,10 +65,9 @@ WORKDIR /var/www
 COPY . /var/www/
 COPY --from=backend /app /var/www/
 COPY --from=frontend /app/public /var/www/public/
-RUN chgrp -R www-data /var/www/storage /var/www/bootstrap/cache && chmod -R ug+rwx /var/www/storage /var/www/bootstrap/cache
-RUN chown -R www-data:www-data /var/www && chmod -R gu+w storage && chmod -R guo+w storage
+RUN chown -R $user:www-data . && usermod -a -G www-data $user && find . -type f -exec chmod 644 {} \; &&  find . -type d -exec chmod 755 {} \;
+RUN chgrp -R www-data storage bootstrap/cache && chmod -R ug+rwx storage bootstrap/cache
 
 # RUN php artisan key:generate
-RUN php artisan optimize
-RUN php artisan config:clear
+RUN php artisan optimize && php artisan config:clear && php artisan config:cache
 
