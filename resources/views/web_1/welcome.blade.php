@@ -12,6 +12,17 @@
     <link href="https://fonts.googleapis.com/css?family=Heebo:400,700|IBM+Plex+Sans:600" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('vendor/switch/css/style.css')}}">
     <script src="https://unpkg.com/scrollreveal"></script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-158934272-2"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-158934272-2');
+    </script>
+
 </head>
 <body class="is-boxed has-animations">
 <div class="body-wrap boxed-container">
