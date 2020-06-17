@@ -12,7 +12,7 @@ services:
     restart: unless-stopped
     working_dir: /var/www
     volumes:
-      - magiclistvol:/var/www/
+      - volmagiclist:/var/www/
 
 networks:
   default:
@@ -20,5 +20,4 @@ networks:
       name: server_network
 
 volumes:
-  magiclistvol:
-    external: true
+  volmagiclist:
