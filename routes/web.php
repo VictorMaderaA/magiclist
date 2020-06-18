@@ -20,7 +20,12 @@ Route::get('dev/views/{id}', 'Views\Develop\ViewsController@show')->name('dev_vi
 
 Route::get('/', 'WelcomeController');
 
-Auth::routes();
+Auth::routes(['verify' => true]);
+
+Route::get('/legal/terms', "Views\Web\LegalController@terms")->name('legal_terms');
+Route::get('/legal/privacy', "Views\Web\LegalController@privacy")->name('legal_privacy');
+Route::get('/legal/cookies', "Views\Web\LegalController@cookies")->name('legal_cookies');
+
 
 Route::get('/app', 'HomeController@index')->name('home');
 
