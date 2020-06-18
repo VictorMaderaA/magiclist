@@ -22,6 +22,8 @@
 
     <link rel="stylesheet" href="{{asset('vendor/icofont/icofont.min.css')}}">
 
+    <script data-ad-client="ca-pub-8453462599655086" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-158934272-2"></script>
     <script>
