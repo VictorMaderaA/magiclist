@@ -23,6 +23,7 @@ mix.copyDirectory('node_modules/jquery/dist', 'public/mix/jquery')
     .copy('node_modules/admin-lte/dist/js/adminlte.js', 'public/mix/adminlte/js')
     .copy('node_modules/admin-lte/dist/js/adminlte.min.js', 'public/mix/adminlte/js')
     .copyDirectory('node_modules/admin-lte/dist/css', 'public/mix/adminlte/css')
+    .copyDirectory('node_modules/bootstrap/dist', 'public/mix/bootstrap')
 ;
 
 

@@ -43,6 +43,9 @@ Route::group([
     Route::post('/activity', 'ActivitiesController@create');
 
 
+    Route::post('/contact', 'ContactController@sendMessage')->name('api_contact');
+
+
 });
 
 
