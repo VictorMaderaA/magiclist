@@ -27,7 +27,7 @@ class ContactController extends BaseController
         $feedback->message = $request->input('message');
         $feedback->user_id = $request->input('anon')? null : auth()->user()->id;
         $feedback->saveOrFail();
-        return response();
+        return redirect(route('home'));
     }
 
 }
