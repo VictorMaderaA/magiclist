@@ -6,7 +6,7 @@ namespace App\Http\Controllers\Views\Web;
 
 use App\Http\Controllers\Base\BaseController;
 
-class ContactController extends BaseController
+class FeedbackController extends BaseController
 {
 
     public function __construct()

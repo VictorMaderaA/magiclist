@@ -9,7 +9,7 @@ use App\Models\Feedback;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class ContactController extends BaseController
+class FeedbackController extends BaseController
 {
 
     public function sendMessage(Request $request) {

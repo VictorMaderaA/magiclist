@@ -28,7 +28,7 @@ Route::get('/legal/cookies', "Views\Web\LegalController@cookies")->name('legal_c
 
 
 Route::get('/app', 'HomeController@index')->name('home');
-Route::get('/contact', 'Views\Web\ContactController@index')->name('contact');
+Route::get('/contact', 'Views\Web\FeedbackController@index')->name('contact');
 
 Route::get('/list/{listId}', 'Views\Web\ListController@index')->name('list_index');
 
