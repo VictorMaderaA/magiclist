@@ -5,9 +5,27 @@ namespace App\Models;
 
 
 use App\Models\Base\BaseModel;
+use App\User;
+use Illuminate\Support\Facades\Mail;
 
 class Feedback extends BaseModel
 {
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        Feedback::created(function ($feedback) {
+            $user = $feedback->user_id? User::find($feedback->user_id) : null;
+            $user = $user? "User: {$user->name} | {$user->email}" : 'User: Anonimo';
+            $content = "Type: {$feedback->type}\n{$user}\nMessage: {$feedback->message}";
+            Mail::raw($content, function ($message) {
+                //TODO - remove default email
+                $message->to('victor.madera.a@gmail.com')
+                    ->subject('New Feedback - MagicList ' . date('Y-m-d H:i:s'));
+            });
+        });
+    }
 
     /**
      * The table associated with the model.
