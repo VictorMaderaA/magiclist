@@ -84,8 +84,8 @@ v8-compile-cache-0/
 /public/.htaccess
 /public/css
 /public/js
+/public/mix
 public/mix-manifest.json
-/storage
 storage/*.key
 phpunit.phar
 node_modules
