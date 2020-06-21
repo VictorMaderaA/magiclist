@@ -68,21 +68,12 @@
                 this.$refs.mainComponent.showList(list);
             },
             onShowCreateNewList(){
-                console.log('Create New List Master');
                 this.$refs.mainComponent.showCreateNewList();
             },
             onListCreated(list){
                 this.$refs.sidebarUl.loadLists();
                 //TODO Add existing list from param
             }
-
-
-
-
-
-
-
-
         }
     }
 </script>

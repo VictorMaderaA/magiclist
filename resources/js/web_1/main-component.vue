@@ -1,11 +1,11 @@
 <template>
     <div>
 
-        <div class="container" style="padding-top: 20vh"
+        <div class="container" style="padding-top: 20vh;"
              v-if="showing.empty">
             <div class="container">
                 <div class="row justify-content-around">
-                    <img v-on:click="showCreateNewList" style="max-height: 40vh;"
+                    <img v-on:click="showCreateNewList" style="max-height: 40vh; cursor: pointer;"
                         sizes="(max-width: 1400px) 50vw, 1400px"
                         srcset="
                         img/app/new-list/list-welcome-200.png 200w,
@@ -16,7 +16,7 @@
                 </div>
                 <div class="row justify-content-around"
                      v-on:click="showCreateNewList">
-                    <h4 style="font-size:2vw; font-family: sans-serif; font-weight: bold">
+                    <h4 style="font-size:2vw; font-family: sans-serif; font-weight: bold; cursor: pointer;">
                         <u>Select or Create now a new List</u>
                     </h4>
                 </div>
@@ -127,7 +127,6 @@
 
             showCreateNewList(){
                 this.hideShowing();
-                console.log('Create New List - Main Component');
                 this.showing.createList = true;
             },
             showEditItem(item){
@@ -136,14 +135,12 @@
             },
             showEditList(list){
                 if(!this.setCurrList(list)){
-                    console.error('Missing List - Aborting')
                     return;
                 }
                 this.show('editList');
             },
             showCreateItem(item){
                 this.hideShowing();
-                console.log('Create Item - Main Component');
                 this.showing.createItem = true;
             },
 
@@ -163,7 +160,6 @@
             setCurrList(list){
                 if(!list) {
                     if(!this.curr.listId){
-                        console.error('No Current List Selected')
                         return false;
                     }
                     return true;
@@ -178,7 +174,6 @@
             setCurrItem(item){
                 if(!item) {
                     if(!this.curr.itemId){
-                        console.error('No Current Item Selected')
                         return false;
                     }
                     return true;

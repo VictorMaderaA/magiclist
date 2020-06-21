@@ -6,17 +6,17 @@
                 @list-selected="onListSelected">
     </sidebar-ul>
 
-    <div style="max-width: 225px; max-height: 225px; background: rgba(1,1,1,0.1);">
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-        <!-- app/sidebar-footer -->
-        <ins class="adsbygoogle"
-            style="display:inline-block;width:225px;height:225px"
-            data-ad-client="ca-pub-8453462599655086"
-            data-ad-slot="7316267219"></ins>
-        <script>
-            (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-    </div>
+{{--    <div style="max-width: 225px; max-height: 225px; background: rgba(1,1,1,0.1);">--}}
+{{--        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>--}}
+{{--        <!-- app/sidebar-footer -->--}}
+{{--        <ins class="adsbygoogle"--}}
+{{--            style="display:inline-block;width:225px;height:225px"--}}
+{{--            data-ad-client="ca-pub-8453462599655086"--}}
+{{--            data-ad-slot="7316267219"></ins>--}}
+{{--        <script>--}}
+{{--            (adsbygoogle = window.adsbygoogle || []).push({});--}}
+{{--        </script>--}}
+{{--    </div>--}}
 @endsection
 
 @section('navbar-links')
