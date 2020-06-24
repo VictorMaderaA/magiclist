@@ -10,17 +10,13 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
+    <script src="{{ asset('mix/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('mix/bootstrap/js/bootstrap.min.js') }}"></script>
 
     <!-- Fonts -->
-    <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
-
-    <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-
-
     <link rel="stylesheet" href="{{asset('vendor/icofont/icofont.min.css')}}">
+    <link rel="stylesheet" href="{{asset('mix/bootstrap/css/bootstrap.min.css')}}">
 
     @if (env('APP_ENV')==='production')
         <script data-ad-client="ca-pub-8453462599655086" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
