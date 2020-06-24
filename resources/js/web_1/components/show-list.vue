@@ -98,8 +98,8 @@
                                 </div>
                             </div>
 
-                            <div class="d-flex flex-wrap justify-content-around">
-                                <div class="mt-auto p-2">
+                            <div class="d-flex align-content-center flex-wrap justify-content-around mb-3">
+                                <div class="p-2 align-self-center">
                                     <h5>
                                         List Options
                                     </h5>
@@ -115,7 +115,7 @@
                                     </div>
                                 </div>
 
-                                <div class="mt-auto p-2" v-if="list.todo">
+                                <div class="p-2 align-self-center" v-if="list.todo">
                                     <h5>
                                         Show options
                                     </h5>
