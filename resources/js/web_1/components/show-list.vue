@@ -98,35 +98,52 @@
                                 </div>
                             </div>
 
-                            <div class="row justify-content-around" >
-                                <div class="col-10">
+                            <div class="d-flex flex-wrap justify-content-around">
+                                <div class="mt-auto p-2">
+                                    <h5>
+                                        List Options
+                                    </h5>
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox">
+                                            <input class="custom-control-input" type="checkbox" v-model="list.todo"
+                                                   id="todo" name="customRadio" value="0" style="cursor: pointer;"
+                                                   v-on:click.capture.prevent="onClickTodo">
+                                            <label for="todo" class="custom-control-label" style="cursor: pointer;">
+                                                Todo List
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mt-auto p-2" v-if="list.todo">
                                     <h5>
                                         Show options
                                     </h5>
                                     <div class="form-group">
                                         <div class="custom-control custom-radio">
                                             <input class="custom-control-input" type="radio" v-model="card.showOptions"
-                                                   id="pending" name="customRadio" value="0">
-                                            <label for="pending" class="custom-control-label">
+                                                   id="pending" name="customRadio" value="0" style="cursor: pointer;">
+                                            <label for="pending" class="custom-control-label" style="cursor: pointer;">
                                                 Pending <small>{{ list.activities_pending_count }}</small>
                                             </label>
                                         </div>
                                         <div class="custom-control custom-radio">
                                             <input class="custom-control-input" type="radio" v-model="card.showOptions"
-                                                   id="all" name="customRadio" value="1">
-                                            <label for="all" class="custom-control-label">
+                                                   id="all" name="customRadio" value="1" style="cursor: pointer;">
+                                            <label for="all" class="custom-control-label" style="cursor: pointer;">
                                                 All <small>{{ list.activities_count }}</small>
                                             </label>
                                         </div>
                                         <div class="custom-control custom-radio">
                                             <input class="custom-control-input" type="radio" v-model="card.showOptions"
-                                                   id="completed" name="customRadio" value="2">
-                                            <label for="completed" class="custom-control-label">
+                                                   id="completed" name="customRadio" value="2" style="cursor: pointer;">
+                                            <label for="completed" class="custom-control-label" style="cursor: pointer;">
                                                 Completed <small>{{ list.activities_completed_count }}</small>
                                             </label>
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
 
                             <div v-if="list.activities_count < 1">
@@ -174,7 +191,7 @@
                                         <i class="fas fa-ellipsis-v"></i>
                                     </span>
                                                     <!-- checkbox -->
-                                                    <div class="icheck-primary d-inline ml-2">
+                                                    <div class="icheck-primary d-inline ml-2" v-if="list.todo">
                                                         <button type="button" class="btn btn-sm"
                                                                 data-placement="top" data-original-title="Tooltip on top"
                                                                 v-on:click="onClickCheck(item)">
@@ -237,6 +254,7 @@
                     activities_pending_count: 0,
                     activities_count: 0,
                     activities_completed_count: 0,
+                    todo: null,
                 },
                 listItems: [],
 
@@ -251,6 +269,16 @@
               this.curr.listId = this.listId;
               this.loadListData()
           }
+        },
+        computed: {
+            dragOptions() {
+                return {
+                    animation: 200,
+                    group: "description",
+                    disabled: false,
+                    ghostClass: "ghost"
+                };
+            },
         },
         methods: {
             updateComponent(listId) {
@@ -280,6 +308,21 @@
                     this.listItems = newItems;
                 }
                 this.reqStateCurrent.splice(this.reqStateCurrent.findIndex(x => x === item.id), 1);
+            },
+
+            async onClickTodo(){
+                if(this.reqStateCurrent.findIndex(x => x === 'todo') !== -1){
+                    return;
+                }
+                this.reqStateCurrent.push('todo');
+                let response = await Manager.reqUpdateList(this.list.id, null, null, !this.list.todo);
+                if(response.status === 200){
+                    this.list.todo = response.data.todo;
+                }else{
+                    //TODO show warning
+                    console.error('Failed to change list todo');
+                }
+                this.reqStateCurrent.splice(this.reqStateCurrent.findIndex(x => x === 'todo'), 1);
             },
 
             updateCounters(oldState, newState){
@@ -333,6 +376,9 @@
             },
 
             canShowItem(item){
+                if(!this.list.todo){
+                    return true;
+                }
                 if(this.card.showOptions === "1"){
                     return true;
                 }
@@ -348,16 +394,6 @@
 
             onMoveCallback(evt, originalEvent){
                 this.orderModified = true;
-            },
-        },
-        computed: {
-            dragOptions() {
-                return {
-                    animation: 200,
-                    group: "description",
-                    disabled: false,
-                    ghostClass: "ghost"
-                };
             },
         },
         watch: {
