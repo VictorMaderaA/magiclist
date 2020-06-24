@@ -19,17 +19,44 @@ window.Vue = require('vue');
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-Vue.component('app-master', require('./web_1/app-master.vue').default);
-Vue.component('main-component', require('./web_1/main-component.vue').default);
+Vue.component('app-master', () => import(
+    /* webpackChunkName: "app-master" */
+    './web_1/app-master.vue'
+    ));
+Vue.component('main-component', () => import(
+    /* webpackChunkName: "main-component" */
+    './web_1/main-component.vue'
+    ));
 
-Vue.component('create-item', require('./web_1/components/create-item.vue').default);
-Vue.component('create-list', require('./web_1/components/create-list.vue').default);
-Vue.component('edit-item', require('./web_1/components/edit-item.vue').default);
-Vue.component('show-item', require('./web_1/components/show-item.vue').default);
-Vue.component('show-list', require('./web_1/components/show-list.vue').default);
-Vue.component('edit-list', require('./web_1/components/edit-list.vue').default);
+Vue.component('create-item', () => import(
+    /* webpackChunkName: "create-item" */
+    './web_1/components/create-item.vue'
+    ));
+Vue.component('create-list', () => import(
+    /* webpackChunkName: "create-list" */
+    './web_1/components/create-list.vue'
+    ));
+Vue.component('edit-item', () => import(
+    /* webpackChunkName: "edit-item" */
+    './web_1/components/edit-item.vue'
+    ));
+Vue.component('show-item', () => import(
+    /* webpackChunkName: "show-item" */
+    './web_1/components/show-item.vue'
+    ));
+Vue.component('show-list', () => import(
+    /* webpackChunkName: "show-list" */
+    './web_1/components/show-list.vue'
+    ));
+Vue.component('edit-list', () => import(
+    /* webpackChunkName: "edit-list" */
+    './web_1/components/edit-list.vue'
+    ));
 
-Vue.component('sidebar-ul', require('./web_1/components/sidebar-ul.vue').default);
+Vue.component('sidebar-ul', () => import(
+    /* webpackChunkName: "sidebar-ul" */
+    './web_1/components/sidebar-ul.vue'
+    ));
 
 
 import vSelect from 'vue-select'

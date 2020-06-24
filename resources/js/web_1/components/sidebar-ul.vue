@@ -51,6 +51,9 @@
                 orderModified: false,
             }
         },
+        mounted() {
+            this.loadLists();
+        },
         methods: {
             showDefaultList(){
                 if(this.lists.length > 0){

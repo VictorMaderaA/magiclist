@@ -9,9 +9,10 @@
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
 
-        <script data-ad-client="ca-pub-8453462599655086" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-
-        <script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="19bfd6a3-a271-4038-bd50-5cd52c8f01c4" data-blockingmode="auto" type="text/javascript"></script>
+        @if (env('APP_ENV')==='production')
+            <script data-ad-client="ca-pub-8453462599655086" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+            <script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="19bfd6a3-a271-4038-bd50-5cd52c8f01c4" data-blockingmode="auto" type="text/javascript"></script>
+        @endif
 
         <!-- Styles -->
         <style>
