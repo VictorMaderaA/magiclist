@@ -35,14 +35,18 @@ export default new Vue({
                 .then((resp) => this.onRequest(resp))
                 .catch((err) => this.onRequestError(err));
         },
-        reqUpdateList(listId, name, description){
+        reqUpdateList(listId, name, description, todo){
             let data = {};
             if(name){
                 data.name = name;
             }
-            if(description){
+            if(description !== null){
                 data.description = description;
             }
+            if(todo !== null){
+                data.todo = todo? 1 : 0;
+            }
+            console.log(data);
             return axios.post(UPDATE_LIST.replace('{listId}', listId), data)
                 .then((resp) => this.onRequest(resp))
                 .catch((err) => this.onRequestError(err));

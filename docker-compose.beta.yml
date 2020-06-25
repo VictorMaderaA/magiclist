@@ -1,0 +1,23 @@
+version: "3.7"
+services:
+  magiclistbetaapp:
+    build:
+      args:
+        user: victor
+        uid: 1000
+      context: ./
+      dockerfile: Dockerfile
+    image: victormaderaa/magiclistbeta
+    container_name: magiclistbeta-app
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - volmagiclistbeta:/var/www/
+
+networks:
+  default:
+    external:
+      name: server_network
+
+volumes:
+  volmagiclistbeta:
