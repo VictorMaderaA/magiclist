@@ -1,36 +1,13 @@
 version: "3.7"
 services:
   magiclistbetaapp:
-    environment:
-      - APP_NAME
-      - APP_ENV
-      - APP_KEY
-      - APP_DEBUG
-
-      - DB_CONNECTION
-      - DB_HOST
-      - DB_PORT
-      - DB_DATABASE
-      - DB_USERNAME
-      - DB_PASSWORD
-
-      - MAIL_USERNAME
-      - MAIL_PASSWORD
-      - MAIL_FROM_ADDRESS
-
-      - AWS_ACCESS_KEY_ID
-      - AWS_SECRET_ACCESS_KEY
-      - AWS_DEFAULT_REGION
-      - AWS_BUCKET
-
-      - JWT_SECRET
     build:
       args:
         user: victor
         uid: 1000
       context: ./
       dockerfile: Dockerfile
-    image: victormaderaa/magiclist
+    image: victormaderaa/magiclistbeta
     container_name: magiclistbeta-app
     restart: unless-stopped
     working_dir: /var/www

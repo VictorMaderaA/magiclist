@@ -65,7 +65,6 @@ WORKDIR /var/www
 COPY . /var/www/
 COPY --from=backend /app /var/www/
 COPY --from=frontend /app/public /var/www/public/
-RUN cp .env.example .env
 RUN chown -R $user:www-data . && usermod -a -G www-data $user && find . -type f -exec chmod 644 {} \; &&  find . -type d -exec chmod 755 {} \;
 RUN chgrp -R www-data storage bootstrap/cache && chmod -R ug+rwx storage bootstrap/cache
 
