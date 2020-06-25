@@ -57,9 +57,6 @@
         beforeCreate() {
             refresher.methods.start()
         },
-        mounted() {
-            this.$refs.sidebarUl.loadLists();
-        },
         beforeDestroy() {
             refresher.methods.destroy()
         },

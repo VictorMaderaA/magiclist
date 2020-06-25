@@ -135,9 +135,7 @@ class ListController extends BaseController
             return response('',403);
         }
 
-        if($list instanceof Lists)
-
-        $attributes = array_intersect_key($request->all(), array_flip(['name', 'description']));
+        $attributes = array_intersect_key($request->all(), array_flip(['name', 'description', 'todo']));
         $list->setRawAttributes($attributes);
         $list->saveOrFail();
 

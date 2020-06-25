@@ -41,8 +41,8 @@
                                 <!-- text input -->
                                 <div class="form-group">
                                     <label for="name">Item Name</label>
-                                    <input type="text" class="form-control" id="name" v-model="form.name"
-                                           placeholder="Date with Maruchan...">
+                                    <input type="text" class="form-control" id="name" v-model="form.name" ref="name"
+                                           placeholder="Home Made Pizza">
                                 </div>
                             </div>
 
@@ -126,7 +126,7 @@
                                             </div>
                                         </editor-menu-bar>
                                         <editor-content :editor="form.editor"
-                                                        style="background: white; color: black; outline: none"/>
+                                                        style="background: #f8f8f8; color: black; outline: none"/>
                                     </div>
 
                                     <div class="form-group" v-if="form.showRawDesc">
@@ -259,6 +259,7 @@
             },
             onClickSaveOther(){
                 this.save();
+                this.$refs.name.focus();
             },
             async  onClickSaveEdit(){
                 let response = await this.save();
