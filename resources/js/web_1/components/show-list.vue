@@ -148,11 +148,11 @@
 
                             <div class="row justify-content-center">
                                 <div class="col-md-8" style="margin: 1em">
-                                    <form class="form-inline d-flex justify-content-center md-form form-sm mt-0">
+                                    <div class="form-inline d-flex justify-content-center md-form form-sm mt-0">
                                         <i class="fas fa-search" aria-hidden="true"></i>
                                         <input class="form-control form-control-sm ml-3 w-75" type="search" placeholder="Search in List"
                                                aria-label="Search" v-model="search">
-                                    </form>
+                                    </div>
                                 </div>
                             </div>
 
@@ -386,7 +386,7 @@
             },
 
             canShowItem(item){
-                if(this.search.length > 0 && !item.name.includes(this.search)){
+                if(this.search.length > 0 && !item.name.toLowerCase().includes(this.search.toLowerCase())){
                     return false;
                 }
                 if(!this.list.todo){
