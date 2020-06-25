@@ -78,12 +78,7 @@
                     this.$refs.inputName.focus();
                     return;
                 }
-                let response = await Manager.reqCreateList(this.form.name, this.form.description);
-                if(response.status === 200){
-                    this.$emit('created-list', response.data);
-                }else{
-                    //TODO
-                }
+                await Manager.createList(this.form.name, this.form.description);
             },
             onClickCancel(){
                 this.$emit('cancel');

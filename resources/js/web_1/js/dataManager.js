@@ -19,17 +19,140 @@ export default new Vue({
 
         },
         lists: [],
+
+        listsUpdated: new Date(0),
+
     },
     mounted(){
 
     },
     methods: {
+        emitListsUpdated(){
+            this.$emit('lists-updated', this.lists);
+        },
+        emitListUpdated(list){
+            this.$emit('list-updated', list);
+        },
+        emitListCreated(list){
+            this.$emit('list-created', list);
+        },
+        emitListDeleted(){
+            this.$emit('list-deleted');
+        },
+
+
+        async getLists(){
+            if(this.timePassed(this.listsUpdated, 120)){
+                let response = await this.reqGetLists();
+                if(this.hasStatus200(response)){
+                    let newLists = []
+                    const nowTime = new Date();
+                    this.listsUpdated = nowTime;
+
+                    for (let i = 0; i < response.data.length; ++i) {
+                        let list = response.data[i];
+                        list.reqUpdated = nowTime;
+                        let newList = null;
+                        if(this.lists.length > 0){
+                            newList = this.lists.find(e => e.id === list.id);
+                        }
+                        if(newList){
+                            Object.assign(newList, list);
+                        }else{
+                            newList = list
+                        }
+                        newLists.push(newList);
+                    }
+
+                    this.lists = newLists;
+                    this.emitListsUpdated();
+                }
+            }
+            return this.lists;
+        },
+        async getListData(listId){
+
+        },
+        async updateList(listId, name, description, todo){
+            let response = await this.reqUpdateList(listId, name, description, todo);
+            if(this.hasStatus200(response)){
+                let index = this.lists.findIndex(x => x.id === listId);
+                if(index !== -1){
+                    this.lists[index] = Object.assign(this.lists[index], response.data);
+                    this.emitListsUpdated();
+                    this.emitListUpdated(this.lists[index]);
+                    return 1;
+                }
+            }
+            return -1;
+        },
+        async createList(name, description){
+            let response = await this.reqCreateList(name, description);
+            if(this.hasStatus200(response)){
+                let index = this.lists.push(response.data);
+                if(index > 0){
+                    index -= 1;
+                    this.emitListCreated(this.lists[index]);
+                    return this.lists[index];
+                }
+            }
+            return -1;
+        },
+        async deleteList(listId){
+            let response = await this.reqDeleteList(listId);
+            if(this.hasStatus200(response)){
+                this.lists.splice(this.lists.findIndex(x => x.id === listId), 1);
+                this.emitListDeleted();
+                this.emitListsUpdated();
+                return 1
+            }
+            return -1;
+        },
+        async updateListsOrder(idsOrder){
+
+        },
+
+
+        async deleteActivity(activityId){
+
+        },
+
+        async updateActivityState(activityId, state){
+
+        },
+
+        async updateListActivitiesOrder(listId, idsOrder){
+
+        },
+
+        async createActivity(name, listId, description) {
+
+        },
+
+        async getActivity(activityId) {
+
+        },
+
+        async updateActivity(activityId, name, description, listId) {
+
+        },
+
+
+
+
+        hasStatus200(response) {
+            return response.status === 200
+        },
+        timePassed(lastDate, expectedSeconds) {
+            console.log(!(Math.floor((new Date() - lastDate)/1000) < expectedSeconds))
+            return !(Math.floor((new Date() - lastDate)/1000) < expectedSeconds);
+        },
+
         reqGetLists(){
             return axios.get(GET_LISTS)
                 .then((resp) => this.onRequest(resp))
                 .catch((err) => this.onRequestError(err));
         },
-
         reqGetListData(listId){
             return axios.get(GET_LIST_DATA.replace('{listId}', listId), {})
                 .then((resp) => this.onRequest(resp))
@@ -37,28 +160,23 @@ export default new Vue({
         },
         reqUpdateList(listId, name, description, todo){
             let data = {};
-            if(name){
+            if(name != null){
                 data.name = name;
             }
-            if(description !== null){
+            if(description != null){
                 data.description = description;
             }
-            if(todo !== null){
+            if(todo != null){
                 data.todo = todo? 1 : 0;
             }
-            console.log(data);
             return axios.post(UPDATE_LIST.replace('{listId}', listId), data)
                 .then((resp) => this.onRequest(resp))
                 .catch((err) => this.onRequestError(err));
         },
         reqCreateList(name, description){
             let data = {};
-            if(name){
-                data.name = name;
-            }
-            if(description){
-                data.description = description;
-            }
+            data.name = name;
+            data.description = description;
             return axios.post(CREATE_LIST, data)
                 .then((resp) => this.onRequest(resp))
                 .catch((err) => this.onRequestError(err));

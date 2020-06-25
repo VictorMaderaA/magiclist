@@ -108,10 +108,8 @@
                     this.$refs.inputName.focus();
                     return;
                 }
-                let response = await Manager.reqUpdateList(this.list.id, this.list.name, this.list.description);
-                if(response.status === 200){
-                    this.list = response.data;
-                    // this.$emit('updated-list', response.data);
+                let response = await Manager.updateList(this.list.id, this.list.name, this.list.description);
+                if(response){
                     this.message.success = 'Saved Successfully';
                     this.message.danger = null;
                 }else{

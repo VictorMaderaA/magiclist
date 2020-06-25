@@ -8,6 +8,7 @@ use App\Http\Controllers\Base\BaseController;
 use App\Models\Activities;
 use App\Models\Lists;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Mavinoo\Batch\BatchFacade;
 
@@ -102,7 +103,7 @@ class ListController extends BaseController
         //Validamos
         $validator = Validator::make($request->all(), [
             'name' => 'required|string',
-            'description' => 'string',
+            'description' => 'string|nullable',
         ]);
         if($validator->fails()) {
             return response($validator->errors(), 400);
@@ -110,7 +111,7 @@ class ListController extends BaseController
 
         $list = new Lists();
         $list->name = $request->input('name');
-        $list->description = $request->input('description', '');
+        $list->description = $request->input('description')?? '';
         $list->user_id = auth()->id();
         $list->saveOrFail();
         $list->syncOriginal();
@@ -136,6 +137,9 @@ class ListController extends BaseController
         }
 
         $attributes = array_intersect_key($request->all(), array_flip(['name', 'description', 'todo']));
+        if(array_key_exists('description', $attributes) && $attributes['description'] === null){
+            $attributes['description'] = '';
+        }
         $list->setRawAttributes($attributes);
         $list->saveOrFail();
 

@@ -279,6 +279,9 @@
               this.curr.listId = this.listId;
               this.loadListData()
           }
+          Manager.$on('list-updated', (list) => {
+              this.list = list;
+          })
         },
         computed: {
             dragOptions() {
@@ -325,10 +328,8 @@
                     return;
                 }
                 this.reqStateCurrent.push('todo');
-                let response = await Manager.reqUpdateList(this.list.id, null, null, !this.list.todo);
-                if(response.status === 200){
-                    this.list.todo = response.data.todo;
-                }else{
+                let response = await Manager.updateList(this.list.id, null, null, !this.list.todo);
+                if(!response){
                     //TODO show warning
                     console.error('Failed to change list todo');
                 }
@@ -352,10 +353,7 @@
 
 
             async onClickDeleteList(list){
-                let response = await Manager.reqDeleteList(list.id);
-                if(response.status === 200){
-                    this.$emit('list-deleted', this.list);
-                }
+                await Manager.deleteList(list.id);
             },
 
             async onClickEditList(){

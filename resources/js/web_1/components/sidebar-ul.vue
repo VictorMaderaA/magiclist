@@ -45,11 +45,16 @@
         data() {
             return {
                 firstLoad: true,
-                lists: null,
+                lists: Manager.lists,
 
                 drag: false,
                 orderModified: false,
             }
+        },
+        beforeMount() {
+            Manager.$on('lists-updated', (lists) => {
+                this.lists = lists;
+            });
         },
         mounted() {
             this.loadLists();
@@ -63,17 +68,13 @@
                 }
             },
             async loadLists(){
-                let response = await Manager.reqGetLists();
-                if(response.status === 200){
-                    this.lists = response.data;
-                    if(this.firstLoad){
-                        this.showDefaultList();
-                        this.firstLoad = false;
-                    }
-                }else{
-                    //TODO
+                this.lists = await Manager.getLists();
+                if(this.firstLoad){
+                    this.showDefaultList();
+                    this.firstLoad = false;
                 }
             },
+
 
             onListSelected(list){
                 this.$emit('list-selected', list);

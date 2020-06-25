@@ -54,7 +54,6 @@
 @section('content')
 
     <main-component ref="mainComponent"
-                    @list-created="onListCreated"
     ></main-component>
 
     <section class="content">

@@ -295,15 +295,11 @@
             },
 
             async loadListsOptions(){
-                let response = await Manager.reqGetLists();
-                if(response.status === 200){
-                    this.form.listOptions = [];
-                    response.data.forEach((x) => {
-                        this.form.listOptions.push(x);
-                    });
-                }else{
-                    //TODO
-                }
+                let lists = await Manager.getLists();
+                this.form.listOptions = [];
+                lists.forEach((x) => {
+                    this.form.listOptions.push(x);
+                });
             },
 
             onClickCancel(){
