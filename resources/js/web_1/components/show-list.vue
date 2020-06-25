@@ -146,6 +146,16 @@
 
                             </div>
 
+                            <div class="row justify-content-center">
+                                <div class="col-md-8" style="margin: 1em">
+                                    <form class="form-inline d-flex justify-content-center md-form form-sm mt-0">
+                                        <i class="fas fa-search" aria-hidden="true"></i>
+                                        <input class="form-control form-control-sm ml-3 w-75" type="search" placeholder="Search in List"
+                                               aria-label="Search" v-model="search">
+                                    </form>
+                                </div>
+                            </div>
+
                             <div v-if="list.activities_count < 1">
                                 <div class="row justify-content-center">
                                     <img v-on:click="onClickNewItem" style="max-height: 30vh; cursor: pointer;"
@@ -258,7 +268,7 @@
                 },
                 listItems: [],
 
-
+                search: '',
                 drag: false,
                 orderModified: false,
                 reqStateCurrent: [],
@@ -376,6 +386,9 @@
             },
 
             canShowItem(item){
+                if(this.search.length > 0 && !item.name.includes(this.search)){
+                    return false;
+                }
                 if(!this.list.todo){
                     return true;
                 }
