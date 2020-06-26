@@ -299,10 +299,10 @@
                 this.loadListData();
             },
             async loadListData(){
-                let response = await Manager.reqGetListData(this.curr.listId);
-                if(response.status === 200){
-                    this.list = response.data;
-                    this.listItems = response.data.activities;
+                let list = await Manager.getListData(this.curr.listId);
+                if(list){
+                    this.list = list;
+                    this.listItems = list.activities;
                 }
             },
 
@@ -364,13 +364,13 @@
                 this.modalItem = item;
             },
             async onClickDeleteItem(item){
-                let response = await Manager.reqDeleteActivity(item.id);
-                if(response.status === 200){
+                Manager.markListDataReload(item.list_id);
+                let response = await Manager.deleteActivity(item.id);
+                if(response){
                     this.loadListData()
                 }else{
                     console.error('Failed to Delete element');
                 }
-                //TODO ELSE
             },
             onClickEditItem(item){
                 this.$emit('edit-item', item);
@@ -414,7 +414,7 @@
                     this.listItems.forEach((x) => {
                         newOrder.push(x.id);
                     });
-                    Manager.reqUpdateListActivitiesOrder(this.curr.listId, newOrder);
+                    Manager.updateListActivitiesOrder(this.curr.listId, newOrder);
                     this.orderModified = false;
                 }
             }

@@ -346,8 +346,8 @@
                         desc = this.form.editor.getHTML();
                     }
 
-                    let response = await Manager.reqUpdateActivity(data.id, data.name, desc, data.list_id);
-                    if (response.status === 200) {
+                    let activity = await Manager.updateActivity(data.id, data.name, desc, data.list_id);
+                    if (activity) {
                         this.message.success = 'Created Successfully';
                         this.message.danger = null;
 

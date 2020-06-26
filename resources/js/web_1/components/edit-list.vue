@@ -96,9 +96,9 @@
         },
         methods: {
             async loadListData(){
-                let response = await Manager.reqGetListData(this.listId);
-                if(response.status === 200) {
-                    this.list = response.data;
+                let list = await Manager.getListData(this.listId);
+                if(list) {
+                    this.list = list;
                     this.name = this.list.name;
                 }
             },
