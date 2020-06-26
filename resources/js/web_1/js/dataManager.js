@@ -21,6 +21,7 @@ export default new Vue({
         lists: [],
 
         listsUpdated: new Date(0),
+        listDataUpdated: []
 
     },
     mounted(){
@@ -41,17 +42,27 @@ export default new Vue({
         },
 
 
+        emitItemUpdated(item){
+            this.$emit('item-updated', item);
+        },
+
+        markListDataReload(listId){
+            let updateData = this.listDataUpdated.findIndex(x => x.id === listId);
+            if(updateData !== -1){
+                this.listDataUpdated[updateData].date = new Date(0);
+            }
+        },
+
+
         async getLists(){
             if(this.timePassed(this.listsUpdated, 120)){
                 let response = await this.reqGetLists();
                 if(this.hasStatus200(response)){
                     let newLists = []
-                    const nowTime = new Date();
-                    this.listsUpdated = nowTime;
+                    this.listsUpdated = new Date();
 
                     for (let i = 0; i < response.data.length; ++i) {
                         let list = response.data[i];
-                        list.reqUpdated = nowTime;
                         let newList = null;
                         if(this.lists.length > 0){
                             newList = this.lists.find(e => e.id === list.id);
@@ -71,6 +82,37 @@ export default new Vue({
             return this.lists;
         },
         async getListData(listId){
+            let updateData = this.listDataUpdated.findIndex(x => x.id === listId);
+            let needUpdate = false;
+            if(updateData !== -1){
+                needUpdate = !!this.timePassed(this.listDataUpdated[updateData].date, 60);
+            }else{
+                needUpdate = true;
+            }
+            let index = this.lists.findIndex(x => x.id === listId);
+            if(index === -1){
+                console.error('GetListData Failed List Not Loaded');
+                return -1;
+            }
+
+            if(needUpdate){
+                let response = await this.reqGetListData(listId);
+                if(this.hasStatus200(response)){
+                    this.lists[index] = response.data;
+                    this.emitListUpdated(this.lists[index]);
+                    if(updateData !== -1){
+                        this.listDataUpdated[updateData].date = new Date();
+                    }else{
+                        this.listDataUpdated.push({
+                            id: listId,
+                            date: new Date()
+                        });
+                    }
+                }else{
+                    return this.lists[index];
+                }
+            }
+            return this.lists[index];
 
         },
         async updateList(listId, name, description, todo){
@@ -122,7 +164,13 @@ export default new Vue({
         },
 
         async updateListActivitiesOrder(listId, idsOrder){
-
+            this.markListDataReload(listId);
+            let response = await this.reqUpdateListActivitiesOrder(listId, idsOrder);
+            if(this.hasStatus200(response)){
+                return 1;
+            }else{
+                return -1;
+            }
         },
 
         async createActivity(name, listId, description) {
@@ -134,7 +182,13 @@ export default new Vue({
         },
 
         async updateActivity(activityId, name, description, listId) {
-
+            this.markListDataReload(listId);
+            let response = await this.reqUpdateActivity(activityId, name, description, listId);
+            if(this.hasStatus200(response)){
+                return response.data;
+            }else{
+                return -1;
+            }
         },
 
 
@@ -144,9 +198,10 @@ export default new Vue({
             return response.status === 200
         },
         timePassed(lastDate, expectedSeconds) {
-            console.log(!(Math.floor((new Date() - lastDate)/1000) < expectedSeconds))
             return !(Math.floor((new Date() - lastDate)/1000) < expectedSeconds);
         },
+
+
 
         reqGetLists(){
             return axios.get(GET_LISTS)

@@ -299,10 +299,10 @@
                 this.loadListData();
             },
             async loadListData(){
-                let response = await Manager.reqGetListData(this.curr.listId);
-                if(response.status === 200){
-                    this.list = response.data;
-                    this.listItems = response.data.activities;
+                let list = await Manager.getListData(this.curr.listId);
+                if(list){
+                    this.list = list;
+                    this.listItems = list.activities;
                 }
             },
 
@@ -414,7 +414,7 @@
                     this.listItems.forEach((x) => {
                         newOrder.push(x.id);
                     });
-                    Manager.reqUpdateListActivitiesOrder(this.curr.listId, newOrder);
+                    Manager.updateListActivitiesOrder(this.curr.listId, newOrder);
                     this.orderModified = false;
                 }
             }
