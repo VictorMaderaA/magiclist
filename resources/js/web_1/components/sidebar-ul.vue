@@ -21,7 +21,7 @@
                 <transition-group type="transition" :name="!drag ? 'flip-list' : null">
                     <li v-for="(item) in lists" :key="item.id" class="nav-item">
                         <a class="nav-link" v-on:click.stop.prevent="onListSelected(item)">
-                            <i class="far fa-circle nav-icon"></i>
+                            <i class="nav-icon" v-bind:class="listIcon(item)"></i>
                             <p>{{item.name}}</p>
                         </a>
                     </li>
@@ -45,7 +45,7 @@
         data() {
             return {
                 firstLoad: true,
-                lists: Manager.lists,
+                lists: [],
 
                 drag: false,
                 orderModified: false,
@@ -53,6 +53,7 @@
         },
         beforeMount() {
             Manager.$on('lists-updated', (lists) => {
+                this.lists = [];
                 this.lists = lists;
             });
         },
@@ -96,6 +97,13 @@
             onMoveCallback(evt, originalEvent){
                 this.orderModified = true;
             },
+            listIcon(list){
+                if(list.private){
+                    return 'far fa-circle';
+                }else{
+                    return 'fas fa-globe';
+                }
+            }
 
         },
         computed: {
