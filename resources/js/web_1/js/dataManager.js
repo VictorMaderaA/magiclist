@@ -91,7 +91,7 @@ export default new Vue({
             }
             return this.lists;
         },
-        async getListData(listId){
+        async getListData(listId, copy){
             let updateData = this.listDataUpdated.findIndex(x => x.id === listId);
             let needUpdate = false;
             if(updateData !== -1){
@@ -118,9 +118,10 @@ export default new Vue({
                             date: new Date()
                         });
                     }
-                }else{
-                    return this.lists[index];
                 }
+            }
+            if(copy){
+                return Object.assign({}, this.lists[index]);
             }
             return this.lists[index];
 
@@ -131,8 +132,9 @@ export default new Vue({
                 let index = this.lists.findIndex(x => x.id === listId);
                 if(index !== -1){
                     this.lists[index] = Object.assign(this.lists[index], response.data);
-                    this.emitListsUpdated();
+                    console.log(this.lists[index], response.data)
                     this.emitListUpdated(this.lists[index]);
+                    this.emitListsUpdated();
                     return 1;
                 }
             }

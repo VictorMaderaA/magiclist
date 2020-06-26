@@ -112,7 +112,7 @@
         },
         methods: {
             async loadListData(){
-                let list = await Manager.getListData(this.listId);
+                let list = await Manager.getListData(this.listId, true);
                 if(list) {
                     this.list = list;
                     this.name = this.list.name;
@@ -128,6 +128,12 @@
                 if(response){
                     this.message.success = 'Saved Successfully';
                     this.message.danger = null;
+                    this.$snotify.success('Saved', {
+                        timeout: 2000,
+                        showProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: false
+                    });
                 }else{
                     this.message.success = null;
                     this.message.danger = 'Something went wrong when trying to update';
