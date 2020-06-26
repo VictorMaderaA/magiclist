@@ -25,6 +25,21 @@
                         </div>
 
                         <div class="row justify-content-center">
+                            <div class="col-auto">
+                                <!-- text input -->
+                                <div class="form-group">
+                                    <div class="custom-control custom-checkbox">
+                                        <input class="custom-control-input" type="checkbox" v-model="list.private"
+                                               id="private" name="customRadio" value="true" style="cursor: pointer;">
+                                        <label for="private" class="custom-control-label" style="cursor: pointer;">
+                                            Private List
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row justify-content-center">
                             <div class="col-sm-8">
                                 <!-- text input -->
                                 <div class="form-group">
@@ -82,6 +97,7 @@
                 list: {
                     name: null,
                     description: null,
+                    private: null,
                 },
                 message: {
                     danger: null,
@@ -108,7 +124,7 @@
                     this.$refs.inputName.focus();
                     return;
                 }
-                let response = await Manager.updateList(this.list.id, this.list.name, this.list.description);
+                let response = await Manager.updateList(this.list.id, this.list.name, this.list.description, null, this.list.private);
                 if(response){
                     this.message.success = 'Saved Successfully';
                     this.message.danger = null;

@@ -125,8 +125,8 @@ export default new Vue({
             return this.lists[index];
 
         },
-        async updateList(listId, name, description, todo){
-            let response = await this.reqUpdateList(listId, name, description, todo);
+        async updateList(listId, name, description, todo, isPrivate){
+            let response = await this.reqUpdateList(listId, name, description, todo, isPrivate);
             if(this.hasStatus200(response)){
                 let index = this.lists.findIndex(x => x.id === listId);
                 if(index !== -1){
@@ -138,8 +138,8 @@ export default new Vue({
             }
             return -1;
         },
-        async createList(name, description){
-            let response = await this.reqCreateList(name, description);
+        async createList(name, description, isPrivate){
+            let response = await this.reqCreateList(name, description, isPrivate);
             if(this.hasStatus200(response)){
                 let index = this.lists.push(response.data);
                 if(index > 0){
@@ -225,7 +225,7 @@ export default new Vue({
                 .then((resp) => this.onRequest(resp))
                 .catch((err) => this.onRequestError(err));
         },
-        reqUpdateList(listId, name, description, todo){
+        reqUpdateList(listId, name, description, todo, isPrivate){
             let data = {};
             if(name != null){
                 data.name = name;
@@ -236,14 +236,18 @@ export default new Vue({
             if(todo != null){
                 data.todo = todo? 1 : 0;
             }
+            if(isPrivate != null){
+                data.private = isPrivate? 1 : 0;
+            }
             return axios.post(UPDATE_LIST.replace('{listId}', listId), data)
                 .then((resp) => this.onRequest(resp))
                 .catch((err) => this.onRequestError(err));
         },
-        reqCreateList(name, description){
+        reqCreateList(name, description, isPrivate){
             let data = {};
             data.name = name;
             data.description = description;
+            data.private = isPrivate;
             return axios.post(CREATE_LIST, data)
                 .then((resp) => this.onRequest(resp))
                 .catch((err) => this.onRequestError(err));

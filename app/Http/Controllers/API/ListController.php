@@ -104,6 +104,7 @@ class ListController extends BaseController
         $validator = Validator::make($request->all(), [
             'name' => 'required|string',
             'description' => 'string|nullable',
+            'private' => 'boolean',
         ]);
         if($validator->fails()) {
             return response($validator->errors(), 400);
@@ -113,6 +114,7 @@ class ListController extends BaseController
         $list->name = $request->input('name');
         $list->description = $request->input('description')?? '';
         $list->user_id = auth()->id();
+        $list->private = $request->input('private', false);
         $list->saveOrFail();
         $list->syncOriginal();
 
@@ -136,7 +138,7 @@ class ListController extends BaseController
             return response('',403);
         }
 
-        $attributes = array_intersect_key($request->all(), array_flip(['name', 'description', 'todo']));
+        $attributes = array_intersect_key($request->all(), array_flip(['name', 'description', 'todo', 'private']));
         if(array_key_exists('description', $attributes) && $attributes['description'] === null){
             $attributes['description'] = '';
         }
