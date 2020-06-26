@@ -42,10 +42,10 @@ Route::group([
     Route::post('/activity/{activityId}/media', 'ActivitiesController@addMediaFile');
     Route::post('/activity', 'ActivitiesController@create');
 
-
     Route::post('/contact', 'FeedbackController@sendMessage')->name('api_contact');
-
-
 });
+
+Route::get('/list/explore', 'API\ListController@explore')->middleware('guest');
+
 
 

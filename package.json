@@ -27,9 +27,11 @@
     },
     "dependencies": {
         "admin-lte": "^3.0.5",
+        "holderjs": "^2.9.7",
         "tiptap": "^1.27.1",
         "tiptap-extensions": "^1.29.1",
         "vue-gallery": "^2.0.1",
+        "vue-holderjs": "^1.0.2",
         "vue-select": "^3.10.3",
         "vue-snotify": "^3.2.1",
         "vuedraggable": "^2.23.2"

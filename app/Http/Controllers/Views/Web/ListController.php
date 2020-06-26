@@ -10,19 +10,11 @@ use App\Models\Lists;
 class ListController extends BaseController
 {
 
-    public function __construct()
+    public function explore()
     {
-        self::middleware('auth:api');
-    }
-
-    public function index($listId)
-    {
-        $list = Lists::query()
-            ->where('user_id', auth()->id())
-            ->with('activities')
-            ->findOrFail($listId);
-        return view('web.list.index')
-            ->with('list', json_encode($list->toArray(), 1));
+        $lists = Lists::query()->where('private', false)->get(['id', 'name', 'description']);
+        return view('web_1.lists')
+            ->with('lists', $lists);
     }
 
 }

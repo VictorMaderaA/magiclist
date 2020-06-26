@@ -18,7 +18,7 @@ Route::get('dev/views/', 'Views\Develop\ViewsController@index');
 Route::get('dev/views/{id}', 'Views\Develop\ViewsController@show')->name('dev_views_show');
 
 
-Route::get('/', 'Views\Web\WelcomeController');
+Route::get('/', 'Views\Web\WelcomeController')->name('welcome');
 
 Auth::routes(['verify' => true]);
 
@@ -30,4 +30,4 @@ Route::get('/legal/cookies', "Views\Web\LegalController@cookies")->name('legal_c
 Route::get('/app', 'Views\Web\HomeController@index')->name('home');
 Route::get('/contact', 'Views\Web\FeedbackController@index')->name('contact');
 
-Route::get('/list/{listId}', 'Views\Web\ListController@index')->name('list_index');
+Route::get('/explore', 'Views\Web\ListController@explore')->name('list_index');
