@@ -49,13 +49,19 @@
         }
     };
 
+    import Manager from './js/dataManager'
+
     export default {
         name: "app-master",
         components: {
-            refresher
+            refresher,
+            Manager
         },
         beforeCreate() {
             refresher.methods.start()
+        },
+        mounted() {
+            Manager.setSnotify(this.$snotify);
         },
         beforeDestroy() {
             refresher.methods.destroy()

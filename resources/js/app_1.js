@@ -59,8 +59,16 @@ Vue.component('sidebar-ul', () => import(
     ));
 
 
-import vSelect from 'vue-select'
+import vSelect from 'vue-select';
 Vue.component('v-select', vSelect);
+
+import Snotify, { SnotifyPosition } from 'vue-snotify'
+const options = {
+    toast: {
+        position: SnotifyPosition.rightBottom
+    }
+}
+Vue.use(Snotify, options);
 
 // Vue.component('create', require('./web_1/components/NULL.vue').default);
 
