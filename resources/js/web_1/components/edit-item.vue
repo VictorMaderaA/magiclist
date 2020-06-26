@@ -350,7 +350,12 @@
                     if (activity) {
                         this.message.success = 'Created Successfully';
                         this.message.danger = null;
-
+                        this.$snotify.success('Saved', {
+                            timeout: 2000,
+                            showProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: false
+                        });
                     } else {
                         this.message.success = null;
                         this.message.danger = 'Something went wrong when trying to create the new activity';

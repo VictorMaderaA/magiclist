@@ -21,6 +21,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('mix/adminlte/css/alt/adminlte.core.min.css') }}">
     <link rel="stylesheet" href="{{ asset('mix/adminlte/css/alt/adminlte.components.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('mix/snotify/css/material.css') }}">
 
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">

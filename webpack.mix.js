@@ -33,6 +33,12 @@ mix.copyDirectory('node_modules/jquery/dist', 'public/mix/jquery')
     .copyDirectory('node_modules/bootstrap/dist', 'public/mix/bootstrap')
 ;
 
+//Snotify
+mix.copy('node_modules/vue-snotify/styles/dark.css', 'public/mix/snotify/css')
+    .copy('node_modules/vue-snotify/styles/material.css', 'public/mix/snotify/css')
+    .copy('node_modules/vue-snotify/styles/simple.css', 'public/mix/snotify/css')
+;
+
 
 if (mix.inProduction()) {
     mix.version();

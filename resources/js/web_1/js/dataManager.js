@@ -12,8 +12,10 @@ const CREATE_ACTIVITY = '/api/activity';
 const GET_ACTIVITY = '/api/activity/{activityId}';
 const UPDATE_ACTIVITY = '/api/activity/{activityId}';
 
-
 export default new Vue({
+    component: {
+
+    },
     data: {
         user: {
 
@@ -21,13 +23,18 @@ export default new Vue({
         lists: [],
 
         listsUpdated: new Date(0),
-        listDataUpdated: []
+        listDataUpdated: [],
+        notify: null,
 
     },
     mounted(){
 
     },
     methods: {
+        setSnotify(snotify){
+            this.notify = snotify
+        },
+
         emitListsUpdated(){
             this.$emit('lists-updated', this.lists);
         },
@@ -316,6 +323,12 @@ export default new Vue({
             return resp
         },
         onRequestError(err){
+            this.notify.error(err.response.data.message, 'Request Error', {
+                timeout: 2000,
+                showProgressBar: true,
+                closeOnClick: false,
+                pauseOnHover: true
+            });
             console.error(err.response);
             return err;
         },

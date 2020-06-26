@@ -31,6 +31,7 @@
         "tiptap-extensions": "^1.29.1",
         "vue-gallery": "^2.0.1",
         "vue-select": "^3.10.3",
+        "vue-snotify": "^3.2.1",
         "vuedraggable": "^2.23.2"
     }
 }
