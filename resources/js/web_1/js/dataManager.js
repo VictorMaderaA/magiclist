@@ -45,6 +45,9 @@ export default new Vue({
         emitItemUpdated(item){
             this.$emit('item-updated', item);
         },
+        emitItemDeleted(){
+            this.$emit('item-deleted');
+        },
 
         markListDataReload(listId){
             let updateData = this.listDataUpdated.findIndex(x => x.id === listId);
@@ -156,7 +159,12 @@ export default new Vue({
 
 
         async deleteActivity(activityId){
-
+            let response = await this.reqDeleteActivity(activityId);
+            if(this.hasStatus200(response)){
+                return response.data;
+            }else{
+                return -1;
+            }
         },
 
         async updateActivityState(activityId, state){
@@ -172,15 +180,12 @@ export default new Vue({
                 return -1;
             }
         },
-
         async createActivity(name, listId, description) {
 
         },
-
         async getActivity(activityId) {
 
         },
-
         async updateActivity(activityId, name, description, listId) {
             this.markListDataReload(listId);
             let response = await this.reqUpdateActivity(activityId, name, description, listId);

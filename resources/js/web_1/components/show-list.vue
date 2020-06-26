@@ -364,13 +364,13 @@
                 this.modalItem = item;
             },
             async onClickDeleteItem(item){
-                let response = await Manager.reqDeleteActivity(item.id);
-                if(response.status === 200){
+                Manager.markListDataReload(item.list_id);
+                let response = await Manager.deleteActivity(item.id);
+                if(response){
                     this.loadListData()
                 }else{
                     console.error('Failed to Delete element');
                 }
-                //TODO ELSE
             },
             onClickEditItem(item){
                 this.$emit('edit-item', item);
