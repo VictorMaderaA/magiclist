@@ -148,9 +148,4 @@ class ListController extends BaseController
         return response(Lists::find($listId)->toArray());
     }
 
-
-    public function explore(Request $request){
-        $lists = Lists::query()->where('private', false)->get(['id', 'name', 'description']);
-        return response($lists->toArray());
-    }
 }

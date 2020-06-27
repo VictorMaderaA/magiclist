@@ -30,4 +30,6 @@ Route::get('/legal/cookies', "Views\Web\LegalController@cookies")->name('legal_c
 Route::get('/app', 'Views\Web\HomeController@index')->name('home');
 Route::get('/contact', 'Views\Web\FeedbackController@index')->name('contact');
 
-Route::get('/explore', 'Views\Web\ListController@explore')->name('list_index');
+Route::get('/explore', 'Views\Web\ExploreController@index')->name('explore');
+Route::get('/explore/list/{listId}', 'Views\Web\ExploreController@list')->name('explore_list');
+Route::get('/explore/item/{activityId}', 'Views\Web\ExploreController@activity')->name('explore_activity');

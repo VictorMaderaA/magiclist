@@ -2,6 +2,13 @@
     <div>
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
             <li class="nav-item">
+                <a class="nav-link" href="/explore">
+                    <i class="fas fa-archive"></i>
+                    <p>Discover Lists</p>
+                </a>
+            </li>
+
+            <li class="nav-item">
                 <a class="nav-link"
                    v-on:click.stop.prevent="onCreateNewList()">
                     <i class="fas fa-plus-circle"></i>

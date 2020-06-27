@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -143,13 +143,20 @@
         max-width: 40rem;
     }
 
-    footer {
-        padding-top: 3rem;
-        padding-bottom: 3rem;
+    html {
+        position: relative;
+        min-height: 100%;
     }
-
-    footer p {
-        margin-bottom: .25rem;
+    body {
+        margin-bottom: 60px; /* Margin bottom by footer height */
+    }
+    .footer {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 60px; /* Set the fixed height of the footer here */
+        line-height: 60px; /* Vertically center the text there */
+        background-color: #f5f5f5;
     }
 
     .box-shadow {

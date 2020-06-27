@@ -37,8 +37,13 @@
                                 <p class="card-text text-center ">{{ list.description }}</p>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="btn-group">
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">Copy To My Lists</button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary"
+                                                v-on:click="onClickView(list.id)">
+                                            View
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary">
+                                            Copy To My Lists (Work In Progress)
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -66,7 +71,12 @@
             }
         },
         methods: {
+            onClickView(listId){
+                window.location.href = '/explore/list/' + listId ;
+            },
+            onClickCopy(){
 
+            }
         }
     }
 </script>
