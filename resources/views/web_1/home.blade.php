@@ -53,23 +53,10 @@
 
 @section('content')
 
-    <main-component ref="mainComponent"
-                    @list-created="onListCreated"
-    ></main-component>
+    <vue-snotify></vue-snotify>
+    <main-component ref="mainComponent"></main-component>
 
     <section class="content">
-
-
-
-
-
-
-
-
-
-
-
-
 
     </section>
 @endsection

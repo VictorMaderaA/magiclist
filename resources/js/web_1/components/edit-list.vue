@@ -25,6 +25,21 @@
                         </div>
 
                         <div class="row justify-content-center">
+                            <div class="col-auto">
+                                <!-- text input -->
+                                <div class="form-group">
+                                    <div class="custom-control custom-checkbox">
+                                        <input class="custom-control-input" type="checkbox" v-model="list.private"
+                                               id="private" name="customRadio" value="true" style="cursor: pointer;">
+                                        <label for="private" class="custom-control-label" style="cursor: pointer;">
+                                            Private List
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row justify-content-center">
                             <div class="col-sm-8">
                                 <!-- text input -->
                                 <div class="form-group">
@@ -82,6 +97,7 @@
                 list: {
                     name: null,
                     description: null,
+                    private: null,
                 },
                 message: {
                     danger: null,
@@ -96,9 +112,9 @@
         },
         methods: {
             async loadListData(){
-                let response = await Manager.reqGetListData(this.listId);
-                if(response.status === 200) {
-                    this.list = response.data;
+                let list = await Manager.getListData(this.listId, true);
+                if(list) {
+                    this.list = list;
                     this.name = this.list.name;
                 }
             },
@@ -108,12 +124,16 @@
                     this.$refs.inputName.focus();
                     return;
                 }
-                let response = await Manager.reqUpdateList(this.list.id, this.list.name, this.list.description);
-                if(response.status === 200){
-                    this.list = response.data;
-                    // this.$emit('updated-list', response.data);
+                let response = await Manager.updateList(this.list.id, this.list.name, this.list.description, null, this.list.private);
+                if(response){
                     this.message.success = 'Saved Successfully';
                     this.message.danger = null;
+                    this.$snotify.success('Saved', {
+                        timeout: 2000,
+                        showProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: false
+                    });
                 }else{
                     this.message.success = null;
                     this.message.danger = 'Something went wrong when trying to update';

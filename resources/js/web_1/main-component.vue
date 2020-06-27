@@ -32,7 +32,6 @@
         ></create-item>
 
         <create-list ref="createList"
-                     @created-list="onListCreated"
                      @cancel="showList"
                      v-if="showing.createList"
         ></create-list>
@@ -59,7 +58,6 @@
         ></show-item>
 
         <show-list ref="showList"
-                   @list-deleted="onListDeleted"
                    @edit-item="showEditItem"
                    @create-item="showCreateItem"
                    @selected-item="showItem"
@@ -74,9 +72,13 @@
 </template>
 
 <script>
+    import Manager from './js/dataManager'
 
     export default {
         name: "main-component",
+        components: {
+            Manager
+        },
         data(){
             return {
                 showing: {
@@ -93,6 +95,14 @@
                     itemId: null,
                 }
             }
+        },
+        mounted() {
+            Manager.$on('list-created', (list) => {
+                this.showList(list.id);
+            });
+            Manager.$on('list-deleted', () => {
+                this.showEmpty();
+            });
         },
         methods: {
             hideShowing(){
@@ -142,18 +152,6 @@
             showCreateItem(item){
                 this.hideShowing();
                 this.showing.createItem = true;
-            },
-
-
-
-            onListCreated(list){
-                this.$emit('list-created')
-                this.showList(list);
-            },
-            onListDeleted(){
-                this.$emit('list-created')
-                this.showEmpty();
-                //TODO CHANGE EMIT METHOD
             },
 
 

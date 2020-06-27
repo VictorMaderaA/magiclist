@@ -346,11 +346,16 @@
                         desc = this.form.editor.getHTML();
                     }
 
-                    let response = await Manager.reqUpdateActivity(data.id, data.name, desc, data.list_id);
-                    if (response.status === 200) {
+                    let activity = await Manager.updateActivity(data.id, data.name, desc, data.list_id);
+                    if (activity) {
                         this.message.success = 'Created Successfully';
                         this.message.danger = null;
-
+                        this.$snotify.success('Saved', {
+                            timeout: 2000,
+                            showProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: false
+                        });
                     } else {
                         this.message.success = null;
                         this.message.danger = 'Something went wrong when trying to create the new activity';

@@ -17,6 +17,21 @@
                     <!-- /.card-header -->
                     <div class="card-body">
                         <div class="row justify-content-center">
+                            <div class="col-auto">
+                                <!-- text input -->
+                                <div class="form-group">
+                                    <div class="custom-control custom-checkbox">
+                                        <input class="custom-control-input" type="checkbox" v-model="form.private"
+                                               id="private" name="customRadio" value="true" style="cursor: pointer;">
+                                        <label for="private" class="custom-control-label" style="cursor: pointer;">
+                                            Private List
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row justify-content-center">
                             <div class="col-sm-8">
                                 <!-- text input -->
                                 <div class="form-group">
@@ -29,7 +44,7 @@
                         </div>
 
                         <div class="row justify-content-center">
-                            <div class="col-sm-10">
+                            <div class="col-sm-11">
                                 <!-- textarea -->
                                 <div class="form-group">
                                     <label for="description">Description</label>
@@ -69,6 +84,7 @@
                 form: {
                     name: null,
                     description: '',
+                    private: false,
                 }
             }
         },
@@ -78,12 +94,7 @@
                     this.$refs.inputName.focus();
                     return;
                 }
-                let response = await Manager.reqCreateList(this.form.name, this.form.description);
-                if(response.status === 200){
-                    this.$emit('created-list', response.data);
-                }else{
-                    //TODO
-                }
+                await Manager.createList(this.form.name, this.form.description);
             },
             onClickCancel(){
                 this.$emit('cancel');

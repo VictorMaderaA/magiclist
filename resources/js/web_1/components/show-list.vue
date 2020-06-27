@@ -148,11 +148,11 @@
 
                             <div class="row justify-content-center">
                                 <div class="col-md-8" style="margin: 1em">
-                                    <form class="form-inline d-flex justify-content-center md-form form-sm mt-0">
+                                    <div class="form-inline d-flex justify-content-center md-form form-sm mt-0">
                                         <i class="fas fa-search" aria-hidden="true"></i>
                                         <input class="form-control form-control-sm ml-3 w-75" type="search" placeholder="Search in List"
                                                aria-label="Search" v-model="search">
-                                    </form>
+                                    </div>
                                 </div>
                             </div>
 
@@ -279,6 +279,9 @@
               this.curr.listId = this.listId;
               this.loadListData()
           }
+          Manager.$on('list-updated', (list) => {
+              this.list = list;
+          })
         },
         computed: {
             dragOptions() {
@@ -296,10 +299,11 @@
                 this.loadListData();
             },
             async loadListData(){
-                let response = await Manager.reqGetListData(this.curr.listId);
-                if(response.status === 200){
-                    this.list = response.data;
-                    this.listItems = response.data.activities;
+                console.log('TEST')
+                let list = await Manager.getListData(this.curr.listId, true);
+                if(list){
+                    this.list = list;
+                    this.listItems = list.activities;
                 }
             },
 
@@ -325,10 +329,8 @@
                     return;
                 }
                 this.reqStateCurrent.push('todo');
-                let response = await Manager.reqUpdateList(this.list.id, null, null, !this.list.todo);
-                if(response.status === 200){
-                    this.list.todo = response.data.todo;
-                }else{
+                let response = await Manager.updateList(this.list.id, null, null, !this.list.todo);
+                if(!response){
                     //TODO show warning
                     console.error('Failed to change list todo');
                 }
@@ -352,10 +354,7 @@
 
 
             async onClickDeleteList(list){
-                let response = await Manager.reqDeleteList(list.id);
-                if(response.status === 200){
-                    this.$emit('list-deleted', this.list);
-                }
+                await Manager.deleteList(list.id);
             },
 
             async onClickEditList(){
@@ -366,13 +365,13 @@
                 this.modalItem = item;
             },
             async onClickDeleteItem(item){
-                let response = await Manager.reqDeleteActivity(item.id);
-                if(response.status === 200){
+                Manager.markListDataReload(item.list_id);
+                let response = await Manager.deleteActivity(item.id);
+                if(response){
                     this.loadListData()
                 }else{
                     console.error('Failed to Delete element');
                 }
-                //TODO ELSE
             },
             onClickEditItem(item){
                 this.$emit('edit-item', item);
@@ -386,7 +385,7 @@
             },
 
             canShowItem(item){
-                if(this.search.length > 0 && !item.name.includes(this.search)){
+                if(this.search.length > 0 && !item.name.toLowerCase().includes(this.search.toLowerCase())){
                     return false;
                 }
                 if(!this.list.todo){
@@ -416,7 +415,7 @@
                     this.listItems.forEach((x) => {
                         newOrder.push(x.id);
                     });
-                    Manager.reqUpdateListActivitiesOrder(this.curr.listId, newOrder);
+                    Manager.updateListActivitiesOrder(this.curr.listId, newOrder);
                     this.orderModified = false;
                 }
             }

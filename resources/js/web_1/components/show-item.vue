@@ -153,9 +153,9 @@
                 console.error('Failed to load Item Data');
             },
 
-            async onClickDeleteItem(item){
-                let response = await Manager.reqDeleteActivity(item);
-                if(response.status === 200){
+            async onClickDeleteItem(itemId){
+                let response = await Manager.deleteActivity(itemId);
+                if(response){
                     this.onDeleted()
                 }else{
                     console.error('Failed to Delete element');

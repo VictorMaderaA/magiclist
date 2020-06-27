@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Views\Web;
 
+use App\Http\Controllers\Base\BaseController;
 use Illuminate\Contracts\Support\Renderable;
 
-class HomeController extends Controller
+class HomeController extends BaseController
 {
     /**
      * Create a new controller instance.
