@@ -299,7 +299,8 @@
                 this.loadListData();
             },
             async loadListData(){
-                let list = await Manager.getListData(this.curr.listId);
+                console.log('TEST')
+                let list = await Manager.getListData(this.curr.listId, true);
                 if(list){
                     this.list = list;
                     this.listItems = list.activities;
