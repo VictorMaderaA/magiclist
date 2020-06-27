@@ -252,9 +252,9 @@
         },
         methods:{
             async onClickSave(){
-                let response = await this.save();
-                if(response.status === 200){
-                    this.$emit('list-show', response.data.list_id);
+                let item = await this.save();
+                if(item){
+                    this.$emit('list-show', item.list_id);
                 }
             },
             onClickSaveOther(){
@@ -262,9 +262,9 @@
                 this.$refs.name.focus();
             },
             async  onClickSaveEdit(){
-                let response = await this.save();
-                if(response.status === 200){
-                    this.$emit('item-edit', response.data)
+                let item = await this.save();
+                if(item){
+                    this.$emit('item-edit', item)
                 }
             },
 
@@ -277,12 +277,12 @@
                     //Mostrando Editor
                     desc = this.form.editor.getHTML();
                 }
-                let response = await Manager.reqCreateActivity(this.form.name, this.form.listId, desc);
-                this.manageResponse(response);
-                return response;
+                let item = await Manager.createActivity(this.form.name, this.form.listId, desc);
+                this.manageResponse(item);
+                return item;
             },
-            manageResponse(response){
-                if(response.status === 200){
+            manageResponse(item){
+                if(item){
                     this.form.name = null;
                     this.form.editor.setContent('');
                     this.form.rawDesc = '';

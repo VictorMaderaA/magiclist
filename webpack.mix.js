@@ -13,13 +13,15 @@ const mix = require('laravel-mix');
 
 // Override mix internal webpack output configuration mix.config.webpackConfig.output = {
 mix.config.webpackConfig.output = {
-    chunkFilename: 'js/[name].bundle.js',
+    chunkFilename: 'js/chunks/[name].bundle.js',
     publicPath: '/',
 };
 
 mix.setPublicPath('public');
 
 mix.js('resources/js/app.js', 'public/js');
+
+mix.js('resources/js/app_explore.js', 'public/js');
 
 
 
@@ -37,6 +39,11 @@ mix.copyDirectory('node_modules/jquery/dist', 'public/mix/jquery')
 mix.copy('node_modules/vue-snotify/styles/dark.css', 'public/mix/snotify/css')
     .copy('node_modules/vue-snotify/styles/material.css', 'public/mix/snotify/css')
     .copy('node_modules/vue-snotify/styles/simple.css', 'public/mix/snotify/css')
+;
+
+//Snotify
+mix.copy('node_modules/holderjs/holder.js', 'public/mix/holderjs/')
+    .copy('node_modules/holderjs/holder.min.js', 'public/mix/holderjs/')
 ;
 
 

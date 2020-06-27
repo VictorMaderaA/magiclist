@@ -18,7 +18,7 @@ Route::get('dev/views/', 'Views\Develop\ViewsController@index');
 Route::get('dev/views/{id}', 'Views\Develop\ViewsController@show')->name('dev_views_show');
 
 
-Route::get('/', 'WelcomeController');
+Route::get('/', 'Views\Web\WelcomeController')->name('welcome');
 
 Auth::routes(['verify' => true]);
 
@@ -27,13 +27,9 @@ Route::get('/legal/privacy', "Views\Web\LegalController@privacy")->name('legal_p
 Route::get('/legal/cookies', "Views\Web\LegalController@cookies")->name('legal_cookies');
 
 
-Route::get('/app', 'HomeController@index')->name('home');
+Route::get('/app', 'Views\Web\HomeController@index')->name('home');
 Route::get('/contact', 'Views\Web\FeedbackController@index')->name('contact');
 
-Route::get('/list/{listId}', 'Views\Web\ListController@index')->name('list_index');
-
-
-
-
-//Route::get('image-upload', 'ImageUploadController@imageUpload')->name('image.upload');
-//Route::post('image-upload', 'ImageUploadController@imageUploadPost')->name('image.upload.post');
+Route::get('/explore', 'Views\Web\ExploreController@index')->name('explore');
+Route::get('/explore/list/{listId}', 'Views\Web\ExploreController@list')->name('explore_list');
+Route::get('/explore/item/{activityId}', 'Views\Web\ExploreController@activity')->name('explore_activity');
