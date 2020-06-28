@@ -67,6 +67,10 @@
 {{--                                <label for="lights-toggle" class="text-xs"><span>Turn me <span class="label-text">dark</span></span></label>--}}
 {{--                            </div>--}}
                         </div>
+                        <br>
+                            <a class="button button-primary" href="{{route('explore')}}">
+                                Explora Listas
+                            </a>
                     </div>
                     <div class="hero-media">
                         <div class="header-illustration">
