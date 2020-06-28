@@ -94,7 +94,7 @@
                     this.$refs.inputName.focus();
                     return;
                 }
-                await Manager.createList(this.form.name, this.form.description);
+                await Manager.createList(this.form.name, this.form.description, this.form.private);
             },
             onClickCancel(){
                 this.$emit('cancel');
