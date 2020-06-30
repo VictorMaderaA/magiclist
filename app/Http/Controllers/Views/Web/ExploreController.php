@@ -6,7 +6,10 @@ namespace App\Http\Controllers\Views\Web;
 
 use App\Http\Controllers\Base\BaseController;
 use App\Models\Activities;
+use App\Models\History\ListViewHistory;
 use App\Models\Lists;
+use App\User;
+use Illuminate\Support\Facades\Auth;
 
 class ExploreController extends BaseController
 {
@@ -18,9 +21,10 @@ class ExploreController extends BaseController
     }
 
     public function list($listId){
-        $lists = Lists::query()->where('private', false)->with('activities')->findOrFail($listId);
+        $list = Lists::query()->where('private', false)->with('activities')->findOrFail($listId);
+        ListViewHistory::createNew($list, User::find(\auth()->id()), request()->ip());
         return view('web_1.explore.list')
-            ->with('list', $lists);
+            ->with('list', $list);
     }
 
     public function activity($activityId){

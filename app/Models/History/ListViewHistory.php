@@ -86,4 +86,14 @@ class ListViewHistory extends BaseModel
     {
         return $this->belongsTo(Lists::class);
     }
+
+    public static function createNew(Lists $list, User $user, string $ip){
+        $geo = geoip($ip);
+        $viewHistory = new ListViewHistory();
+        $viewHistory->user_id = $user->id?? null;
+        $viewHistory->list_id = $list->id;
+        $viewHistory->geo_data = (!$geo->default)? json_encode($geo->toArray(), true) : null;
+        $viewHistory->save();
+        return $viewHistory;
+    }
 }

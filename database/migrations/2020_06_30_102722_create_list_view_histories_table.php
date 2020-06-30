@@ -17,7 +17,6 @@ class CreateListViewHistoriesTable extends Migration
             $table->foreignId('list_id')->references('id')->on('lists');
             $table->json('geo_data')->nullable();
             $table->foreignId('user_id')->nullable()->references('id')->on('users');
-            $table->json('geo_data')->nullable();
             $table->timestamps();
         });
     }
