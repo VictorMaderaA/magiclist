@@ -87,7 +87,7 @@ class ListViewHistory extends BaseModel
         return $this->belongsTo(Lists::class);
     }
 
-    public static function createNew(Lists $list, User $user, string $ip){
+    public static function createNew(Lists $list, ?User $user, string $ip){
         $geo = geoip($ip);
         $viewHistory = new ListViewHistory();
         $viewHistory->user_id = $user->id?? null;

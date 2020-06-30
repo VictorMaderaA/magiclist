@@ -22,7 +22,7 @@ class ExploreController extends BaseController
 
     public function list($listId){
         $list = Lists::query()->where('private', false)->with('activities')->findOrFail($listId);
-        ListViewHistory::createNew($list, User::find(\auth()->id()), request()->ip());
+        ListViewHistory::createNew($list, \auth()->user(), request()->ip());
         return view('web_1.explore.list')
             ->with('list', $list);
     }
