@@ -14,5 +14,13 @@ $factory->define(\App\Models\Lists::class, function (Faker $faker) {
             }
             return \factory(\App\User::class)->create()->id;
         },
+        'description' => function () use ($faker) {
+            if($faker->boolean){
+                return $faker->realText();
+            }
+            return '<p></p>';
+        },
+        'todo' => $faker->boolean,
+        'private' => $faker->boolean,
     ];
 });
