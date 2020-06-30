@@ -1,55 +1,40 @@
 <?php
 
-
-namespace App\Models;
-
+namespace App\Models\History;
 
 use App\Models\Base\BaseModel;
-use App\Models\History\ListViewHistory;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Lists;
+use App\User;
 
-class Lists extends BaseModel
+class ListViewHistory extends BaseModel
 {
-    use SoftDeletes;
-
-    protected static function boot()
-    {
-        parent::boot();
-
-        Lists::creating(function ($list) {
-            $count = auth()->user()->lists()->count();
-            $list->priority = $count+1;
-        });
-    }
-
-
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'lists';
+    protected $table = 'list_view_histories';
 
     /**
      * The primary key for the model.
      *
      * @var string
      */
-    protected $primaryKey = 'id';
+    protected $primaryKey = null;
 
     /**
      * The "type" of the primary key ID.
      *
      * @var string
      */
-    protected $keyType = 'int'; //'int'
+    protected $keyType = null;
 
     /**
      * Indicates if the IDs are auto-incrementing.
      *
      * @var bool
      */
-    public $incrementing = true;
+    public $incrementing = false;
 
     /**
      * Indicates if the model should be timestamped.
@@ -70,11 +55,7 @@ class Lists extends BaseModel
      *
      * @var array
      */
-    protected $withCount = [
-        'activities',
-        'activitiesPending',
-        'activitiesCompleted'
-    ];
+    protected $withCount = [];
 
     //-----------------------------------------------------------------------------------------------------------------
 
@@ -96,28 +77,13 @@ class Lists extends BaseModel
 
     //-----------------------------------------------------------------------------------------------------------------
 
-    public function activities()
+    public function user()
     {
-        return $this->hasMany(Activities::class, 'list_id')
-            ->orderBy('listPriority');
+        return $this->belongsTo(User::class);
     }
 
-    public function viewHistory(){
-        return $this->hasMany(ListViewHistory::class, 'list_id');
-    }
-
-
-    public function activitiesCompleted()
+    public function list()
     {
-        return $this->hasMany(Activities::class, 'list_id')
-            ->where('completed_at', '<>', null);
+        return $this->belongsTo(Lists::class);
     }
-
-    public function activitiesPending()
-    {
-        return $this->hasMany(Activities::class, 'list_id')
-            ->where('completed_at',null);
-    }
-
-
 }

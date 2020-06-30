@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\History\ListViewHistory;
 use App\Models\Lists;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -44,6 +45,10 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
     public function lists()
     {
         return $this->hasMany(Lists::class);
+    }
+
+    public function viewHistoryLists(){
+        return $this->hasMany(ListViewHistory::class);
     }
 
 
