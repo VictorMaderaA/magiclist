@@ -6,8 +6,15 @@ namespace App\Models;
 
 use App\Models\Base\BaseModel;
 use App\Models\History\ListViewHistory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * Class Lists
+ *
+ * @mixin Builder
+ * @package App\Models
+ */
 class Lists extends BaseModel
 {
     use SoftDeletes;
@@ -70,11 +77,7 @@ class Lists extends BaseModel
      *
      * @var array
      */
-    protected $withCount = [
-        'activities',
-        'activitiesPending',
-        'activitiesCompleted'
-    ];
+    protected $withCount = [];
 
     //-----------------------------------------------------------------------------------------------------------------
 
