@@ -20,18 +20,7 @@
 
     <script src="{{ asset('js/app_explore.js') }}" defer></script>
 
-
-    <script data-ad-client="ca-pub-8453462599655086" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-158934272-2"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-
-        gtag('config', 'UA-158934272-2');
-    </script>
-    <script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="19bfd6a3-a271-4038-bd50-5cd52c8f01c4" data-blockingmode="auto" type="text/javascript"></script>
+    @include('layouts.headerSnippets')
 
 </head>
 

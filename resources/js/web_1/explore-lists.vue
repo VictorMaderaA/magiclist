@@ -79,10 +79,10 @@
                 window.location.href = '/explore/list/' + listId ;
             },
             reqCopyList(listId){
-                console.log(this.doingReqCopy)
                 if(this.doingReqCopy){
                     return;
                 }
+                gtag('event', 'req-list-copy');
                 this.doingReqCopy = true;
                 this.$snotify.async('Called with promise', 'Success async', async () => {
                     let promise = await new Promise((resolve, reject) => {
