@@ -8,7 +8,6 @@ use App\Http\Controllers\Base\BaseController;
 use App\Models\Activities;
 use App\Models\Lists;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Mavinoo\Batch\BatchFacade;
 
@@ -142,6 +141,7 @@ class ListController extends BaseController
 
     public function update(Request $request, $listId){
         //Comprobamos que el usuario tenga acceso a la lista de la actividad
+        /** @var Lists $list */
         if(!$list = auth('api')->user()->lists()->find($listId)){
             return response('',403);
         }
@@ -163,6 +163,7 @@ class ListController extends BaseController
             $query->where('user_id', auth()->id())
                 ->orWhere('private', false);
         });
+        /** @var Lists $original */
         $original = $findQuery->findOrFail($listId);
         $newList = $original->replicate([
             'priority',

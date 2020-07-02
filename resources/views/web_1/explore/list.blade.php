@@ -16,6 +16,7 @@
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="{{asset('mix/bootstrap/css/bootstrap.min.css')}}">
     <link rel="stylesheet" href="{{asset('vendor/Fontawesome5-13-0/css/all.min.css')}}">
+    <link rel="stylesheet" href="{{ asset('mix/snotify/css/material.css') }}">
 
 
     <script data-ad-client="ca-pub-8453462599655086" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>

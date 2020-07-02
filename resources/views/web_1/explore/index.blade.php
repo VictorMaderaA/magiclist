@@ -16,6 +16,7 @@
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="{{asset('mix/bootstrap/css/bootstrap.min.css')}}">
     <link rel="stylesheet" href="{{asset('vendor/Fontawesome5-13-0/css/all.min.css')}}">
+    <link rel="stylesheet" href="{{ asset('mix/snotify/css/material.css') }}">
 
     <script src="{{ asset('js/app_explore.js') }}" defer></script>
 

@@ -1,5 +1,7 @@
 <template>
     <div>
+        <vue-snotify></vue-snotify>
+
         <section class="jumbotron text-center">
             <div class="container">
                 <h1 class="jumbotron-heading">Explore Public Lists</h1>
@@ -41,8 +43,9 @@
                                                 v-on:click="onClickView(list.id)">
                                             View
                                         </button>
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">
-                                            Copy To My Lists (Work In Progress)
+                                        <button type="button" class="btn btn-sm btn-outline-secondary"
+                                                v-on:click="reqCopyList(list.id)">
+                                            Copy To My Lists
                                         </button>
                                     </div>
                                 </div>
@@ -60,6 +63,7 @@
 </template>
 
 <script>
+
     export default {
         name: "explore-lists.vue",
         props: {
@@ -67,16 +71,50 @@
         },
         data() {
             return {
-
+                doingReqCopy: false,
             }
         },
         methods: {
             onClickView(listId){
                 window.location.href = '/explore/list/' + listId ;
             },
-            onClickCopy(){
-
-            }
+            reqCopyList(listId){
+                console.log(this.doingReqCopy)
+                if(this.doingReqCopy){
+                    return;
+                }
+                this.doingReqCopy = true;
+                this.$snotify.async('Called with promise', 'Success async', async () => {
+                    let promise = await new Promise((resolve, reject) => {
+                        const COPY_LIST = '/api/list/{listId}/copy';
+                        return axios.post(COPY_LIST.replace('{listId}', listId))
+                            .then(function (response) {
+                                resolve({
+                                    title: 'List Copied!!!',
+                                    body: 'You can find it in your lists!',
+                                    config: {
+                                        closeOnClick: true,
+                                        showProgressBar: true,
+                                        timeout: 5000,
+                                    }
+                                });
+                            })
+                            .catch(function (error) {
+                                reject({
+                                    title: 'Failed To Copy!!!',
+                                    body: 'Something went Wrong! :(',
+                                    config: {
+                                        closeOnClick: true,
+                                        showProgressBar: true,
+                                        timeout: 3000,
+                                    }
+                                });
+                            });
+                    });
+                    this.doingReqCopy = false;
+                    return promise;
+                });
+            },
         }
     }
 </script>
