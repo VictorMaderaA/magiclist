@@ -49,7 +49,7 @@
                             <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
                                 <div class="d-flex justify-content-between align-items-center w-100">
                                     <strong class="text-gray-dark">{{act.name}}</strong>
-                                    <button class="btn btn-sm btn-outline-primary" v-if="act.description === '<p></p>'"
+                                    <button class="btn btn-sm btn-outline-primary" v-if="act.description !== '<p></p>'"
                                             v-on:click="onClickView(act.id)">View</button>
                                 </div>
                             </div>
@@ -90,9 +90,9 @@
                 gtag('event', 'req-list-copy');
                 this.doingReqCopy = true;
                 this.$snotify.async('Called with promise', 'Success async', async () => {
-                    let promise = await new Promise((resolve, reject) => {
+                    return new Promise(async (resolve, reject) => {
                         const COPY_LIST = '/api/list/{listId}/copy';
-                        return axios.post(COPY_LIST.replace('{listId}', listId))
+                        let promise = await axios.post(COPY_LIST.replace('{listId}', listId))
                             .then(function (response) {
                                 resolve({
                                     title: 'List Copied!!!',
@@ -103,6 +103,7 @@
                                         timeout: 5000,
                                     }
                                 });
+                                return response;
                             })
                             .catch(function (error) {
                                 reject({
@@ -114,10 +115,20 @@
                                         timeout: 3000,
                                     }
                                 });
+                                return error;
                             });
+                        this.doingReqCopy = false;
+                        if(promise.response && promise.response.status === 401){
+                            this.$snotify.warning('A new Tab will open', 'Need to login', {
+                                closeOnClick: true,
+                                showProgressBar: true,
+                                timeout: 2000,
+                            });
+                            setTimeout(() => window.open('/login', '_blank'), 2000);
+                        }
+                        return promise;
                     });
-                    this.doingReqCopy = false;
-                    return promise;
+
                 });
             },
         }

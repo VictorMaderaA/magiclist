@@ -85,9 +85,9 @@
                 gtag('event', 'req-list-copy');
                 this.doingReqCopy = true;
                 this.$snotify.async('Called with promise', 'Success async', async () => {
-                    let promise = await new Promise((resolve, reject) => {
+                    return new Promise(async (resolve, reject) => {
                         const COPY_LIST = '/api/list/{listId}/copy';
-                        return axios.post(COPY_LIST.replace('{listId}', listId))
+                        let promise = await axios.post(COPY_LIST.replace('{listId}', listId))
                             .then(function (response) {
                                 resolve({
                                     title: 'List Copied!!!',
@@ -98,6 +98,7 @@
                                         timeout: 5000,
                                     }
                                 });
+                                return response;
                             })
                             .catch(function (error) {
                                 reject({
@@ -109,10 +110,20 @@
                                         timeout: 3000,
                                     }
                                 });
+                                return error;
                             });
+                        this.doingReqCopy = false;
+                        if(promise.response.status === 401){
+                            this.$snotify.warning('A new Tab will open', 'Need to login', {
+                                closeOnClick: true,
+                                showProgressBar: true,
+                                timeout: 2000,
+                            });
+                            setTimeout(() => window.open('/login', '_blank'), 2000);
+                        }
+                        return promise;
                     });
-                    this.doingReqCopy = false;
-                    return promise;
+
                 });
             },
         }
