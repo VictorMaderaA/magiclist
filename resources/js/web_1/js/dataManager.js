@@ -5,6 +5,7 @@ const UPDATE_LIST = '/api/list/{listId}';
 const COPY_LIST = '/api/list/{listId}/copy';
 const CREATE_LIST = '/api/list';
 const UPDATE_LIST_ACTIVITIES_ORDER = '/api/list/{listId}/change-activities-order';
+const RANDOMIZE_LIST_ACTIVITIES_ORDER = '/api/list/{listId}/randomize-activities-order';
 const UPDATE_LISTS_ORDER = '/api/list/change-order';
 
 const DELETE_ACTIVITY = '/api/activity/{activityId}';
@@ -198,6 +199,16 @@ export default new Vue({
                 return -1;
             }
         },
+
+        async randomizeListActivitiesOrder(listId){
+            this.markListDataReload(listId);
+            let response = await this.reqRandomizeListActivitiesOrder(listId);
+            if(this.hasStatus200(response)){
+                return response.data;
+            }else{
+                return -1;
+            }
+        },
         async createActivity(name, listId, description) {
             this.markListDataReload(listId);
             let response = await this.reqCreateActivity(name, listId, description);
@@ -310,6 +321,13 @@ export default new Vue({
                 .then((resp) => this.onRequest(resp))
                 .catch((err) => this.onRequestError(err));
         },
+
+        reqRandomizeListActivitiesOrder(listId){
+            return axios.post(RANDOMIZE_LIST_ACTIVITIES_ORDER.replace('{listId}', listId))
+                .then((resp) => this.onRequest(resp))
+                .catch((err) => this.onRequestError(err));
+        },
+
 
         reqCreateActivity(name, listId, description) {
             let data = {

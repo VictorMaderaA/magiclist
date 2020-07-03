@@ -144,6 +144,21 @@
                                     </div>
                                 </div>
 
+                                <div class="p-2 align-self-center">
+                                    <h5>
+                                        Actions
+                                    </h5>
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-default dropdown-toggle"
+                                                data-toggle="dropdown" aria-expanded="false">
+                                            Actions
+                                        </button>
+                                        <ul class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(-56px, 38px, 0px);">
+                                            <li><a class="dropdown-item" v-on:click.prevent.capture="onRandomizeOrder()">Randomize List Order</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+
                             </div>
 
                             <div class="row justify-content-center">
@@ -403,6 +418,12 @@
                 return false;
             },
 
+            async onRandomizeOrder() {
+                let response = await Manager.randomizeListActivitiesOrder(this.curr.listId);
+                if(response){
+                    this.loadListData();
+                }
+            },
 
             onMoveCallback(evt, originalEvent){
                 this.orderModified = true;
