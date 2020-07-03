@@ -181,6 +181,8 @@ return [
 
         \Torann\GeoIP\GeoIPServiceProvider::class,
 
+        Intervention\Image\ImageServiceProvider::class
+
     ],
 
     /*
@@ -236,6 +238,8 @@ return [
         'Batch' => Mavinoo\Batch\BatchFacade::class,
 
         'GeoIP' => \Torann\GeoIP\Facades\GeoIP::class,
+
+        'Image' => Intervention\Image\Facades\Image::class
 
     ],
 
