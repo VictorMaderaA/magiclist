@@ -172,6 +172,7 @@ class ListController extends BaseController
         /** @var Lists $original */
         $original = $findQuery->findOrFail($listId);
         $newList = $original->replicate([
+            'id',
             'priority',
             'user_id'
         ])
@@ -191,7 +192,7 @@ class ListController extends BaseController
                 'list_id'
             ])->setAttribute('list_id', $newList->getAttribute('id'))->save();
         }
-        return response($original->refresh()->toArray());
+        return response($newList->refresh()->toArray());
     }
 
 

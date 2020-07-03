@@ -154,6 +154,7 @@
                                             Actions
                                         </button>
                                         <ul class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(-56px, 38px, 0px);">
+                                            <li><a class="dropdown-item" v-on:click.prevent.capture="duplicateList()">Duplicate</a></li>
                                             <li><a class="dropdown-item" v-on:click.prevent.capture="onRandomizeOrder()">Randomize List Order</a></li>
                                         </ul>
                                     </div>
@@ -314,7 +315,6 @@
                 this.loadListData();
             },
             async loadListData(){
-                console.log('TEST')
                 let list = await Manager.getListData(this.curr.listId, true);
                 if(list){
                     this.list = list;
@@ -422,6 +422,13 @@
                 let response = await Manager.randomizeListActivitiesOrder(this.curr.listId);
                 if(response){
                     this.loadListData();
+                }
+            },
+
+            async duplicateList() {
+                let response = await Manager.copyList(this.curr.listId);
+                if(response){
+
                 }
             },
 

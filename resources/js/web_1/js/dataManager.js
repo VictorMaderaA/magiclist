@@ -200,6 +200,18 @@ export default new Vue({
             }
         },
 
+        async copyList(listId){
+            let response = await this.reqCopyList(listId);
+            if(this.hasStatus200(response)){
+                let index = this.lists.push(response.data)-1;
+                this.emitListsUpdated();
+                this.emitListCreated(this.lists[index]);
+                return 1;
+            }else{
+                return -1;
+            }
+        },
+
         async randomizeListActivitiesOrder(listId){
             this.markListDataReload(listId);
             let response = await this.reqRandomizeListActivitiesOrder(listId);
