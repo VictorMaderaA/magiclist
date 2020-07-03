@@ -141,7 +141,6 @@ export default new Vue({
                 let index = this.lists.findIndex(x => x.id === listId);
                 if(index !== -1){
                     this.lists[index] = Object.assign(this.lists[index], response.data);
-                    console.log(this.lists[index], response.data)
                     this.emitListUpdated(this.lists[index]);
                     this.emitListsUpdated();
                     return 1;
