@@ -187,7 +187,14 @@ export default new Vue({
         },
 
         async updateActivityState(activityId, state){
-
+            this.markListDataReload(true);
+            let response = await this.reqUpdateActivityState(activityId, state);
+            if(this.hasStatus200(response)){
+                this.emitItemUpdated(response.data);
+                return response.data;
+            }else{
+                return -1;
+            }
         },
 
         async updateListActivitiesOrder(listId, idsOrder){
