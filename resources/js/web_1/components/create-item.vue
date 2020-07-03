@@ -42,7 +42,7 @@
                                 <div class="form-group">
                                     <label for="name">Item Name</label>
                                     <input type="text" class="form-control" id="name" v-model="form.name" ref="name"
-                                           placeholder="Home Made Pizza">
+                                           placeholder="Home Made Pizza" v-on:keyup.ctrl.enter="onClickSaveOther">
                                 </div>
                             </div>
 
@@ -126,6 +126,7 @@
                                             </div>
                                         </editor-menu-bar>
                                         <editor-content :editor="form.editor"
+                                                        v-on:keyup.ctrl.enter="onClickSaveOther"
                                                         style="background: #f8f8f8; color: black; outline: none"/>
                                     </div>
 
@@ -138,7 +139,8 @@
                                         </label>
                                         <textarea class="form-control" id="rawDesc" rows="5"
                                                   style="margin-top: 0; margin-bottom: 0; height: 266px;"
-                                                  v-model="form.rawDesc"></textarea>
+                                                  v-model="form.rawDesc"
+                                                  v-on:keyup.ctrl.enter="onClickSaveOther"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -151,6 +153,16 @@
                         </div>
 
 
+                    </div>
+
+                    <div class="card-info">
+                        <div class="row justify-content-center">
+                            <div class="col-10">
+                                <p>
+                                    <small>Ctrl + Enter: Save And Add Other</small>
+                                </p>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="card-footer">
@@ -252,16 +264,28 @@
         },
         methods:{
             async onClickSave(){
+                if(!this.form.name){
+                    this.message.danger = 'Missing Name';
+                    return;
+                }
                 let item = await this.save();
                 if(item){
                     this.$emit('list-show', item.list_id);
                 }
             },
             onClickSaveOther(){
+                if(!this.form.name){
+                    this.message.danger = 'Missing Name';
+                    return;
+                }
                 this.save();
                 this.$refs.name.focus();
             },
             async  onClickSaveEdit(){
+                if(!this.form.name){
+                    this.message.danger = 'Missing Name';
+                    return;
+                }
                 let item = await this.save();
                 if(item){
                     this.$emit('item-edit', item)
