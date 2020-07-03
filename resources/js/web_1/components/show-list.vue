@@ -144,6 +144,23 @@
                                     </div>
                                 </div>
 
+                                <div class="p-2 align-self-center">
+                                    <h5>
+                                        Actions
+                                    </h5>
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-default dropdown-toggle"
+                                                data-toggle="dropdown" aria-expanded="false">
+                                            Actions
+                                        </button>
+                                        <ul class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(-56px, 38px, 0px);">
+                                            <li><a class="dropdown-item" v-on:click.prevent.capture="openRandomItem()">Show Random Item</a></li>
+                                            <li><a class="dropdown-item" v-on:click.prevent.capture="duplicateList()">Duplicate</a></li>
+                                            <li><a class="dropdown-item" v-on:click.prevent.capture="onRandomizeOrder()">Randomize List Order</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+
                             </div>
 
                             <div class="row justify-content-center">
@@ -299,8 +316,7 @@
                 this.loadListData();
             },
             async loadListData(){
-                console.log('TEST')
-                let list = await Manager.getListData(this.curr.listId, true);
+                let list = await Manager.getListData(this.curr.listId, false);
                 if(list){
                     this.list = list;
                     this.listItems = list.activities;
@@ -313,12 +329,12 @@
                     return;
                 }
                 this.reqStateCurrent.push(item.id);
-                let response = await Manager.reqUpdateActivityState(item.id, !item.completed_at);
-                if(response.status === 200){
+                let activity = await Manager.updateActivityState(item.id, !item.completed_at);
+                if(activity){
                     let newItems = this.listItems.slice(0);
                     let found = newItems.findIndex(e => e.id === item.id);
-                    this.updateCounters(newItems[found].completed_at, response.data.completed_at);
-                    newItems[found] = response.data;
+                    this.updateCounters(newItems[found].completed_at, activity.completed_at);
+                    newItems[found] = activity;
                     this.listItems = newItems;
                 }
                 this.reqStateCurrent.splice(this.reqStateCurrent.findIndex(x => x === item.id), 1);
@@ -403,10 +419,42 @@
                 return false;
             },
 
+            async onRandomizeOrder() {
+                let response = await Manager.randomizeListActivitiesOrder(this.curr.listId);
+                if(response){
+                    this.loadListData();
+                }
+            },
+
+            async duplicateList() {
+                let response = await Manager.copyList(this.curr.listId);
+                if(response){
+
+                }
+            },
 
             onMoveCallback(evt, originalEvent){
                 this.orderModified = true;
             },
+
+            openRandomItem(){
+                let availableItems = [];
+                this.listItems.forEach(x => {
+                    if(this.canShowItem(x)){
+                        availableItems.push(x);
+                    }
+                });
+                if(availableItems.length <= 0){
+                    this.$snotify.warning('Add items or extend list filters', 'No Items', {
+                        timeout: 2000,
+                        showProgressBar: true,
+                        closeOnClick: true,
+                        pauseOnHover: true
+                    });
+                }else{
+                    this.onClickItem(availableItems[Math.floor(Math.random() * availableItems.length)]);
+                }
+            }
         },
         watch: {
             listItems: function () {
@@ -419,7 +467,7 @@
                     this.orderModified = false;
                 }
             }
-        }
+        },
     }
 </script>
 

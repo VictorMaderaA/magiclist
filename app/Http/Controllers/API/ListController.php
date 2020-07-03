@@ -10,6 +10,8 @@ use App\Models\Lists;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Mavinoo\Batch\BatchFacade;
+use phpDocumentor\Reflection\Types\Integer;
+use PhpParser\Node\Expr\Cast\Int_;
 
 class ListController extends BaseController
 {
@@ -51,10 +53,16 @@ class ListController extends BaseController
         }
 
         $newOrderArray = $request->input('data');
-        $activities = $list->activities()->findMany($newOrderArray);
+        $updated = $this->updateActivitiesOrder($list, $newOrderArray);
+        //Devolvemos mod correcta
+        return response($updated, 200);
+    }
+
+    private function updateActivitiesOrder(Lists $list, array $newOrder){
+        $activities = $list->activities(false)->findMany($newOrder);
         $iPriority = 1;
         $updateAttributes = [];
-        foreach ($newOrderArray as $activityId){
+        foreach ($newOrder as $activityId){
             if($activity = $activities->find($activityId)){
                 if($activity->listPriority !== $iPriority){
                     array_push($updateAttributes, [
@@ -65,11 +73,8 @@ class ListController extends BaseController
                 $iPriority++;
             }
         }
+        return BatchFacade::update(new Activities(), $updateAttributes, 'id');
 
-        $updated = BatchFacade::update(new Activities(), $updateAttributes, 'id');
-
-        //Devolvemos mod correcta
-        return response($updated, 200);
     }
 
 
@@ -85,10 +90,15 @@ class ListController extends BaseController
         }
 
         $newOrderArray = $request->input('data');
-        $lists = auth('api')->user()->lists()->findMany($newOrderArray);
+        $updated = $this->updateOrder($newOrderArray);
+        return response($updated, 200);
+    }
+
+    private function updateOrder(array $newOrder){
+        $lists = auth('api')->user()->lists()->findMany($newOrder);
         $iPriority = 1;
         $updateAttributes = [];
-        foreach ($newOrderArray as $listId){
+        foreach ($newOrder as $listId){
             if($list = $lists->find($listId)){
                 if($list->priority !== $iPriority){
                     array_push($updateAttributes, [
@@ -99,11 +109,7 @@ class ListController extends BaseController
                 $iPriority++;
             }
         }
-
-        $updated = BatchFacade::update(new Lists(), $updateAttributes, 'id');
-
-        //Devolvemos mod correcta
-        return response($updated, 200);
+        return BatchFacade::update(new Lists(), $updateAttributes, 'id');
     }
 
     public function create(Request $request){
@@ -166,6 +172,7 @@ class ListController extends BaseController
         /** @var Lists $original */
         $original = $findQuery->findOrFail($listId);
         $newList = $original->replicate([
+            'id',
             'priority',
             'user_id'
         ])
@@ -185,7 +192,20 @@ class ListController extends BaseController
                 'list_id'
             ])->setAttribute('list_id', $newList->getAttribute('id'))->save();
         }
-        return response($original->refresh()->toArray());
+        return response($newList->refresh()->toArray());
+    }
+
+
+    public function randomizeListOrder(int $listId){
+        //Comprobamos que el usuario tenga acceso a la lista de la actividad
+        /** @var Lists $list */
+        if(!$list = auth('api')->user()->lists()->find($listId)){
+            return response('',403);
+        }
+        $activities = $list->activities(false)->inRandomOrder()->get(['id'])->toArray();
+        $newOrderIds = array_column($activities, 'id');
+        $updated = $this->updateActivitiesOrder($list, $newOrderIds);
+        return response($updated, 200);
     }
 
 }

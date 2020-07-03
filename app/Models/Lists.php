@@ -99,10 +99,13 @@ class Lists extends BaseModel
 
     //-----------------------------------------------------------------------------------------------------------------
 
-    public function activities()
+    public function activities($order = true)
     {
-        return $this->hasMany(Activities::class, 'list_id')
-            ->orderBy('listPriority');
+        $query = $this->hasMany(Activities::class, 'list_id');
+        if($order){
+            $query->orderBy('listPriority');
+        }
+        return $query;
     }
 
     public function viewHistory(){
