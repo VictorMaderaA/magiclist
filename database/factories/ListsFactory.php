@@ -18,7 +18,7 @@ $factory->define(\App\Models\Lists::class, function (Faker $faker) {
             if($faker->boolean){
                 return $faker->realText();
             }
-            return '<p></p>';
+            return '';
         },
         'todo' => $faker->boolean,
         'private' => $faker->boolean,

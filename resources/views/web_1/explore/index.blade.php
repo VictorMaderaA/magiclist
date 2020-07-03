@@ -16,21 +16,11 @@
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="{{asset('mix/bootstrap/css/bootstrap.min.css')}}">
     <link rel="stylesheet" href="{{asset('vendor/Fontawesome5-13-0/css/all.min.css')}}">
+    <link rel="stylesheet" href="{{ asset('mix/snotify/css/material.css') }}">
 
     <script src="{{ asset('js/app_explore.js') }}" defer></script>
 
-
-    <script data-ad-client="ca-pub-8453462599655086" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-158934272-2"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-
-        gtag('config', 'UA-158934272-2');
-    </script>
-    <script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="19bfd6a3-a271-4038-bd50-5cd52c8f01c4" data-blockingmode="auto" type="text/javascript"></script>
+    @include('layouts.headerSnippets')
 
 </head>
 
@@ -38,7 +28,7 @@
 
 <header>
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-        <a class="navbar-brand" href="#">MagicList</a>
+        <a class="navbar-brand" href="/explore">MagicList</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
                 aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>

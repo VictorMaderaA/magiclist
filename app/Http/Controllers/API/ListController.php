@@ -8,7 +8,6 @@ use App\Http\Controllers\Base\BaseController;
 use App\Models\Activities;
 use App\Models\Lists;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Mavinoo\Batch\BatchFacade;
 
@@ -17,14 +16,22 @@ class ListController extends BaseController
 
     public function getData($listId){
         //Comprobamos que el usuario tenga acceso a la lista de la actividad
-        if(!$list = auth('api')->user()->lists()->with('activities')->find($listId)){
+        if(!$list = auth('api')->user()->lists()->with('activities')->withCount([
+            'activities',
+            'activitiesPending',
+            'activitiesCompleted'
+        ])->find($listId)){
             return response('',403);
         }
         return response($list);
     }
 
     public function get(){
-        $lists = auth('api')->user()->lists()->orderBy('priority')->get();
+        $lists = auth('api')->user()->lists()->withCount([
+            'activities',
+            'activitiesPending',
+            'activitiesCompleted'
+        ])->orderBy('priority')->get();
         return response($lists->toArray(), 200);
     }
 
@@ -134,6 +141,7 @@ class ListController extends BaseController
 
     public function update(Request $request, $listId){
         //Comprobamos que el usuario tenga acceso a la lista de la actividad
+        /** @var Lists $list */
         if(!$list = auth('api')->user()->lists()->find($listId)){
             return response('',403);
         }
@@ -146,6 +154,38 @@ class ListController extends BaseController
         $list->saveOrFail();
 
         return response(Lists::find($listId)->toArray());
+    }
+
+    public function copy($listId){
+        //Check if the list if from the user or its public. If not fails
+        $findQuery = Lists::query();
+        $findQuery->orWhere(function ($query) {
+            $query->where('user_id', auth()->id())
+                ->orWhere('private', false);
+        });
+        /** @var Lists $original */
+        $original = $findQuery->findOrFail($listId);
+        $newList = $original->replicate([
+            'priority',
+            'user_id'
+        ])
+            ->setAttribute('user_id', auth()->id())
+            ->setAttribute('name', $original->getAttribute('name') . ' Copy');
+
+        try {
+            $newList->saveOrFail();
+        } catch (\Throwable $e) {
+            return response('Failed to Clone', 500);
+        }
+
+        /** @var Activities $act */
+        foreach ($original->activities()->get() as $act){
+            $act->replicate([
+                'listPriority',
+                'list_id'
+            ])->setAttribute('list_id', $newList->getAttribute('id'))->save();
+        }
+        return response($original->refresh()->toArray());
     }
 
 }

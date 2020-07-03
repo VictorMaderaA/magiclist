@@ -2,30 +2,18 @@
     <div>
         <vue-snotify></vue-snotify>
 
-        <section class="jumbotron text-center">
-            <div class="container">
-                <h1 class="jumbotron-heading">Explore Public Lists</h1>
-                <p class="lead text-muted">Here you can find a variety of lists explore them and copy them in to your own</p>
-                <p>
-                    <a href="/app" class="btn btn-primary my-2">Create Your Own List</a>
-<!--                    <a href="/" class="btn btn-secondary my-2">Secondary action</a>-->
-                </p>
-            </div>
-        </section>
+        <div class="container">
+            <div class="row">
+
+                <div class="col-lg-12">
 
 
-        <div class="album py-5 bg-light">
-            <div class="container">
-
-                <div class="row">
-
-
-                    <div class="col-md-6" v-for="list in lists">
+                    <div class="col-md-12" style="padding-top: 50px">
                         <div class="card mb-4 box-shadow">
                             <img class="card-img-top"
-                                 v-holder="'img=100px150?random=yes&bg=55595c&fg=eceeef&text=' + list.name"
-                                 alt="Card image cap" src=""
-                                 style="object-fit: cover; max-height: 150px; width: auto; height: auto;">
+                                 v-holder="'img=100px200?theme=thumb&bg=55595c&fg=eceeef&text=' + list.name"
+                                 alt="Activity Header Image" src=""
+                                 style="object-fit: cover; max-height: 200px; width: auto; height: auto;">
 
                             <div class="card-header">
                                 <p class="card-title text-center" >
@@ -39,11 +27,7 @@
                                 <p class="card-text text-center ">{{ list.description }}</p>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="btn-group">
-                                        <button type="button" class="btn btn-sm btn-outline-secondary"
-                                                v-on:click="onClickView(list.id)">
-                                            View
-                                        </button>
-                                        <button type="button" class="btn btn-sm btn-outline-secondary"
+                                        <button type="button" class="btn btn-sm btn-outline-primary"
                                                 v-on:click="reqCopyList(list.id)">
                                             Copy To My Lists
                                         </button>
@@ -54,8 +38,29 @@
                     </div>
 
 
+                    <div class="my-3 p-3 bg-white rounded box-shadow">
+                        <h6 class="border-bottom border-gray pb-2 mb-0">List Items</h6>
+
+                        <div class="media text-muted pt-3" style="font-size: 2em" v-for="act in list.activities">
+                            <img v-holder="'img=50x50?random=true&amp;bg=007bff&amp;fg=007bff&amp;size=1&text=.'"
+                                 alt="32x32" class="mr-2 rounded" data-holder-rendered="true"
+                                 style="width: 50px; height: 50px;" src="">
+
+                            <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
+                                <div class="d-flex justify-content-between align-items-center w-100">
+                                    <strong class="text-gray-dark">{{act.name}}</strong>
+                                    <button class="btn btn-sm btn-outline-primary" v-if="act.description !== '<p></p>'"
+                                            v-on:click="onClickView(act.id)">View</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
 
                 </div>
+
+
             </div>
         </div>
 
@@ -67,7 +72,7 @@
     export default {
         name: "explore-lists.vue",
         props: {
-            lists: Array,
+            list: Object,
         },
         data() {
             return {
@@ -75,8 +80,8 @@
             }
         },
         methods: {
-            onClickView(listId){
-                window.location.href = '/explore/list/' + listId ;
+            onClickView(itemId){
+                window.location.href = '/explore/item/' + itemId ;
             },
             reqCopyList(listId){
                 if(this.doingReqCopy){
@@ -113,7 +118,7 @@
                                 return error;
                             });
                         this.doingReqCopy = false;
-                        if(promise.response.status === 401){
+                        if(promise.response && promise.response.status === 401){
                             this.$snotify.warning('A new Tab will open', 'Need to login', {
                                 closeOnClick: true,
                                 showProgressBar: true,

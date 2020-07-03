@@ -41,7 +41,7 @@ mix.copy('node_modules/vue-snotify/styles/dark.css', 'public/mix/snotify/css')
     .copy('node_modules/vue-snotify/styles/simple.css', 'public/mix/snotify/css')
 ;
 
-//Snotify
+//HolderJs
 mix.copy('node_modules/holderjs/holder.js', 'public/mix/holderjs/')
     .copy('node_modules/holderjs/holder.min.js', 'public/mix/holderjs/')
 ;

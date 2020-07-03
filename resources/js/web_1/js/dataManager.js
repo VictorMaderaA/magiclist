@@ -2,6 +2,7 @@ const GET_LISTS = '/api/list';
 const GET_LIST_DATA = '/api/list/{listId}';
 const DELETE_LIST = '/api/list/{listId}';
 const UPDATE_LIST = '/api/list/{listId}';
+const COPY_LIST = '/api/list/{listId}/copy';
 const CREATE_LIST = '/api/list';
 const UPDATE_LIST_ACTIVITIES_ORDER = '/api/list/{listId}/change-activities-order';
 const UPDATE_LISTS_ORDER = '/api/list/change-order';
@@ -256,6 +257,11 @@ export default new Vue({
                 data.private = isPrivate? 1 : 0;
             }
             return axios.post(UPDATE_LIST.replace('{listId}', listId), data)
+                .then((resp) => this.onRequest(resp))
+                .catch((err) => this.onRequestError(err));
+        },
+        reqCopyList(listId){
+            return axios.post(COPY_LIST.replace('{listId}', listId))
                 .then((resp) => this.onRequest(resp))
                 .catch((err) => this.onRequestError(err));
         },
