@@ -28,11 +28,23 @@ class ImageManager
     ];
 
     public function uploadImage(UploadedFile $file) : Media{
+        if($this->isImage($file)){
+            $this->processImage($file);
+        }elseif ($this->isVideo($file)){
+            $this->processVideo($file);
+        }elseif ($this->isGif($file)){
+            $this->proccessGif($file);
+        }
+
+
         $realName = $file->getClientOriginalName();
         $internalName = $file->hashName();
         $path = env('AWS_BUCKET_PATH') . '/userImages/';
 
         Storage::disk('s3')->put($path, $file);
+
+
+
 
         $media = new Media();
         $media->name = $realName;
@@ -57,11 +69,16 @@ class ImageManager
     }
 
     public function processImage(UploadedFile $file){
+        fail('1');
+    }
 
+    public function processVideo(UploadedFile $file){
+        dd(2);
     }
 
     public function proccessGif(UploadedFile $file){
         $image = imagepng(imagecreatefromstring($file));
+        dd($image);
     }
 
 }
