@@ -48,7 +48,6 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y \
     libxml2-dev \
     zip \
     unzip \
-    php-redis \
     redis-server
 
 # Clear cache
