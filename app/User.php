@@ -2,13 +2,21 @@
 
 namespace App;
 
+use App\Models\History\ListViewHistory;
 use App\Models\Lists;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Foundation\Auth\VerifiesEmails;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
+/**
+ * Class User
+ *
+ * @mixin Builder
+ * @package App
+ */
 class User extends Authenticatable implements JWTSubject, MustVerifyEmail
 {
     use Notifiable, VerifiesEmails;
@@ -43,7 +51,11 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
 
     public function lists()
     {
-        return $this->hasMany(Lists::class);
+        return $this->hasMany(Lists::class)->orderBy('priority');
+    }
+
+    public function viewHistoryLists(){
+        return $this->hasMany(ListViewHistory::class)->orderBy('listPriority');
     }
 
 

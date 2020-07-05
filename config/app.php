@@ -179,6 +179,8 @@ return [
 
         Mavinoo\Batch\BatchServiceProvider::class,
 
+        \Torann\GeoIP\GeoIPServiceProvider::class,
+
     ],
 
     /*
@@ -232,6 +234,8 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
         'Batch' => Mavinoo\Batch\BatchFacade::class,
+
+        'GeoIP' => \Torann\GeoIP\Facades\GeoIP::class,
 
     ],
 

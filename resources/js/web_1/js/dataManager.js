@@ -2,8 +2,10 @@ const GET_LISTS = '/api/list';
 const GET_LIST_DATA = '/api/list/{listId}';
 const DELETE_LIST = '/api/list/{listId}';
 const UPDATE_LIST = '/api/list/{listId}';
+const COPY_LIST = '/api/list/{listId}/copy';
 const CREATE_LIST = '/api/list';
 const UPDATE_LIST_ACTIVITIES_ORDER = '/api/list/{listId}/change-activities-order';
+const RANDOMIZE_LIST_ACTIVITIES_ORDER = '/api/list/{listId}/randomize-activities-order';
 const UPDATE_LISTS_ORDER = '/api/list/change-order';
 
 const DELETE_ACTIVITY = '/api/activity/{activityId}';
@@ -139,7 +141,6 @@ export default new Vue({
                 let index = this.lists.findIndex(x => x.id === listId);
                 if(index !== -1){
                     this.lists[index] = Object.assign(this.lists[index], response.data);
-                    console.log(this.lists[index], response.data)
                     this.emitListUpdated(this.lists[index]);
                     this.emitListsUpdated();
                     return 1;
@@ -185,7 +186,14 @@ export default new Vue({
         },
 
         async updateActivityState(activityId, state){
-
+            this.markListDataReload(true);
+            let response = await this.reqUpdateActivityState(activityId, state);
+            if(this.hasStatus200(response)){
+                this.emitItemUpdated(response.data);
+                return response.data;
+            }else{
+                return -1;
+            }
         },
 
         async updateListActivitiesOrder(listId, idsOrder){
@@ -193,6 +201,28 @@ export default new Vue({
             let response = await this.reqUpdateListActivitiesOrder(listId, idsOrder);
             if(this.hasStatus200(response)){
                 return 1;
+            }else{
+                return -1;
+            }
+        },
+
+        async copyList(listId){
+            let response = await this.reqCopyList(listId);
+            if(this.hasStatus200(response)){
+                let index = this.lists.push(response.data)-1;
+                this.emitListsUpdated();
+                this.emitListCreated(this.lists[index]);
+                return 1;
+            }else{
+                return -1;
+            }
+        },
+
+        async randomizeListActivitiesOrder(listId){
+            this.markListDataReload(listId);
+            let response = await this.reqRandomizeListActivitiesOrder(listId);
+            if(this.hasStatus200(response)){
+                return response.data;
             }else{
                 return -1;
             }
@@ -259,6 +289,11 @@ export default new Vue({
                 .then((resp) => this.onRequest(resp))
                 .catch((err) => this.onRequestError(err));
         },
+        reqCopyList(listId){
+            return axios.post(COPY_LIST.replace('{listId}', listId))
+                .then((resp) => this.onRequest(resp))
+                .catch((err) => this.onRequestError(err));
+        },
         reqCreateList(name, description, isPrivate){
             let data = {};
             data.name = name;
@@ -304,6 +339,13 @@ export default new Vue({
                 .then((resp) => this.onRequest(resp))
                 .catch((err) => this.onRequestError(err));
         },
+
+        reqRandomizeListActivitiesOrder(listId){
+            return axios.post(RANDOMIZE_LIST_ACTIVITIES_ORDER.replace('{listId}', listId))
+                .then((resp) => this.onRequest(resp))
+                .catch((err) => this.onRequestError(err));
+        },
+
 
         reqCreateActivity(name, listId, description) {
             let data = {

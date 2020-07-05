@@ -8,23 +8,32 @@ use App\Http\Controllers\Base\BaseController;
 use App\Models\Activities;
 use App\Models\Lists;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Mavinoo\Batch\BatchFacade;
+use phpDocumentor\Reflection\Types\Integer;
+use PhpParser\Node\Expr\Cast\Int_;
 
 class ListController extends BaseController
 {
 
     public function getData($listId){
         //Comprobamos que el usuario tenga acceso a la lista de la actividad
-        if(!$list = auth('api')->user()->lists()->with('activities')->find($listId)){
+        if(!$list = auth('api')->user()->lists()->with('activities')->withCount([
+            'activities',
+            'activitiesPending',
+            'activitiesCompleted'
+        ])->find($listId)){
             return response('',403);
         }
         return response($list);
     }
 
     public function get(){
-        $lists = auth('api')->user()->lists()->orderBy('priority')->get();
+        $lists = auth('api')->user()->lists()->withCount([
+            'activities',
+            'activitiesPending',
+            'activitiesCompleted'
+        ])->orderBy('priority')->get();
         return response($lists->toArray(), 200);
     }
 
@@ -44,10 +53,16 @@ class ListController extends BaseController
         }
 
         $newOrderArray = $request->input('data');
-        $activities = $list->activities()->findMany($newOrderArray);
+        $updated = $this->updateActivitiesOrder($list, $newOrderArray);
+        //Devolvemos mod correcta
+        return response($updated, 200);
+    }
+
+    private function updateActivitiesOrder(Lists $list, array $newOrder){
+        $activities = $list->activities(false)->findMany($newOrder);
         $iPriority = 1;
         $updateAttributes = [];
-        foreach ($newOrderArray as $activityId){
+        foreach ($newOrder as $activityId){
             if($activity = $activities->find($activityId)){
                 if($activity->listPriority !== $iPriority){
                     array_push($updateAttributes, [
@@ -58,11 +73,8 @@ class ListController extends BaseController
                 $iPriority++;
             }
         }
+        return BatchFacade::update(new Activities(), $updateAttributes, 'id');
 
-        $updated = BatchFacade::update(new Activities(), $updateAttributes, 'id');
-
-        //Devolvemos mod correcta
-        return response($updated, 200);
     }
 
 
@@ -78,10 +90,15 @@ class ListController extends BaseController
         }
 
         $newOrderArray = $request->input('data');
-        $lists = auth('api')->user()->lists()->findMany($newOrderArray);
+        $updated = $this->updateOrder($newOrderArray);
+        return response($updated, 200);
+    }
+
+    private function updateOrder(array $newOrder){
+        $lists = auth('api')->user()->lists()->findMany($newOrder);
         $iPriority = 1;
         $updateAttributes = [];
-        foreach ($newOrderArray as $listId){
+        foreach ($newOrder as $listId){
             if($list = $lists->find($listId)){
                 if($list->priority !== $iPriority){
                     array_push($updateAttributes, [
@@ -92,11 +109,7 @@ class ListController extends BaseController
                 $iPriority++;
             }
         }
-
-        $updated = BatchFacade::update(new Lists(), $updateAttributes, 'id');
-
-        //Devolvemos mod correcta
-        return response($updated, 200);
+        return BatchFacade::update(new Lists(), $updateAttributes, 'id');
     }
 
     public function create(Request $request){
@@ -134,6 +147,7 @@ class ListController extends BaseController
 
     public function update(Request $request, $listId){
         //Comprobamos que el usuario tenga acceso a la lista de la actividad
+        /** @var Lists $list */
         if(!$list = auth('api')->user()->lists()->find($listId)){
             return response('',403);
         }
@@ -146,6 +160,52 @@ class ListController extends BaseController
         $list->saveOrFail();
 
         return response(Lists::find($listId)->toArray());
+    }
+
+    public function copy($listId){
+        //Check if the list if from the user or its public. If not fails
+        $findQuery = Lists::query();
+        $findQuery->orWhere(function ($query) {
+            $query->where('user_id', auth()->id())
+                ->orWhere('private', false);
+        });
+        /** @var Lists $original */
+        $original = $findQuery->findOrFail($listId);
+        $newList = $original->replicate([
+            'id',
+            'priority',
+            'user_id'
+        ])
+            ->setAttribute('user_id', auth()->id())
+            ->setAttribute('name', $original->getAttribute('name') . ' Copy');
+
+        try {
+            $newList->saveOrFail();
+        } catch (\Throwable $e) {
+            return response('Failed to Clone', 500);
+        }
+
+        /** @var Activities $act */
+        foreach ($original->activities()->get() as $act){
+            $act->replicate([
+                'listPriority',
+                'list_id'
+            ])->setAttribute('list_id', $newList->getAttribute('id'))->save();
+        }
+        return response($newList->refresh()->toArray());
+    }
+
+
+    public function randomizeListOrder(int $listId){
+        //Comprobamos que el usuario tenga acceso a la lista de la actividad
+        /** @var Lists $list */
+        if(!$list = auth('api')->user()->lists()->find($listId)){
+            return response('',403);
+        }
+        $activities = $list->activities(false)->inRandomOrder()->get(['id'])->toArray();
+        $newOrderIds = array_column($activities, 'id');
+        $updated = $this->updateActivitiesOrder($list, $newOrderIds);
+        return response($updated, 200);
     }
 
 }
